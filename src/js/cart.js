@@ -1,217 +1,293 @@
+// Écouteur d'événement pour charger le code une fois que le DOM est prêt
 document.addEventListener("DOMContentLoaded", () => {
-  const cartItemsList = document.querySelector(".cart-items-list");
-  const subtotalEl = document.querySelector(".summary-subtotal");
-  const totalEl = document.querySelector(".summary-total");
-  const emptyCartMessage = document.querySelector(".empty-cart-message");
-  const cartSummarySection = document.querySelector(".cart-summary-section");
-  const shippingCost = 0;  // Si la livraison est gratuite, laisser à 0
+  // =============================================
+  // 1. Sélection des éléments du DOM
+  // =============================================
+  // Sélectionne tous les conteneurs de billets flottants (version desktop)
+  const floatingContainers = document.querySelectorAll(".floating-container");
+  // Sélectionne toutes les options de prix disponibles
+  const pricingOptions = document.querySelectorAll(".pricing-option");
+  // Sélectionne le bouton "Ajouter au panier" (version desktop)
+  const addToCartBtn = document.querySelector(".add-to-cart-button");
+  // Sélectionne l'élément affichant le nombre d'articles dans le panier
+  const cartCountElem = document.querySelector(".cart-count");
 
-  // Fonction pour lire le panier depuis localStorage
-  function readCart() {
-    try {
-      return JSON.parse(localStorage.getItem("cart")) || [];
-    } catch (error) {
-      console.error("Erreur lors de la lecture du panier depuis localStorage", error);
-      return [];
+  // =============================================
+  // 2. État initial de l'application
+  // =============================================
+  // Billet sélectionné par défaut (50€)
+  let selectedBill = "50";
+  // Option de prix sélectionnée par défaut (première option)
+  let selectedPriceOption = pricingOptions.length > 0 ? pricingOptions[0] : null;
+  // Conteneur pour les notifications/toasts
+  let toastContainer = null;
+
+  // =============================================
+  // 3. Fonctions utilitaires (helpers)
+  // =============================================
+  // Met à jour le nombre d'articles dans le panier (affiché dans la navbar)
+  const updateCartCount = () => {
+    // Récupère le panier depuis le localStorage ou initialise un tableau vide
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    // Calcule le nombre total d'articles dans le panier
+    const totalCount = cart.reduce((acc, item) => acc + (item.quantity || 0), 0);
+    // Met à jour l'affichage du nombre d'articles
+    if (cartCountElem) {
+      if (totalCount > 0) {
+        cartCountElem.textContent = totalCount;
+        cartCountElem.style.display = "flex";  // ou "inline-block" selon ton CSS
+      } else {
+        cartCountElem.textContent = "";        // vide le texte
+        cartCountElem.style.display = "none"; // cache l'élément
+      }
     }
-  }
+  };
 
+  // Active/désactive la classe "active" ou "selected" sur un ensemble d'éléments
+  const toggleActiveClass = (elements, activeElement, className) => {
+    // Désactive la classe pour tous les éléments
+    elements.forEach(el => el.classList.remove(className));
+    // Active la classe pour l'élément sélectionné
+    if (activeElement) activeElement.classList.add(className);
+  };
 
+  // Affiche la notification
+  const showToast = (productName, quantity, totalPrice) => {
+    if (!toastContainer) {
+      toastContainer = document.getElementById("toast-container") || document.createElement("div");
+      toastContainer.id = "toast-container";
+      toastContainer.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        pointer-events: none;
+      `;
+      document.body.appendChild(toastContainer);
+    }
 
-  // Fonction pour écrire dans localStorage
-  function writeCart(cart) {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.style.cssText = `
+      background-color: #111015;
+      color: white;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      border-left: 3px solid #d4af37;
+      border-radius: 6px;
+      max-width: 320px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      font-family: Arial, sans-serif;
+      pointer-events: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    `;
 
-  // Créer un élément pour un article du panier
-  function createCartItemElement(item) {
-    const li = document.createElement("li");
-    li.className = "cart-item";
-    li.dataset.id = item.id;
-    li.dataset.price = item.price;
+    toast.innerHTML = `
+      <div style="display: flex; align-items: flex-start; gap: 12px;">
+        <!-- ✅ Check icon à gauche -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+          stroke="#d4af37" style="width: 16px; height: 16px; margin-top: 15px; flex-shrink: 0;">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
 
-    li.innerHTML = `
-      <img class="item-image" src="${item.image || '/public/50euro.png'}" alt="${item.name}" />
-      <div class="item-details">
-        <div class="item-name">Nitro Booost 1 mois</div>
-        <div class="item-price">€${item.price.toFixed(2)}</div>
-        <div class="quantity-control">
-          <span class="quantity-label">Quantité :</span>
-          <div class="quantity-buttons">
-            <button class="quantity-button" ${item.quantity <= 1 ? "disabled" : ""}>-</button>
-            <span class="quantity-display">${item.quantity}</span>
-            <button class="quantity-button">+</button>
+        <!-- ✅ Texte + lien décalés vers la droite -->
+        <div style="flex: 1; margin-left: 4px;">
+          <div style="line-height: 1.4; margin-bottom: 8px;">
+            <span style="color: #d4af37; font-weight: 600;">${productName}</span>
+            <span style="color: #d1d1d1;"> Ajouté au Panier</span>
           </div>
+
+          <a href="Cart.html" style="color: #d4af37; font-weight: 600; text-decoration: none; display: inline-block; font-size: 14px;">
+            Voir le Panier &rsaquo;
+          </a>
         </div>
       </div>
-      <div class="item-actions">
-        <div class="item-total">€${(item.price * item.quantity).toFixed(2)}</div>
-        <button class="remove-button">Supprimer</button>
-      </div>
     `;
-    return li;
-  }
+    
+    toastContainer.appendChild(toast);
 
-  // Mise à jour des totaux du panier
-  function updateCartTotals() {
-    let subtotal = 0;
-    
-    // Sélectionner tous les articles du panier
-    const cartItems = cartItemsList.querySelectorAll(".cart-item");
-    
-    // Calcul du sous-total en fonction des quantités et prix des articles
-    cartItems.forEach(item => {
-      const quantity = parseInt(item.querySelector(".quantity-display").textContent);
-      const price = parseFloat(item.dataset.price);
-      
-      // Calcul du total pour chaque article
-      const itemTotal = quantity * price;
-      item.querySelector(".item-total").textContent = `€${itemTotal.toFixed(2)}`;
-      
-      // Ajout au sous-total global
-      subtotal += itemTotal;
+    // Animation d'apparition
+    requestAnimationFrame(() => {
+      toast.style.opacity = "1";
     });
 
-    // Mise à jour du sous-total et du total
-    subtotalEl.textContent = `€${subtotal.toFixed(2)}`;
-    totalEl.textContent = `€${(subtotal + shippingCost).toFixed(2)}`;
-  }
+    // Suppression automatique après 4 secondes
+    setTimeout(() => {
+      toast.style.opacity = "0";
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.remove();
+        }
+      }, 300);
+    }, 4000);
+  };
 
-  // Vérifier si le panier est vide et afficher ou masquer les sections
-  function checkIfCartEmpty() {
-    const cart = readCart();
-    if (cart.length === 0) {
-      emptyCartMessage.style.display = "block";
-      cartSummarySection.style.display = "none";
-    } else {
-      emptyCartMessage.style.display = "none";
-      cartSummarySection.style.display = "block";
-    }
-  }
-
-  // Charger le panier et afficher les éléments
-  function loadCart() {
-  const cart = readCart();
-  cartItemsList.innerHTML = "";  // Vider la liste avant de la remplir
-  if (cart.length === 0) {
-    checkIfCartEmpty();
-    return;
-  }
-  cart.forEach(item => {
-    cartItemsList.appendChild(createCartItemElement(item));
-  });
-  updateCartTotals();
-  checkIfCartEmpty();
-}
-
-// Supprimer un article du DOM et synchroniser le panier
-function removeItem(itemElement) {
-  // Récupérer l'ID de l'article
-  const itemId = itemElement.dataset.id;
-  
-  // Retirer l'article du DOM
-  itemElement.remove();
-  
-  // Récupérer le panier actuel depuis le localStorage
-  let cart = readCart();
-  
-  // Supprimer l'article du tableau en fonction de son ID
-  cart = cart.filter(item => item.id !== itemId);
-
-  // Sauvegarder le panier mis à jour dans localStorage
-  writeCart(cart);
-
-  // Mise à jour des totaux après suppression
-  updateCartTotals();
-
-  // Vérifier si le panier est vide après la suppression
-  checkIfCartEmpty();
-}
-
-function syncCartStorage() {
-  const cart = [];
-
-  // Remplir le panier avec les articles actuels
-  cartItemsList.querySelectorAll(".cart-item").forEach(item => {
-    const quantity = parseInt(item.querySelector(".quantity-display").textContent);
-    const price = parseFloat(item.dataset.price);
-    const name = item.querySelector(".item-name").textContent;
-    const image = item.querySelector(".item-image").src;
-
-    // Ajouter l'article au panier
-    cart.push({
-      id: item.dataset.id, // Assurez-vous d'inclure l'ID unique de chaque article
-      name,
-      price,
-      image,
-      quantity,
-    });
-  });
-
-  // Sauvegarder le panier mis à jour dans le localStorage
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-
-  // Gestion des clics pour les boutons quantité et suppression
-  cartItemsList.addEventListener("click", (e) => {
-    const target = e.target;
-
-    // Gérer l'augmentation ou la diminution de la quantité
-    if (target.classList.contains("quantity-button")) {
-      const isIncrement = target.textContent.trim() === "+";
-      const item = target.closest(".cart-item");
-      const display = item.querySelector(".quantity-display");
-      let quantity = parseInt(display.textContent);
-
-      if (!isIncrement && quantity === 1) return;
-
-      quantity = isIncrement ? quantity + 1 : quantity - 1;
-      display.textContent = quantity;
-
-      item.querySelectorAll(".quantity-button")[0].disabled = quantity <= 1;
-      updateCartTotals();
-      syncCartStorage();
+  // Gère l'ajout d'un produit au panier
+  const handleAddToCart = (quantity = 1) => {
+    if (!selectedPriceOption) {
+      console.error("Aucune option de prix sélectionnée");
+      return;
     }
 
-    // Gérer la suppression d'un article
-    if (target.classList.contains("remove-button")) {
-      const item = target.closest(".cart-item");
-      removeItem(item);
-    }
-  });
-
-  // Ajouter un article au panier
-  document.querySelectorAll(".add-to-cart-button").forEach(button => {
-    button.addEventListener("click", () => {
-      const product = products[selectedBill]; // Le produit actuellement sélectionné
-      const selectedOption = product.options[selectedOptionIndex];
-
-      if (!product.name || !product.mobileImage) {
-        alert("Produit incomplet, nom ou image manquants.");
+    try {
+      // Récupère le panier depuis le localStorage ou initialise un tableau vide
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      // Récupère le prix de l'option sélectionnée
+      const price = parseFloat(selectedPriceOption.dataset.price);
+      
+      if (isNaN(price)) {
+        console.error("Prix invalide:", selectedPriceOption.dataset.price);
         return;
       }
 
-      const cart = readCart();
-      const existingItem = cart.find(item => item.name === `${product.name} - ${selectedOption.label}`);
+      const totalPrice = (price * quantity).toFixed(2);
+      // Récupère la description (nom) du produit sélectionné
+      const productName = selectedPriceOption.querySelector(".amount")?.textContent || "Produit";
 
-      if (existingItem) {
-        existingItem.quantity += 1;
+      // Vérifie si le produit est déjà dans le panier
+      const existingItemIndex = cart.findIndex(item => 
+        item.bill === selectedBill && 
+        Math.abs(item.price - price) < 0.01 // Comparaison de flottants
+      );
+
+      if (existingItemIndex !== -1) {
+        // Si le produit est déjà dans le panier, incrémente la quantité
+        cart[existingItemIndex].quantity += quantity;
       } else {
+        // Sinon, ajoute le produit au panier avec un ID unique
         cart.push({
-          id: Date.now(),
-          name: `${product.name} - ${selectedOption.label}`,
-          image: product.mobileImage || "https://via.placeholder.com/80",
-          price: selectedOption.price,
-          quantity: 1
+          id: Date.now() + Math.random(), // ID unique
+          bill: selectedBill,
+          price: price,
+          quantity: quantity,
+          name: productName, // Uniformiser avec 'name' au lieu de 'description'
+          image: "/public/50euro.png" // Image par défaut
         });
       }
+      
+      // Sauvegarde le panier dans le localStorage
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
+      
+      // Affiche une notification/toast avec le nom, la quantité et le prix total
+      showToast(productName, quantity, totalPrice);
+      
+      console.log("Produit ajouté au panier:", { productName, quantity, price, totalPrice });
+      
+    } catch (error) {
+      console.error("Erreur lors de l'ajout au panier:", error);
+    }
+  };
 
-      writeCart(cart);
-      loadCart();
+  // Gère le clic sur les conteneurs de billets (version desktop)
+  floatingContainers.forEach(container => {
+    container.addEventListener("click", () => {
+      // Met à jour le billet sélectionné
+      selectedBill = container.dataset.bill;
+
+      // Met à jour les classes "active" pour les conteneurs de billets
+      toggleActiveClass(floatingContainers, container, "active");
+
+      // Affichage conditionnel des sections produits selon billet
+      document.querySelectorAll('.product-display').forEach(section => {
+        if (section.dataset.bill === selectedBill) {
+          section.style.display = 'block';
+        } else {
+          section.style.display = 'none';
+        }
+      });
+
+      // Met à jour la selectedPriceOption pour le nouveau billet
+      const visibleOptions = document.querySelectorAll(`.product-display[data-bill="${selectedBill}"] .pricing-option`);
+      if (visibleOptions.length > 0) {
+        selectedPriceOption = visibleOptions[0];
+        toggleActiveClass(document.querySelectorAll('.pricing-option'), selectedPriceOption, "selected");
+      }
     });
   });
 
-  loadCart();  // Initialiser le panier à l'ouverture de la page
+  // Gère le clic sur les options de prix
+  pricingOptions.forEach(option => {
+    option.addEventListener("click", () => {
+      // Vérifier que cette option appartient au billet sélectionné
+      const productDiv = option.closest('.product-display');
+      if (productDiv && productDiv.dataset.bill === selectedBill) {
+        // Met à jour l'option de prix sélectionnée
+        selectedPriceOption = option;
+        // Met à jour les classes "selected" pour les options de prix du produit actuel
+        const currentProductOptions = productDiv.querySelectorAll('.pricing-option');
+        toggleActiveClass(currentProductOptions, option, "selected");
+      }
+    });
+  });
 
+  // Gère le clic sur le bouton "Ajouter au panier" (version desktop)
+  const addToCartBtns = document.querySelectorAll(".add-to-cart-button");
+
+  addToCartBtns.forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      const productDiv = btn.closest(".product-display");
+      const billOfBtn = productDiv ? productDiv.dataset.bill : null;
+      
+      if (billOfBtn === selectedBill) {
+        handleAddToCart(1);
+      } else {
+        console.warn("Le bouton ne correspond pas au billet sélectionné");
+      }
+    });
+  });
+
+  // =============================================
+  // 5. Initialisation au chargement de la page
+  // =============================================
+  
+  // Initialiser les options sélectionnées pour chaque produit
+  const initializeProductOptions = () => {
+    const produits = document.querySelectorAll('.product-display');
+
+    produits.forEach(produit => {
+      const options = produit.querySelectorAll('.pricing-option');
+      
+      options.forEach((option, index) => {
+        if (index === 0) {
+          option.classList.add('selected');
+          // Si c'est le produit du billet sélectionné, définir comme selectedPriceOption
+          if (produit.dataset.bill === selectedBill) {
+            selectedPriceOption = option;
+          }
+        } else {
+          option.classList.remove('selected');
+        }
+      });
+    });
+  };
+
+  // Initialiser l'affichage des produits selon le billet sélectionné
+  const initializeProductDisplay = () => {
+    document.querySelectorAll('.product-display').forEach(section => {
+      if (section.dataset.bill === selectedBill) {
+        section.style.display = 'block';
+      } else {
+        section.style.display = 'none';
+      }
+    });
+  };
+
+  // Initialiser le billet actif
+  const initializeActiveBill = () => {
+    const defaultContainer = document.querySelector(`[data-bill="${selectedBill}"]`);
+    if (defaultContainer) {
+      defaultContainer.classList.add('active');
+    }
+  };
+
+  // Lancer toutes les initialisations
+  initializeActiveBill();
+  initializeProductDisplay();
+  initializeProductOptions();
+  updateCartCount();
+
+  console.log("Application initialisée avec le billet:", selectedBill);
 });
