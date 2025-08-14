@@ -142,10 +142,28 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const totalPrice = (price * quantity).toFixed(2);
-      // Récupère la description (nom) du produit sélectionné
-      const productName = selectedPriceOption.querySelector(".amount")?.textContent || "Produit";
+      
+      // CORRECTION: Récupère le nom depuis data-name en priorité, sinon depuis le texte
+      const productName = selectedPriceOption.dataset.name || 
+                          selectedPriceOption.querySelector(".amount")?.textContent || 
+                          "Produit";
+      
+      // CORRECTION: Détermine l'image selon le billet sélectionné
+      let productImage = "/public/50euro.png"; // Image par défaut
+      if (selectedBill === "50") {
+        productImage = "/public/50euro.png";
+      } else if (selectedBill === "20") {
+        productImage = "/public/20euro.png";
+      }
 
-      // Vérifie si le produit est déjà dans le panier
+      console.log("Ajout au panier:", {
+        productName,
+        price,
+        selectedBill,
+        productImage
+      });
+
+      // Vérifie si le produit est déjà dans le panier (basé sur le nom ET le prix)
       const existingItemIndex = cart.findIndex(item => 
         item.name === productName && 
         Math.abs(item.price - price) < 0.01 // Comparaison de flottants
@@ -154,15 +172,17 @@ document.addEventListener("DOMContentLoaded", () => {
       if (existingItemIndex !== -1) {
         // Si le produit est déjà dans le panier, incrémente la quantité
         cart[existingItemIndex].quantity += quantity;
+        console.log("Quantité mise à jour pour:", productName);
       } else {
         // Sinon, ajoute le produit au panier avec un ID unique
         cart.push({
           id: Date.now().toString(), // ID unique en string
-          name: productName, // Nom du produit
+          name: productName, // Nom du produit depuis data-name
           price: price, // Prix unitaire
           quantity: quantity, // Quantité
-          image: "/public/50euro.png" // Image par défaut
+          image: productImage // Image selon le billet sélectionné (50.webp ou 20.webp)
         });
+        console.log("Nouveau produit ajouté:", productName);
       }
       
       // Sauvegarde le panier dans le localStorage
@@ -185,6 +205,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // Met à jour le billet sélectionné
       selectedBill = container.dataset.bill;
 
+      console.log("Billet sélectionné:", selectedBill);
+
       // Met à jour les classes "active" pour les conteneurs de billets
       toggleActiveClass(floatingContainers, container, "active");
 
@@ -201,7 +223,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const visibleOptions = document.querySelectorAll(`.product-display[data-bill="${selectedBill}"] .pricing-option`);
       if (visibleOptions.length > 0) {
         selectedPriceOption = visibleOptions[0];
-        toggleActiveClass(document.querySelectorAll('.pricing-option'), selectedPriceOption, "selected");
+        // Mettre à jour les classes selected pour le nouveau produit
+        document.querySelectorAll('.pricing-option').forEach(opt => opt.classList.remove('selected'));
+        selectedPriceOption.classList.add('selected');
+        
+        console.log("Option sélectionnée:", selectedPriceOption.dataset.name || selectedPriceOption.querySelector(".amount")?.textContent);
       }
     });
   });
@@ -217,6 +243,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Met à jour les classes "selected" pour les options de prix du produit actuel
         const currentProductOptions = productDiv.querySelectorAll('.pricing-option');
         toggleActiveClass(currentProductOptions, option, "selected");
+        
+        console.log("Option sélectionnée:", option.dataset.name || option.querySelector(".amount")?.textContent);
       }
     });
   });
@@ -255,6 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
           // Si c'est le produit du billet sélectionné, définir comme selectedPriceOption
           if (produit.dataset.bill === selectedBill) {
             selectedPriceOption = option;
+            console.log("Option par défaut:", option.dataset.name || option.querySelector(".amount")?.textContent);
           }
         } else {
           option.classList.remove('selected');
