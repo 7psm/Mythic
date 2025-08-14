@@ -2,13 +2,27 @@
 
 ## Programme du Dev
 
+### Beta : 
+- Ajout de git dans le projet ✅
+- Ajout de Node.js dans le projet ✅
+- Pages Principales et Script Fonctionnels (70%) ✅
+
+** A FINIR :**
+- Bug script cart.js
+- Bug script OrderConext.js
+- Finir la page Checkout.html et la rendre fonctionnel
+- Faire la page Confirmation.html et la rendre fonctionnel
+- Intégré le système de commande via le bot. (A la validation de la commande, le client reçoit un MP du bot avec son récap (embed) et moi un embed dans un salon "Orders" avec le récapitulatif)
+- Mise en place de sécurité au sein du site
+- Crypté et Protéger les données des clients (notamment les infos sur les coordonnées bancaire)
+
 ### V1 : Version complète pour PC 
 **Updates v1 :**
 - Ajout de responsive autres écran pc
-- Ajout de git dans le projet 
 - Ajout d'un système de mise à jour (vérifie la version du site entre l'actuelle et la nouvelle. Si non identique, refresh auto de la page, sinon, rien)
 - Ajout d'API pour faciliter la gestion du site
 - Amélioration de la sécurité du site
+- Ajouter un système de mail en PHP (permet au client de reçevoir égallement un mail avec le récapitulatif de commande)
 
 ### V2 : Version Complète Mobile
 **Updates v2 :**
