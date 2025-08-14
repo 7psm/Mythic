@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
       toastContainer.id = "toast-container";
       toastContainer.style.cssText = `
         position: fixed;
-        top: 20px;
+        bottom: 20px;
         right: 20px;
         z-index: 9999;
         pointer-events: none;
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Vérifie si le produit est déjà dans le panier
       const existingItemIndex = cart.findIndex(item => 
-        item.bill === selectedBill && 
+        item.name === productName && 
         Math.abs(item.price - price) < 0.01 // Comparaison de flottants
       );
 
@@ -157,11 +157,10 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         // Sinon, ajoute le produit au panier avec un ID unique
         cart.push({
-          id: Date.now() + Math.random(), // ID unique
-          bill: selectedBill,
-          price: price,
-          quantity: quantity,
-          name: productName, // Uniformiser avec 'name' au lieu de 'description'
+          id: Date.now().toString(), // ID unique en string
+          name: productName, // Nom du produit
+          price: price, // Prix unitaire
+          quantity: quantity, // Quantité
           image: "/public/50euro.png" // Image par défaut
         });
       }
