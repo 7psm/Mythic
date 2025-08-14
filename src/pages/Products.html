@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IncognitoMarket - No.1 Shop All Over Discord</title>
+    <link rel="icon" href="/public/logo.png" />
+
+    <!-- /////////////////////////////////////////////////////////////////////////
+       ////////////////////       Dépendances CSS et JS       ////////////////////
+       ///////////////////////////////////////////////////////////////////////// -->
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/src/styles/PagesStyles/Products.css" />
+    <link rel="stylesheet" href="/src/styles/GlobalStyle.css" />
+    <link rel="stylesheet" href="/src/styles/NavBar.css" />
+
+    <!-- Script -->
+    <script src="../js/Product.js" defer></script>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  </head>
+
+ <body>
+    <div class="page-container">
+      <!-- ////////////////////////////////////////////////////////////
+           ////////////////////       Navigation            ///////////
+           ////////////////////////////////////////////////////////////-->
+                    <nav class="navbar-container">
+                      <div class="nav-links">
+                        <a href="../HomePage.html" class="nav-link">Accueil</a>
+                        <a href="Products.html" class="nav-link">Produits</a>
+                        <a href="TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
+                        <a href="Contact.html" class="nav-link">Contact</a>
+                      </div>
+                      <div class="action-buttons">
+                        <a href="Cart.html" class="cart-icon" style="position: relative">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" ><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                          <span class="cart-count">0</span>
+                        </a>
+                        <a href="Contact.html" class="contact-button">Contact</a>
+                      </div>
+                    </nav>
+
+  <!-- /////////////////////////////////////////////////////////////////
+       ////////////////////         Contenu Principal         //////////
+       ///////////////////////////////////////////////////////////////// -->
+        <main class="main-content">
+          <section class="product-section">
+    <!-- Carrousel Produits -->
+            <div class="product-carousel">
+              <div class="floating-container active" data-bill="50">
+                <div class="floating-bill active">
+                  <img class="bill" src="/public/50.webp" alt="Billet 50 euros" />
+                  <img class="shadow" src="/public/shadow.png" alt="Ombre" />
+                </div>
+              </div>
+              <div class="floating-container" data-bill="20">
+                <div class="floating-bill active">
+                  <img class="bill" src="/public/20.webp" alt="Billet 20 euros" />
+                  <img class="shadow" src="/public/shadow.png" alt="Ombre" />
+                </div>
+              </div>
+            </div>
+          
+    <!-- Produit 50€ – Discord Nitro -->
+            <div class="product-display" data-bill="50">
+              <div class="product-info">
+                <h2 class="product-name">DISCORD NITRO</h2>
+                <div class="product-price">LEGAL PAID</div>
+                  <div class="amount-selector">
+                    <label class="amount-label">Choisissez votre abonnement :</label>
+                    <div class="pricing-select">
+                      <div class="pricing-option selected" data-price="7.00" data-name="Nitro Boost 1 mois">
+                        <span class="amount">Nitro Boost 1 mois</span><span class="price">7€</span>
+                      </div>
+                      <div class="pricing-option" data-price="1.40" data-name="Nitro Classic 1 mois">
+                        <span class="amount">Nitro Classic 1 mois</span><span class="price">1.40€</span>
+                      </div>
+                    </div>
+                  <div class="amount-info">Vous Recevrez Votre Produit sur Discord</div>
+                </div>
+                <button class="add-to-cart-button" type="button">Ajouter au Panier</button>
+              </div>
+            </div>
+          
+    <!-- Produit 20€ – Discord Server Boost-->
+            <div class="product-display" data-bill="20" style="display: none">
+              <div class="product-info">
+                <h2 class="product-name">DISCORD SERVER BOOST</h2>
+                <div class="product-price">LEGAL PAID</div>
+                <div class="amount-selector">
+                  <label class="amount-label">Choisissez votre abonnement :</label>
+                    <div class="pricing-select">
+                      <div class="pricing-option selected" data-price="9.99" data-name="Server Boost 1 mois x14">
+                        <span class="amount">Server Boost 1 mois x14</span><span class="price">15€</span>
+                      </div>
+                      <div class="pricing-option selected" data-price="9.99" data-name="Server Boost 1 mois x12">
+                        <span class="amount">Server Boost 1 mois x12</span><span class="price">12€</span>
+                      </div>
+                      <div class="pricing-option" data-price="29.99" data-name="Server Boost 3 mois x14">
+                        <span class="amount">Server Boost 3 mois x14</span><span class="price">20€</span>
+                      </div>
+                      <div class="pricing-option" data-price="29.99" data-name="Server Boost 3 mois x12">
+                        <span class="amount">Server Boost 3 mois x12</span><span class="price">18€</span>
+                      </div>
+                    </div>
+                      <div class="amount-info">
+                        Vous Recevrez Votre Produit sur Discord
+                      </div>
+                  </div>
+                <button class="add-to-cart-button" type="button">Ajouter au Panier</button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+
+  <!-- /////////////////////////////////////////////////////////////////////////
+       ////////////////////           Notifications           //////////////////
+       ///////////////////////////////////////////////////////////////////////// -->
+    <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+ </body>
+</html>
