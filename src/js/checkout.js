@@ -6,16 +6,73 @@ document.addEventListener("DOMContentLoaded", () => {
   const shippingOptions = document.querySelectorAll(".shipping-option");
   const cartCountElem = document.querySelector(".cart-count");
   const form = document.querySelector(".checkout-form");
+  const submitButton = document.querySelector(".submit-button");
   
   console.log("Éléments trouvés:");
   console.log("- Options de paiement:", paymentOptions.length);
   console.log("- Options de livraison:", shippingOptions.length);
   console.log("- Compteur panier:", cartCountElem);
+  console.log("- Bouton submit:", submitButton);
 
-  // Clé de chiffrement pour les données sensibles (en production, utilisez une clé plus sécurisée)
+  // Clé de chiffrement pour les données sensibles
   const ENCRYPTION_KEY = "checkout_secure_key_2024";
 
-  // Fonction de chiffrement simple (pour la démo - en production, utilisez une vraie librairie crypto)
+  // Fonction pour calculer le total de la commande
+  function calculateOrderTotal() {
+    try {
+      // Récupérer le panier
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      
+      // Calculer le sous-total des articles
+      const subtotal = cart.reduce((total, item) => {
+        return total + (item.price * item.quantity);
+      }, 0);
+      
+      // Récupérer le prix de la livraison sélectionnée
+      let shippingCost = 0;
+      const selectedShipping = document.querySelector(".shipping-option.selected");
+      if (selectedShipping) {
+        const priceElement = selectedShipping.querySelector(".shipping-price");
+        if (priceElement) {
+          const priceText = priceElement.textContent.trim();
+          // Extraire le prix (ex: "+ 2.50€" ou "Gratuit")
+          if (priceText.includes("€")) {
+            const match = priceText.match(/(\d+\.?\d*)/);
+            if (match) {
+              shippingCost = parseFloat(match[1]);
+            }
+          }
+        }
+      }
+      
+      const total = subtotal + shippingCost;
+      console.log("Calcul total:", { subtotal, shippingCost, total });
+      return total;
+      
+    } catch (error) {
+      console.error("Erreur calcul total:", error);
+      return 0;
+    }
+  }
+
+  // Fonction pour mettre à jour le texte du bouton avec le total
+  function updateSubmitButtonText() {
+    if (!submitButton) return;
+    
+    const total = calculateOrderTotal();
+    const formattedTotal = total.toFixed(2);
+    
+    // Mettre à jour le texte du bouton
+    if (total > 0) {
+      submitButton.innerHTML = `Finaliser la Commande - ${formattedTotal}€`;
+    } else {
+      submitButton.innerHTML = "Finaliser la Commande";
+    }
+    
+    console.log("Bouton mis à jour avec le total:", formattedTotal + "€");
+  }
+
+  // Fonction de chiffrement simple
   function encryptData(data) {
     try {
       const jsonString = JSON.stringify(data);
@@ -125,6 +182,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       
       console.log("Compteur panier mis à jour:", totalCount);
+      
+      // Mettre à jour le bouton avec le total
+      updateSubmitButtonText();
+      
     } catch (error) {
       console.error("Erreur lors de la mise à jour du compteur panier:", error);
     }
@@ -159,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const priceText = priceElement.textContent.trim().toLowerCase();
         const nameText = nameElement.textContent.trim();
         
-        // Chercher "gratuit" ou "classique" (selon votre HTML)
+        // Chercher "gratuit" ou "classique"
         if (priceText.includes("gratuit") || nameText.includes("Classique")) {
           option.classList.add("selected");
           localStorage.setItem("selectedShippingMethod", nameText);
@@ -178,6 +239,9 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Première option de livraison sélectionnée par défaut");
       }
     }
+    
+    // Mettre à jour le total après sélection de la livraison
+    updateSubmitButtonText();
   }
 
   // Événements pour les moyens de paiement
@@ -236,6 +300,9 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("selectedShippingMethod", selectedMethod);
         console.log("Mode de livraison sauvegardé:", selectedMethod);
         
+        // Mettre à jour le total du bouton quand la livraison change
+        updateSubmitButtonText();
+        
         // Sauvegarder toutes les données du formulaire
         saveFormDataSecurely();
       });
@@ -258,17 +325,16 @@ document.addEventListener("DOMContentLoaded", () => {
         clearTimeout(saveTimeout);
         saveTimeout = setTimeout(() => {
           saveFormDataSecurely();
-        }, 1000); // Sauvegarde 1 seconde après l'arrêt de la saisie
+        }, 1000);
       });
     });
   }
 
   // Validation et soumission du formulaire
   function setupFormValidation() {
-    const submitButton = document.querySelector(".submit-button");
-    
     if (form && submitButton) {
-      form.addEventListener("submit", (e) => {
+      // Modifier le bouton pour une redirection simple
+      submitButton.onclick = function(e) {
         e.preventDefault();
         
         console.log("=== VALIDATION DU FORMULAIRE ===");
@@ -317,17 +383,14 @@ document.addEventListener("DOMContentLoaded", () => {
           const orderNumber = "CMD-" + Date.now().toString().slice(-8);
           console.log("Numéro de commande généré:", orderNumber);
           
-          // En production, ici vous enverriez les données à votre serveur
-          alert(`Commande validée !\nNuméro de commande: ${orderNumber}\n\n(Mode démo - les données sont stockées de manière sécurisée localement)`);
-          
-          // Optionnel: redirection vers une page de confirmation
-          // window.location.href = "confirmation.html?order=" + orderNumber;
+          // Redirection vers la page de confirmation
+          window.location.href = "./Confirmation.html?order=" + orderNumber;
           
         } else {
           console.log("Formulaire invalide");
           alert("Veuillez remplir tous les champs obligatoires et sélectionner un moyen de paiement.");
         }
-      });
+      };
     }
   }
 
@@ -348,10 +411,14 @@ document.addEventListener("DOMContentLoaded", () => {
       setupAutoSave();
     }
     
+    // Mettre à jour le bouton initial
+    updateSubmitButtonText();
+    
     console.log("=== INITIALISATION TERMINÉE ===");
     console.log("- Moyens de paiement: AUCUN sélectionné par défaut");
     console.log("- Mode de livraison: GRATUIT sélectionné par défaut");
     console.log("- Données cryptées et sauvegardées automatiquement");
+    console.log("- Bouton mis à jour avec le prix total");
   }
 
   // Fonction pour vider les données sécurisées (utilitaire)
@@ -370,6 +437,8 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartCount,
     initialize,
     clearSecureData,
-    saveFormDataSecurely
+    saveFormDataSecurely,
+    updateSubmitButtonText,
+    calculateOrderTotal
   };
 });
