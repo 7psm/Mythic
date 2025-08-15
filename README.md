@@ -8,10 +8,6 @@
 - Pages Principales et Script Fonctionnels (70%) ✅
 
 ** A FINIR :**
-- Bug script cart.js
-- Bug script OrderConext.js
-- Finir la page Checkout.html et la rendre fonctionnel
-- Faire la page Confirmation.html et la rendre fonctionnel
 - Intégré le système de commande via le bot. (A la validation de la commande, le client reçoit un MP du bot avec son récap (embed) et moi un embed dans un salon "Orders" avec le récapitulatif)
 - Mise en place de sécurité au sein du site
 - Crypté et Protéger les données des clients (notamment les infos sur les coordonnées bancaire)
@@ -23,6 +19,7 @@
 - Ajout d'API pour faciliter la gestion du site
 - Amélioration de la sécurité du site
 - Ajouter un système de mail en PHP (permet au client de reçevoir égallement un mail avec le récapitulatif de commande)
+- Ajouter page 'Error 404'
 
 ### V2 : Version Complète Mobile
 **Updates v2 :**
