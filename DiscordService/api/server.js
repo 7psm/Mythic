@@ -9,7 +9,7 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 // Import du bot Discord
-const discordBot = require('../bot/index.js');
+const discordBot = require('../bot/discordService.js');
 
 class DiscordAPIServer {
   constructor() {
