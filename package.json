@@ -1,0 +1,47 @@
+{
+  "name": "incognitomarket-discord-bot",
+  "version": "1.0.0",
+  "description": "Bot Discord pour notifications de commandes IncognitoMarket",
+  "main": "bot/discordService.js",
+  "scripts": {
+    "start": "node bot/index.js",
+    "dev": "nodemon bot/index.js",
+    "server": "node api/server.js",
+    "dev-server": "nodemon api/server.js",
+    "both": "concurrently \"npm run dev\" \"npm run dev-server\"",
+    "test": "node test/test-bot.js",
+    "test-api": "node test/test-api.js",
+    "setup": "node setup/setup-bot.js",
+    "deploy": "pm2 start ecosystem.config.js"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "ecommerce",
+    "notifications",
+    "incognitomarket"
+  ],
+  "author": "IncognitoMarket",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express-rate-limit": "^7.1.5",
+    "axios": "^1.6.2",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "concurrently": "^8.2.2",
+    "pm2": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AimbotBabyalone/mythic.git"
+  }
+}
