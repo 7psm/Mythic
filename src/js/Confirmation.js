@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     try {
       // Simulate sending order to Telegram
-      const success = await sendOrderToTelegram(orderData);
+      const success = await window.envoyerNotificationDiscord(orderData);
       
       if (success) {
         console.log("Commande envoyée avec succès");
