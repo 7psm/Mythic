@@ -421,23 +421,3 @@ process.on('SIGINT', () => {
 
 // Export pour utilisation dans l'API
 module.exports = bot;
-
-// ============================================
-// 4. FICHIER .ENV (à créer)
-// ============================================
-
-/*
-# Discord Bot Configuration
-DISCORD_BOT_TOKEN=votre_token_bot_ici
-DISCORD_GUILD_ID=votre_serveur_id_ici
-DISCORD_CHANNEL_ID=id_canal_notifications_ici
-ADMIN_ROLE_ID=id_role_admin_ici
-LOG_CHANNEL_ID=id_canal_logs_ici
-
-# API Configuration
-PORT=3000
-API_SECRET=votre_secret_api_ici
-
-# Database (optionnel)
-DATABASE_URL=votre_database_url_ici
-*/
