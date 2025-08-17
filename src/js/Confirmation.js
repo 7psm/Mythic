@@ -214,22 +214,31 @@ document.addEventListener('DOMContentLoaded', function() {
     // Submit button click
     if (submitButton) {
       submitButton.addEventListener('click', handleSubmitClick);
+    } else {
+      console.error('❌ Bouton submit non trouvé');
     }
     
     // Screenshot modal buttons
     if (notYetBtn) {
       notYetBtn.addEventListener('click', () => {
+        console.log('Clic sur "Pas encore"');
         closeModal(screenshotModal);
       });
+    } else {
+      console.error('❌ Bouton "Pas encore" non trouvé');
     }
     
     if (screenshotTakenBtn) {
       screenshotTakenBtn.addEventListener('click', confirmScreenshotTaken);
+    } else {
+      console.error('❌ Bouton "J\'ai pris une capture" non trouvé');
     }
     
     // Vendor modal button
     if (continueToVendorBtn) {
-      continueToVendorBtn.addEventListener('click', openVendorTelegram);
+      continueToVendorBtn.addEventListener('click', openVendorDiscord);
+    } else {
+      console.error('❌ Bouton "Continuer vers le Vendeur" non trouvé');
     }
     
     // Close modals when clicking outside
@@ -237,11 +246,17 @@ document.addEventListener('DOMContentLoaded', function() {
       if (modal) {
         modal.addEventListener('click', function(e) {
           if (e.target === modal) {
+            console.log('Clic à l\'extérieur du modal, fermeture...');
             closeModal(modal);
           }
         });
       }
     });
+    
+    // Test d'affichage des modales au chargement (pour debug)
+    console.log('🔍 Debug - Éléments modales:');
+    console.log('Screenshot modal:', screenshotModal ? 'Trouvé' : 'Non trouvé');
+    console.log('Vendor modal:', vendorModal ? 'Trouvé' : 'Non trouvé');
     
     console.log("Event listeners configurés");
   }
@@ -251,11 +266,13 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("Clic sur le bouton de soumission");
     
     if (!screenshotTaken) {
-      // Show modal asking to take a screenshot
+      // Première fois : demander capture d'écran
+      console.log("Première soumission : demande de capture d'écran");
       openModal(screenshotModal);
     } else {
-      // Process order
-      submitOrder();
+      // Deuxième fois (après capture confirmée) : afficher modal vendeur directement
+      console.log("Deuxième soumission : affichage du modal vendeur");
+      showVendorModal();
     }
   }
   
@@ -264,49 +281,98 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("Capture d'écran confirmée");
     screenshotTaken = true;
     closeModal(screenshotModal);
-    submitOrder();
+    
+    // NE PAS afficher le modal vendeur ici
+    // Il s'affichera quand l'utilisateur cliquera à nouveau sur "Soumettre la commande"
+    console.log('Capture d\'écran confirmée, retour à la page principale');
   }
   
-  // Submit order
+  // Submit order via Discord
   async function submitOrder() {
     console.log("Soumission de la commande...");
     setSubmitting(true);
     
     try {
-      // Simulate sending order to Telegram
-      const success = await window.envoyerNotificationDiscord(orderData);
+      // Send order data to Discord instead of Telegram
+      const success = await sendOrderToDiscord(orderData);
       
       if (success) {
-        console.log("Commande envoyée avec succès");
-        // Show vendor selection modal
-        showVendorModal();
+        console.log("Commande envoyée avec succès vers Discord");
+        return true; // Retourner le succès
       } else {
-        console.error("Échec de l'envoi de la commande");
+        console.error("Échec de l'envoi de la commande vers Discord");
         alert("Erreur lors de l'envoi de la commande. Veuillez réessayer.");
+        return false;
       }
     } catch (error) {
       console.error("Erreur lors de la soumission:", error);
       alert("Une erreur s'est produite. Veuillez réessayer.");
+      return false;
     } finally {
       setSubmitting(false);
     }
   }
   
-  // Simulate sending order to Telegram
-  async function sendOrderToTelegram(orderData) {
-    // Simulate API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log("Commande envoyée au bot Telegram:", orderData);
-        resolve(true);
-      }, 1500);
-    });
+  // Send order to Discord (remplace l'ancienne fonction Telegram)
+  async function sendOrderToDiscord(orderData) {
+    try {
+      console.log("Envoi des données de commande vers Discord...");
+      
+      // Formatage des données pour Discord
+      const discordData = {
+        numeroCommande: orderData.orderNumber,
+        nom: orderData.name,
+        email: orderData.email,
+        pseudoDiscord: orderData.telegram, // Le champ telegram contient maintenant le pseudo Discord
+        telephone: orderData.phoneNumber,
+        adresse: orderData.address,
+        ville: orderData.city,
+        codePostal: orderData.postalCode,
+        pays: orderData.country,
+        articles: orderData.orderItems.map(item => ({
+          nom: item.name,
+          quantite: item.quantity,
+          prix: item.price
+        })),
+        methodeLivraison: orderData.shippingMethod.name,
+        delaiLivraison: orderData.shippingMethod.delivery,
+        fraisLivraison: orderData.shippingMethod.price,
+        methodePaiement: orderData.paymentMethod,
+        dateCommande: orderData.orderDate
+      };
+      
+      // Simuler l'envoi vers Discord (remplacez par votre vraie API Discord)
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          console.log("📨 Données envoyées vers Discord:", discordData);
+          
+          // Simulation d'un embed Discord
+          console.log("🎨 Embed Discord créé:");
+          console.log(`Titre: 🛒 Nouvelle commande ${discordData.numeroCommande}`);
+          console.log(`Client: ${discordData.nom} (${discordData.pseudoDiscord})`);
+          console.log(`Articles: ${discordData.articles.length} article(s)`);
+          console.log(`Total: €${(discordData.articles.reduce((t, a) => t + (a.prix * a.quantite), 0) + discordData.fraisLivraison).toFixed(2)}`);
+          
+          resolve(true); // Simuler le succès
+        }, 1500);
+      });
+      
+    } catch (error) {
+      console.error("Erreur lors de l'envoi vers Discord:", error);
+      return false;
+    }
   }
   
   // Show vendor modal
   function showVendorModal() {
-    selectedVendor = "MolarMarket";
-    openModal(vendorModal);
+    selectedVendor = ".uwg9";
+    console.log('Affichage du modal vendeur...');
+    
+    // Envoyer les données vers Discord avant d'afficher le modal
+    submitOrder().then(() => {
+      // Afficher le modal vendeur après l'envoi réussi
+      openModal(vendorModal);
+    });
   }
   
   // Handle vendor selection
@@ -315,9 +381,9 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("Vendeur sélectionné:", vendor);
   }
   
-  // Open vendor Telegram
-  function openVendorTelegram() {
-    console.log("Redirection vers Telegram du vendeur:", selectedVendor);
+  // Open vendor Discord (remplace l'ancienne fonction Telegram)
+  function openVendorDiscord() {
+    console.log("Redirection vers Discord du vendeur:", selectedVendor);
     
     // Save order completion to localStorage
     localStorage.setItem('orderCompleted', JSON.stringify({
@@ -326,16 +392,18 @@ document.addEventListener('DOMContentLoaded', function() {
       vendor: selectedVendor
     }));
     
-    // Open Telegram
-    window.open('https://t.me/MolarMarket', '_blank');
+    // Open Discord server
+    const discordUrl = 'https://discord.gg/beC8cFZaXH';
+    console.log("Ouverture de Discord:", discordUrl);
+    window.open(discordUrl, '_blank');
     
     // Close modal
     closeModal(vendorModal);
     
-    // Optional: redirect to success page
-    // setTimeout(() => {
-    //   window.location.href = './Success.html';
-    // }, 1000);
+    // Afficher un message de confirmation
+    setTimeout(() => {
+      alert("✅ Commande finalisée !\n\nVous allez être redirigé vers Discord pour contacter le vendeur.\n\nMerci pour votre commande !");
+    }, 500);
   }
   
   // Set submitting state
@@ -356,16 +424,22 @@ document.addEventListener('DOMContentLoaded', function() {
   // Open modal
   function openModal(modal) {
     if (modal) {
+      console.log('Ouverture du modal:', modal.id);
       modal.classList.add('active');
       isModalOpen = true;
+    } else {
+      console.error('Modal non trouvé pour ouverture');
     }
   }
   
   // Close modal
   function closeModal(modal) {
     if (modal) {
+      console.log('Fermeture du modal:', modal.id);
       modal.classList.remove('active');
       isModalOpen = false;
+    } else {
+      console.error('Modal non trouvé pour fermeture');
     }
   }
   
@@ -375,8 +449,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initialize,
     handleSubmitClick,
     confirmScreenshotTaken,
-    openVendorTelegram,
-    loadOrderData
+    openVendorDiscord,
+    loadOrderData,
+    sendOrderToDiscord
   };
   
   // Initialize the page

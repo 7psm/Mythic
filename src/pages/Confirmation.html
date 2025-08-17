@@ -15,14 +15,6 @@
         <script src="../js/Product.js"></script>
         <script src="../Context/OrderContext.js"></script>
         <script src="../js/Confirmation.js"></script>
-        <script src="/DiscordService/web/discord-client.js"></script>
-        <script>
-        // Configuration
-        window.CONFIG_DISCORD_CLIENT = {
-          apiUrl: 'https://votre-api.com/api',
-          apiSecret: 'votre_secret'
-        };
-        </script>
 
 <!-- ///////////////////////////////////////////////////////////////////
      ////////////////////       Fonts & Icons       ////////////////////
@@ -50,7 +42,7 @@
                 <div class="mobile-actions-group">
                   <a href="./Cart.html" class="cart-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                    <span class="cart-count">0</span>  <!-- Ajoute cet élément -->
+                    <span class="cart-count">0</span>
                   </a>
                   <button class="menu-button" id="menuToggle">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
@@ -67,7 +59,7 @@
                     <p>Merci pour votre commande ! Voici le récapitulatif de votre achat.</p>
                 </div>
             
-            <div class="confirmation-card">
+                <div class="confirmation-card">
                     <div class="card-header">
                         <div class="order-info">
                             <h2 id="customer-name">Nom du Client</h2>
@@ -80,7 +72,7 @@
                         </div>
                     </div>
                 
-                <div class="card-content">
+                    <div class="card-content">
                         <div class="two-columns">
                             <div class="column">
                                 <h3 class="section-title">Informations Client</h3>
@@ -112,22 +104,22 @@
                                 <div class="info-grid">
                                     <div class="info-group">
                                         <h4>Adresse</h4>
-                                        <p id="shipping-address"></p>
+                                        <p id="shipping-address">Adresse</p>
                                     </div>
 
                                     <div class="info-group">
                                         <h4>Ville</h4>
-                                        <p id="shipping-city"></p>
+                                        <p id="shipping-city">Ville</p>
                                     </div>
 
                                     <div class="info-group">
                                         <h4>Pays</h4>
-                                        <p id="shipping-country"></p>
+                                        <p id="shipping-country">Pays</p>
                                     </div>
 
                                     <div class="info-group">
                                         <h4>Code Postal</h4>
-                                        <p id="shipping-postal"></p>
+                                        <p id="shipping-postal">Code Postal</p>
                                     </div>
                                 </div>
                             </div>
@@ -142,13 +134,13 @@
 
                             <div class="info-group">
                                 <h4>Délai Estimé</h4>
-                                <p id="shipping-delivery"></p>
+                                <p id="shipping-delivery">Délai</p>
                             </div>
                         </div>
                     
                         <h3 class="section-title">Méthode de Paiement</h3>
                         <div class="info-group" style="margin-bottom: 15px;">
-                            <p id="payment-method"></p>
+                            <p id="payment-method">PayPal</p>
                         </div>
                     
                         <h3 class="section-title">Articles Commandés</h3>
@@ -172,47 +164,47 @@
                                 <span id="total-cost">€0.00</span>
                             </div>
                         </div>
+                    </div>
                 </div>
-            </div>
             
-            <div class="screenshot-instructions">
-                <h3>📱 Capture d'écran des Détails de Commande</h3>
-                <p>Veuillez prendre une capture d'écran de cette page pour vos dossiers. Cette confirmation contient toutes les informations importantes de votre commande et servira de preuve d'achat.</p>
-                <p>Cette dernière vous sera égallement envoyé par mail et en message privé sur discord.</p>
-            </div>
+                <div class="screenshot-instructions">
+                    <h3>📱 Capture d'écran des Détails de Commande</h3>
+                    <p>Veuillez prendre une capture d'écran de cette page pour vos dossiers. Cette confirmation contient toutes les informations importantes de votre commande et servira de preuve d'achat.</p>
+                    <p>Cette dernière vous sera égallement envoyé par mail et en message privé sur discord.</p>
+                </div>
             
-            <div class="action-buttons">
-                <button class="submit-button" id="submit-order" disabled>
-                    Soumettre la Commande
-                </button>
-            </div>
+                <div class="action-buttons">
+                    <button class="submit-button" id="submit-order" disabled>
+                        Soumettre la Commande
+                    </button>
+                </div>
             </main>
 
-                <!-- Screenshot Modal -->
-                <div class="modal" id="screenshot-modal">
-                    <div class="modal-content">
-                        <h2 class="modal-title">Avez-vous pris une capture d'écran des détails de votre commande ? Ceci est nécessaire avant de soumettre.</h2>
-                        <div class="modal-buttons">
-                            <button class="secondary-button" id="not-yet-btn">
-                                Pas encore
-                            </button>
-                            <button class="primary-button" id="screenshot-taken-btn">
-                                Oui, j'ai pris une capture d'écran
-                            </button>
-                        </div>
+            <!-- Screenshot Modal -->
+            <div class="modal" id="screenshot-modal">
+                <div class="modal-content">
+                    <h2 class="modal-title">Avez-vous pris une capture d'écran des détails de votre commande ? Ceci est nécessaire avant de soumettre.</h2>
+                    <div class="modal-buttons">
+                        <button class="secondary-button" id="not-yet-btn">
+                            Pas encore
+                        </button>
+                        <button class="primary-button" id="screenshot-taken-btn">
+                            Oui, j'ai pris une capture d'écran
+                        </button>
                     </div>
-    
+                </div>
+            </div>
 
             <!-- Vendor Modal -->
             <div class="modal" id="vendor-modal">
                 <div class="modal-content">
-                    <h2 class="modal-title">Sélectionner un Vendeur</h2>
-                    <p>Choisissez votre vendeur préféré pour finaliser la transaction.</p>
+                    <h2 class="modal-title">Commande Soumise avec Succès</h2>
+                    <p>Veuillez sélectionner un vendeur pour continuer votre achat</p>
                     
                     <div class="vendor-options">
                         <div class="vendor-option selected" data-vendor="MolarMarket">
                             <div class="vendor-name">
-                                <i class="fas fa-paper-plane"></i>
+                                <i class="fa-brands fa-discord"></i>
                                 @.uwg9
                             </div>
                             <div class="radio-indicator checked"></div>
@@ -225,5 +217,18 @@
                 </div>
             </div>
         </div>
+
+        <!-- Debug Script -->
+        <script>
+            // Script de debug pour vérifier que les éléments sont trouvés
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('🔍 DEBUG - Vérification des éléments:');
+                console.log('Submit button:', document.getElementById('submit-order') ? '✅' : '❌');
+                console.log('Screenshot modal:', document.getElementById('screenshot-modal') ? '✅' : '❌');
+                console.log('Vendor modal:', document.getElementById('vendor-modal') ? '✅' : '❌');
+                console.log('Screenshot taken btn:', document.getElementById('screenshot-taken-btn') ? '✅' : '❌');
+                console.log('Continue to vendor btn:', document.getElementById('continue-to-vendor') ? '✅' : '❌');
+            });
+        </script>
     </body>
 </html>
