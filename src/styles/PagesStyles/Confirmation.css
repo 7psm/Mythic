@@ -348,14 +348,14 @@
 /* Modal Title */
 .modal-title {
   font-size: 1.2rem;
-  color: var(--text-white, #ffffff);
+  color: var(--text-gray);
   margin-bottom: 12px;
   text-align: center;
 }
 
 /* Modal Description */
 .modal-content p {
-  color: var(--text-gray, #888);
+  color: var(--text-gray);
   margin-bottom: 12px;
   text-align: center;
   font-size: 0.85rem;
@@ -397,7 +397,7 @@
 .secondary-button {
   padding: 10px 20px;
   background: transparent;
-  color: var(--text-white, #ffffff);
+  color: var(--text-gray);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   font-weight: 600;
@@ -442,7 +442,7 @@
 
 /* Vendor Name */
 .vendor-name {
-  color: var(--text-white, #ffffff);
+  color: var(--text-gray);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -459,7 +459,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid var(--text-gray, #666);
+  border: 2px solid var(--text-gray);
   display: flex;
   align-items: center;
   justify-content: center;

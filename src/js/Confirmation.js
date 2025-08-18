@@ -1,459 +1,328 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // State variables
-  let isModalOpen = false;
-  let screenshotTaken = false;
-  let isSubmitting = false;
-  let showVendors = false;
-  let selectedVendor = "";
-  let orderData = {};
-  
-  // DOM Elements
-  const submitButton = document.getElementById('submit-order');
-  const screenshotModal = document.getElementById('screenshot-modal');
-  const vendorModal = document.getElementById('vendor-modal');
-  const notYetBtn = document.getElementById('not-yet-btn');
-  const screenshotTakenBtn = document.getElementById('screenshot-taken-btn');
-  const continueToVendorBtn = document.getElementById('continue-to-vendor');
-  
-  // Initialize the page
-  function initialize() {
-    console.log("=== INITIALISATION PAGE CONFIRMATION ===");
+const _$a = {
+  0: 'DOMContentLoaded',
+  1: 'submit-order', 
+  2: 'screenshot-modal',
+  3: 'vendor-modal',
+  4: 'not-yet-btn',
+  5: 'screenshot-taken-btn', 
+  6: 'continue-to-vendor',
+  7: 'getElementById',
+  8: 'addEventListener',
+  9: 'click',
+  10: 'active',
+  11: 'classList',
+  12: 'add',
+  13: 'remove',
+  14: 'cart',
+  15: 'propMoneyCart',
+  16: 'secureCheckoutData',
+  17: 'selectedShippingMethod',
+  18: 'selectedPaymentMethod',
+  19: 'removeItem',
+  20: 'getItem',
+  21: 'setItem',
+  22: '.cart-count',
+  23: 'textContent',
+  24: 'disabled',
+  25: 'Soumettre la Commande',
+  26: '../HomePage.html',
+  27: 'https://discord.gg/beC8cFZaXH'
+};
+
+const _$b = (x) => _$a[x];
+const _$c = ['order-number', 'order-date', 'customer-name', 'contact-name', 'contact-email', 'contact-phone', 'contact-telegram'];
+const _$d = ['shipping-address', 'shipping-city', 'shipping-country', 'shipping-postal', 'shipping-method', 'shipping-delivery', 'payment-method'];
+const _$e = ['order-items', 'subtotal', 'shipping-cost', 'total-cost'];
+
+document[_$b(8)](_$b(0), function() {
+    // Variables d'état obfusquées
+    let _$f = [false, false, false, false, '', {}]; // [isModalOpen, screenshotTaken, isSubmitting, showVendors, selectedVendor, orderData]
     
-    // Get order data from various sources
-    loadOrderData();
+    // Éléments DOM obfusqués  
+    const _$g = document[_$b(7)](_$b(1));
+    const _$h = document[_$b(7)](_$b(2));
+    const _$i = document[_$b(7)](_$b(3));
+    const _$j = document[_$b(7)](_$b(4));
+    const _$k = document[_$b(7)](_$b(5));
+    const _$l = document[_$b(7)](_$b(6));
     
-    // Check if we have order data, redirect if not
-    if (!orderData.orderNumber) {
-      console.log("Pas de données de commande, redirection vers l'accueil");
-      window.location.href = './HomePage.html';
-      return;
-    }
-    
-    // Populate the page with order data
-    populateOrderData();
-    
-    // Setup event listeners
-    setupEventListeners();
-    
-    // Enable submit button after 3 seconds
-    setTimeout(() => {
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Soumettre la Commande';
-      }
-    }, 3000);
-    
-    console.log("=== INITIALISATION TERMINÉE ===");
-  }
-  
-  // Load order data from localStorage and URL params
-  function loadOrderData() {
-    try {
-      // Get order number from URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const orderNumber = urlParams.get('order');
-      
-      // Get encrypted form data
-      const encryptedData = localStorage.getItem("secureCheckoutData");
-      let formData = null;
-      
-      if (encryptedData) {
-        formData = decryptData(encryptedData);
-      }
-      
-      // Get cart data
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      
-      // Get selected methods
-      const selectedShippingMethod = localStorage.getItem("selectedShippingMethod") || "Livraison Standard";
-      const selectedPaymentMethod = localStorage.getItem("selectedPaymentMethod") || "PayPal";
-      
-      // Build order data object
-      orderData = {
-        orderNumber: orderNumber || generateOrderNumber(),
-        orderDate: new Date().toISOString(),
-        name: formData?.customerInfo?.name || 'Client',
-        email: formData?.customerInfo?.email || 'Non renseigné',
-        phoneNumber: formData?.customerInfo?.phone || 'Non renseigné',
-        telegram: formData?.customerInfo?.discord || 'Non renseigné',
-        address: formData?.shippingInfo?.address || 'Non renseigné',
-        city: formData?.shippingInfo?.city || 'Non renseigné',
-        country: formData?.shippingInfo?.country || 'Non renseigné',
-        postalCode: formData?.shippingInfo?.postalCode || 'Non renseigné',
-        orderItems: cart,
-        shippingMethod: {
-          name: selectedShippingMethod,
-          price: selectedShippingMethod.includes('Express') ? 2.50 : 0,
-          delivery: selectedShippingMethod.includes('Express') ? '15-20min' : '6-12h'
-        },
-        paymentMethod: selectedPaymentMethod
-      };
-      
-      console.log("Données de commande chargées:", orderData);
-      
-    } catch (error) {
-      console.error("Erreur lors du chargement des données:", error);
-      orderData = { orderNumber: null };
-    }
-  }
-  
-  // Decrypt form data
-  function decryptData(encryptedData) {
-    try {
-      const decoded = decodeURIComponent(atob(encryptedData));
-      const originalData = decoded.replace("checkout_secure_key_2024", '');
-      return JSON.parse(originalData);
-    } catch (error) {
-      console.error("Erreur de déchiffrement:", error);
-      return null;
-    }
-  }
-  
-  // Generate order number
-  function generateOrderNumber() {
-    const timestamp = Date.now().toString().slice(-8);
-    return `PM-${timestamp}`;
-  }
-  
-  // Format date for display
-  function formatDate(dateString) {
-    if (!dateString) return new Date().toLocaleDateString('fr-FR');
-    
-    const date = new Date(dateString);
-    return date.toLocaleDateString('fr-FR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  }
-  
-  // Populate the page with order data
-  function populateOrderData() {
-    console.log("Population des données sur la page...");
-    
-    // Order header
-    const orderNumberEl = document.getElementById('order-number');
-    const orderDateEl = document.getElementById('order-date');
-    const customerNameEl = document.getElementById('customer-name');
-    
-    if (orderNumberEl) orderNumberEl.textContent = orderData.orderNumber;
-    if (orderDateEl) orderDateEl.textContent = formatDate(orderData.orderDate);
-    if (customerNameEl) customerNameEl.textContent = orderData.name;
-    
-    // Customer information
-    document.getElementById('contact-name').textContent = orderData.name;
-    document.getElementById('contact-email').textContent = orderData.email;
-    document.getElementById('contact-phone').textContent = orderData.phoneNumber;
-    document.getElementById('contact-telegram').textContent = orderData.telegram;
-    
-    // Shipping information
-    document.getElementById('shipping-address').textContent = orderData.address;
-    document.getElementById('shipping-city').textContent = orderData.city;
-    document.getElementById('shipping-country').textContent = orderData.country;
-    document.getElementById('shipping-postal').textContent = orderData.postalCode;
-    
-    // Shipping and payment methods
-    document.getElementById('shipping-method').textContent = orderData.shippingMethod.name;
-    document.getElementById('shipping-delivery').textContent = orderData.shippingMethod.delivery;
-    document.getElementById('payment-method').textContent = orderData.paymentMethod;
-    
-    // Order items
-    populateOrderItems();
-    
-    // Order summary
-    calculateAndDisplayTotals();
-    
-    console.log("Population des données terminée");
-  }
-  
-  // Populate order items
-  function populateOrderItems() {
-    const orderItemsContainer = document.getElementById('order-items');
-    if (!orderItemsContainer) return;
-    
-    orderItemsContainer.innerHTML = '';
-    
-    orderData.orderItems.forEach(item => {
-      const itemTotal = item.price * item.quantity;
-      
-      const orderItem = document.createElement('div');
-      orderItem.className = 'order-item';
-      orderItem.innerHTML = `
-        <div class="item-name">
-          ${item.name}
-          <span>x${item.quantity}</span>
-        </div>
-        <div class="item-price">€${itemTotal.toFixed(2)}</div>
-      `;
-      orderItemsContainer.appendChild(orderItem);
-    });
-  }
-  
-  // Calculate and display totals
-  function calculateAndDisplayTotals() {
-    const subtotal = orderData.orderItems.reduce(
-      (total, item) => total + (item.price * item.quantity), 
-      0
-    );
-    
-    const shippingCost = orderData.shippingMethod.price || 0;
-    const total = subtotal + shippingCost;
-    
-    // Update display
-    document.getElementById('subtotal').textContent = `€${subtotal.toFixed(2)}`;
-    document.getElementById('shipping-cost').textContent = shippingCost === 0 ? 'Gratuit' : `€${shippingCost.toFixed(2)}`;
-    document.getElementById('total-cost').textContent = `€${total.toFixed(2)}`;
-    
-    console.log("Totaux calculés:", { subtotal, shippingCost, total });
-  }
-  
-  // Setup event listeners
-  function setupEventListeners() {
-    // Submit button click
-    if (submitButton) {
-      submitButton.addEventListener('click', handleSubmitClick);
-    } else {
-      console.error('❌ Bouton submit non trouvé');
-    }
-    
-    // Screenshot modal buttons
-    if (notYetBtn) {
-      notYetBtn.addEventListener('click', () => {
-        console.log('Clic sur "Pas encore"');
-        closeModal(screenshotModal);
-      });
-    } else {
-      console.error('❌ Bouton "Pas encore" non trouvé');
-    }
-    
-    if (screenshotTakenBtn) {
-      screenshotTakenBtn.addEventListener('click', confirmScreenshotTaken);
-    } else {
-      console.error('❌ Bouton "J\'ai pris une capture" non trouvé');
-    }
-    
-    // Vendor modal button
-    if (continueToVendorBtn) {
-      continueToVendorBtn.addEventListener('click', openVendorDiscord);
-    } else {
-      console.error('❌ Bouton "Continuer vers le Vendeur" non trouvé');
-    }
-    
-    // Close modals when clicking outside
-    [screenshotModal, vendorModal].forEach(modal => {
-      if (modal) {
-        modal.addEventListener('click', function(e) {
-          if (e.target === modal) {
-            console.log('Clic à l\'extérieur du modal, fermeture...');
-            closeModal(modal);
-          }
-        });
-      }
-    });
-    
-    // Test d'affichage des modales au chargement (pour debug)
-    console.log('🔍 Debug - Éléments modales:');
-    console.log('Screenshot modal:', screenshotModal ? 'Trouvé' : 'Non trouvé');
-    console.log('Vendor modal:', vendorModal ? 'Trouvé' : 'Non trouvé');
-    
-    console.log("Event listeners configurés");
-  }
-  
-  // Handle submit button click
-  function handleSubmitClick() {
-    console.log("Clic sur le bouton de soumission");
-    
-    if (!screenshotTaken) {
-      // Première fois : demander capture d'écran
-      console.log("Première soumission : demande de capture d'écran");
-      openModal(screenshotModal);
-    } else {
-      // Deuxième fois (après capture confirmée) : afficher modal vendeur directement
-      console.log("Deuxième soumission : affichage du modal vendeur");
-      showVendorModal();
-    }
-  }
-  
-  // Handle user confirming they took a screenshot
-  function confirmScreenshotTaken() {
-    console.log("Capture d'écran confirmée");
-    screenshotTaken = true;
-    closeModal(screenshotModal);
-    
-    // NE PAS afficher le modal vendeur ici
-    // Il s'affichera quand l'utilisateur cliquera à nouveau sur "Soumettre la commande"
-    console.log('Capture d\'écran confirmée, retour à la page principale');
-  }
-  
-  // Submit order via Discord
-  async function submitOrder() {
-    console.log("Soumission de la commande...");
-    setSubmitting(true);
-    
-    try {
-      // Send order data to Discord instead of Telegram
-      const success = await sendOrderToDiscord(orderData);
-      
-      if (success) {
-        console.log("Commande envoyée avec succès vers Discord");
-        return true; // Retourner le succès
-      } else {
-        console.error("Échec de l'envoi de la commande vers Discord");
-        alert("Erreur lors de l'envoi de la commande. Veuillez réessayer.");
-        return false;
-      }
-    } catch (error) {
-      console.error("Erreur lors de la soumission:", error);
-      alert("Une erreur s'est produite. Veuillez réessayer.");
-      return false;
-    } finally {
-      setSubmitting(false);
-    }
-  }
-  
-  // Send order to Discord (remplace l'ancienne fonction Telegram)
-  async function sendOrderToDiscord(orderData) {
-    try {
-      console.log("Envoi des données de commande vers Discord...");
-      
-      // Formatage des données pour Discord
-      const discordData = {
-        numeroCommande: orderData.orderNumber,
-        nom: orderData.name,
-        email: orderData.email,
-        pseudoDiscord: orderData.telegram, // Le champ telegram contient maintenant le pseudo Discord
-        telephone: orderData.phoneNumber,
-        adresse: orderData.address,
-        ville: orderData.city,
-        codePostal: orderData.postalCode,
-        pays: orderData.country,
-        articles: orderData.orderItems.map(item => ({
-          nom: item.name,
-          quantite: item.quantity,
-          prix: item.price
-        })),
-        methodeLivraison: orderData.shippingMethod.name,
-        delaiLivraison: orderData.shippingMethod.delivery,
-        fraisLivraison: orderData.shippingMethod.price,
-        methodePaiement: orderData.paymentMethod,
-        dateCommande: orderData.orderDate
-      };
-      
-      // Simuler l'envoi vers Discord (remplacez par votre vraie API Discord)
-      return new Promise((resolve) => {
+    // Fonction d'initialisation obfusquée
+    function _$m() {
+        _$n();
+        if (!_$f[5].orderNumber) {
+            window.location.href = './HomePage.html';
+            return;
+        }
+        _$o();
+        _$p();
         setTimeout(() => {
-          console.log("📨 Données envoyées vers Discord:", discordData);
-          
-          // Simulation d'un embed Discord
-          console.log("🎨 Embed Discord créé:");
-          console.log(`Titre: 🛒 Nouvelle commande ${discordData.numeroCommande}`);
-          console.log(`Client: ${discordData.nom} (${discordData.pseudoDiscord})`);
-          console.log(`Articles: ${discordData.articles.length} article(s)`);
-          console.log(`Total: €${(discordData.articles.reduce((t, a) => t + (a.prix * a.quantite), 0) + discordData.fraisLivraison).toFixed(2)}`);
-          
-          resolve(true); // Simuler le succès
-        }, 1500);
-      });
-      
-    } catch (error) {
-      console.error("Erreur lors de l'envoi vers Discord:", error);
-      return false;
+            if (_$g) {
+                _$g[_$b(24)] = false;
+                _$g[_$b(23)] = _$b(25);
+            }
+        }, 3000);
     }
-  }
-  
-  // Show vendor modal
-  function showVendorModal() {
-    selectedVendor = ".uwg9";
-    console.log('Affichage du modal vendeur...');
     
-    // Envoyer les données vers Discord avant d'afficher le modal
-    submitOrder().then(() => {
-      // Afficher le modal vendeur après l'envoi réussi
-      openModal(vendorModal);
-    });
-  }
-  
-  // Handle vendor selection
-  function handleVendorSelect(vendor) {
-    selectedVendor = vendor;
-    console.log("Vendeur sélectionné:", vendor);
-  }
-  
-  // Open vendor Discord (remplace l'ancienne fonction Telegram)
-  function openVendorDiscord() {
-    console.log("Redirection vers Discord du vendeur:", selectedVendor);
-    
-    // Save order completion to localStorage
-    localStorage.setItem('orderCompleted', JSON.stringify({
-      orderNumber: orderData.orderNumber,
-      completedAt: new Date().toISOString(),
-      vendor: selectedVendor
-    }));
-    
-    // Open Discord server
-    const discordUrl = 'https://discord.gg/beC8cFZaXH';
-    console.log("Ouverture de Discord:", discordUrl);
-    window.open(discordUrl, '_blank');
-    
-    // Close modal
-    closeModal(vendorModal);
-    
-    // Afficher un message de confirmation
-    setTimeout(() => {
-      alert("✅ Commande finalisée !\n\nVous allez être redirigé vers Discord pour contacter le vendeur.\n\nMerci pour votre commande !");
-    }, 500);
-  }
-  
-  // Set submitting state
-  function setSubmitting(submitting) {
-    isSubmitting = submitting;
-    
-    if (submitButton) {
-      if (submitting) {
-        submitButton.disabled = true;
-        submitButton.textContent = 'Envoi en cours...';
-      } else {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Soumettre la Commande';
-      }
+    // Chargement des données obfusqué
+    function _$n() {
+        try {
+            const _$q = new URLSearchParams(window.location.search);
+            const _$r = _$q.get('order');
+            const _$s = localStorage[_$b(20)](_$b(16));
+            let _$t = null;
+            
+            if (_$s) {
+                _$t = _$u(_$s);
+            }
+            
+            const _$v = JSON.parse(localStorage[_$b(20)](_$b(14)) || '[]');
+            const _$w = localStorage[_$b(20)](_$b(17)) || 'Livraison Standard';
+            const _$x = localStorage[_$b(20)](_$b(18)) || 'PayPal';
+            
+            _$f[5] = {
+                orderNumber: _$r || _$y(),
+                orderDate: new Date().toISOString(),
+                name: _$t?.customerInfo?.name || 'Client',
+                email: _$t?.customerInfo?.email || 'Non renseigné',
+                phoneNumber: _$t?.customerInfo?.phone || 'Non renseigné', 
+                telegram: _$t?.customerInfo?.discord || 'Non renseigné',
+                address: _$t?.shippingInfo?.address || 'Non renseigné',
+                city: _$t?.shippingInfo?.city || 'Non renseigné',
+                country: _$t?.shippingInfo?.country || 'Non renseigné',
+                postalCode: _$t?.shippingInfo?.postalCode || 'Non renseigné',
+                orderItems: _$v,
+                shippingMethod: {
+                    name: _$w,
+                    price: _$w.includes('Express') ? 2.50 : 0,
+                    delivery: _$w.includes('Express') ? '15-20min' : '6-12h'
+                },
+                paymentMethod: _$x
+            };
+        } catch (_$z) {
+            _$f[5] = { orderNumber: null };
+        }
     }
-  }
-  
-  // Open modal
-  function openModal(modal) {
-    if (modal) {
-      console.log('Ouverture du modal:', modal.id);
-      modal.classList.add('active');
-      isModalOpen = true;
-    } else {
-      console.error('Modal non trouvé pour ouverture');
+    
+    // Déchiffrement obfusqué
+    function _$u(_$aa) {
+        try {
+            const _$bb = decodeURIComponent(atob(_$aa));
+            const _$cc = _$bb.replace('checkout_secure_key_2024', '');
+            return JSON.parse(_$cc);
+        } catch (_$dd) {
+            return null;
+        }
     }
-  }
-  
-  // Close modal
-  function closeModal(modal) {
-    if (modal) {
-      console.log('Fermeture du modal:', modal.id);
-      modal.classList.remove('active');
-      isModalOpen = false;
-    } else {
-      console.error('Modal non trouvé pour fermeture');
+    
+    // Génération numéro de commande obfusqué
+    function _$y() {
+        const _$ee = Date.now().toString().slice(-8);
+        return 'PM-' + _$ee;
     }
-  }
-  
-  // Public API for debugging
-  window.confirmationPage = {
-    orderData,
-    initialize,
-    handleSubmitClick,
-    confirmScreenshotTaken,
-    openVendorDiscord,
-    loadOrderData,
-    sendOrderToDiscord
-  };
-  
-  // Initialize the page
-  initialize();
+    
+    // Population des données obfusquée
+    function _$o() {
+        _$c.forEach((_$ff, _$gg) => {
+            const _$hh = document[_$b(7)](_$ff);
+            if (_$hh) {
+                switch (_$gg) {
+                    case 0: _$hh[_$b(23)] = _$f[5].orderNumber; break;
+                    case 1: _$hh[_$b(23)] = new Date(_$f[5].orderDate).toLocaleDateString('fr-FR'); break;
+                    case 2: _$hh[_$b(23)] = _$f[5].name; break;
+                    case 3: _$hh[_$b(23)] = _$f[5].name; break;
+                    case 4: _$hh[_$b(23)] = _$f[5].email; break;
+                    case 5: _$hh[_$b(23)] = _$f[5].phoneNumber; break;
+                    case 6: _$hh[_$b(23)] = _$f[5].telegram; break;
+                }
+            }
+        });
+        
+        _$d.forEach((_$ii, _$jj) => {
+            const _$kk = document[_$b(7)](_$ii);
+            if (_$kk) {
+                switch (_$jj) {
+                    case 0: _$kk[_$b(23)] = _$f[5].address; break;
+                    case 1: _$kk[_$b(23)] = _$f[5].city; break;
+                    case 2: _$kk[_$b(23)] = _$f[5].country; break;
+                    case 3: _$kk[_$b(23)] = _$f[5].postalCode; break;
+                    case 4: _$kk[_$b(23)] = _$f[5].shippingMethod.name; break;
+                    case 5: _$kk[_$b(23)] = _$f[5].shippingMethod.delivery; break;
+                    case 6: _$kk[_$b(23)] = _$f[5].paymentMethod; break;
+                }
+            }
+        });
+        
+        _$ll();
+        _$mm();
+    }
+    
+    // Population articles obfusquée
+    function _$ll() {
+        const _$nn = document[_$b(7)](_$e[0]);
+        if (!_$nn) return;
+        
+        _$nn.innerHTML = '';
+        _$f[5].orderItems.forEach(_$oo => {
+            const _$pp = _$oo.price * _$oo.quantity;
+            const _$qq = document.createElement('div');
+            _$qq.className = 'order-item';
+            _$qq.innerHTML = `
+                <div class="item-name">
+                    ${_$oo.name}
+                    <span>x${_$oo.quantity}</span>
+                </div>
+                <div class="item-price">€${_$pp.toFixed(2)}</div>
+            `;
+            _$nn.appendChild(_$qq);
+        });
+    }
+    
+    // Calcul totaux obfusqué
+    function _$mm() {
+        const _$rr = _$f[5].orderItems.reduce((_$ss, _$tt) => _$ss + (_$tt.price * _$tt.quantity), 0);
+        const _$uu = _$f[5].shippingMethod.price || 0;
+        const _$vv = _$rr + _$uu;
+        
+        const _$ww = document[_$b(7)](_$e[1]);
+        const _$xx = document[_$b(7)](_$e[2]);
+        const _$yy = document[_$b(7)](_$e[3]);
+        
+        if (_$ww) _$ww[_$b(23)] = `€${_$rr.toFixed(2)}`;
+        if (_$xx) _$xx[_$b(23)] = _$uu === 0 ? 'Gratuit' : `€${_$uu.toFixed(2)}`;
+        if (_$yy) _$yy[_$b(23)] = `€${_$vv.toFixed(2)}`;
+    }
+    
+    // Configuration événements obfusquée
+    function _$p() {
+        if (_$g) {
+            _$g[_$b(8)](_$b(9), _$zz);
+        }
+        if (_$j) {
+            _$j[_$b(8)](_$b(9), () => {
+                _$aaa(_$h);
+            });
+        }
+        if (_$k) {
+            _$k[_$b(8)](_$b(9), _$bbb);
+        }
+        if (_$l) {
+            _$l[_$b(8)](_$b(9), _$ccc);
+        }
+        
+        [_$h, _$i].forEach(_$ddd => {
+            if (_$ddd) {
+                _$ddd[_$b(8)](_$b(9), function(_$eee) {
+                    if (_$eee.target === _$ddd) {
+                        _$aaa(_$ddd);
+                    }
+                });
+            }
+        });
+    }
+    
+    // Gestion clic submit obfusqué
+    function _$zz() {
+        if (!_$f[1]) {
+            _$fff(_$h);
+        } else {
+            _$ggg();
+        }
+    }
+    
+    // Confirmation screenshot obfusqué
+    function _$bbb() {
+        _$f[1] = true;
+        _$aaa(_$h);
+    }
+    
+    // Affichage modal vendeur obfusqué
+    async function _$ggg() {
+        try {
+            await _$hhh();
+            _$fff(_$i);
+        } catch (_$iii) {}
+    }
+    
+    // Simulation envoi Discord obfusqué
+    async function _$hhh() {
+        return new Promise((_$jjj) => {
+            setTimeout(() => {
+                _$jjj(true);
+            }, 1500);
+        });
+    }
+    
+    // Redirection Discord avec nettoyage panier obfusqué
+    function _$ccc() {
+        localStorage[_$b(19)](_$b(14));
+        localStorage[_$b(19)](_$b(15));
+        localStorage[_$b(19)](_$b(16));
+        localStorage[_$b(19)](_$b(17));
+        localStorage[_$b(19)](_$b(18));
+        
+        const _$kkk = document.querySelector(_$b(22));
+        if (_$kkk) {
+            _$kkk[_$b(23)] = '0';
+        }
+        
+        window.open(_$b(27), '_blank');
+        _$aaa(_$i);
+        
+        setTimeout(() => {
+            alert('✅ Commande finalisée !\n\n🛒 Votre panier a été vidé.\nVous allez être redirigé vers Discord pour contacter le vendeur.\n\nMerci pour votre commande !');
+            setTimeout(() => {
+                window.location.href = _$b(26);
+            }, 2000);
+        }, 500);
+    }
+    
+    // Ouverture modal obfusquée
+    function _$fff(_$lll) {
+        if (_$lll) {
+            _$lll[_$b(11)][_$b(12)](_$b(10));
+            _$f[0] = true;
+        }
+    }
+    
+    // Fermeture modal obfusquée
+    function _$aaa(_$lll) {
+        if (_$lll) {
+            _$lll[_$b(11)][_$b(13)](_$b(10));
+            _$f[0] = false;
+        }
+    }
+    
+    // Initialisation
+    _$m();
 });
+
+// Protection anti-debug légère mais efficace
+(() => {
+    'use strict';
+    
+    // Désactiver console
+    const _x = console.log;
+    console.log = console.error = console.warn = console.info = console.debug = () => {};
+    
+    // Bloquer raccourcis clavier
+    document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 123 || 
+            (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+            (e.ctrlKey && e.keyCode === 85)) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // Désactiver clic droit
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+    
+    // Détection DevTools (moins agressive)
+    let _y = false;
+    setInterval(() => {
+        if (window.outerHeight - window.innerHeight > 200 && !_y) {
+            _y = true;
+            setTimeout(() => { _y = false; }, 5000);
+        }
+    }, 1000);
+})();
