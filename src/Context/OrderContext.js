@@ -2,28 +2,19 @@
 export const shippingMethods = [
   {
     id: 1,
-    name: "FedEx EXPRESS",
+    name: "Livraison Express",
     price: 10,
     delivery: "1 - 3 DAYS",
-    logo: "/assets/fedex-logo.png"
   },
   {
     id: 2,
-    name: "FedEx Ground",
+    name: "Livraison Classique",
     price: 0,
     delivery: "3 - 6 DAYS",
-    logo: "/assets/ups-logo.png"
-  },
- /* {
-    id: 3,
-    name: "DHL",
-    price: 0,
-    delivery: "8 - 11 DAYS",
-    logo: "/assets/dhl-logo.png"
-  } */  
+  },  
 ];
 
-// Default to FedEx Ground shipping
+// Default to Classic  shipping
 const defaultShippingMethod = shippingMethods[1];
 
 // Available payment methods
@@ -58,7 +49,7 @@ const defaultOrderData = {
   shippingTo: '',
   postalCode: '',
   city: '',
-  telegram: '',
+  discord: '',
   paymentMethod: '',
   orderItems: [],
   shippingMethod: defaultShippingMethod,
