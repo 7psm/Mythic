@@ -1,6 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
-// Available shipping methods
+// Méthode de Livraison Disponible
 export const shippingMethods = [
   {
     id: 1,
