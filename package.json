@@ -4,7 +4,8 @@
   "description": "- Ajout de git dans le projet ✅\r - Ajout de Node.js dans le projet ✅\r - Pages Principales et Script Fonctionnels (70%) ✅",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "netlify dev"
   },
   "repository": {
     "type": "git",
@@ -19,8 +20,5 @@
   "homepage": "https://github.com/AimbotBabyalone/mythic#readme",
   "dependencies": {
     "discord.js": "^14.21.0"
-  },
-  "scripts": {
-  "dev": "netlify dev"
   }
 }
