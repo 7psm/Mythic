@@ -2,10 +2,9 @@
   "name": "mythic",
   "version": "1.0.0",
   "description": "- Ajout de git dans le projet ✅\r - Ajout de Node.js dans le projet ✅\r - Pages Principales et Script Fonctionnels (70%) ✅",
-  "main": "index.js",
+  "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "netlify dev"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -17,8 +16,5 @@
   "bugs": {
     "url": "https://github.com/AimbotBabyalone/mythic/issues"
   },
-  "homepage": "https://github.com/AimbotBabyalone/mythic#readme",
-  "dependencies": {
-    "discord.js": "^14.21.0"
-  }
+  "homepage": "https://github.com/AimbotBabyalone/mythic#readme"
 }
