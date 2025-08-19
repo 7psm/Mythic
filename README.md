@@ -3,9 +3,7 @@
 ## Programme du Dev
 
 ### Beta : 
-- Ajout de git dans le projet ✅
-- Ajout de Node.js dans le projet ✅
-- Pages Principales et Script Fonctionnels (70%) ✅
+- 🎈
 
 ** A FINIR :**
 - Intégré le système de commande via le bot. (A la validation de la commande, le client reçoit un MP du bot avec son récap (embed) et moi un embed dans un salon "Orders" avec le récapitulatif)
