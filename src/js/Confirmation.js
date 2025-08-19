@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // State variables
+  // Etat des Variables
   let isModalOpen = false;
   let screenshotTaken = false;
   let isSubmitting = false;
@@ -7,53 +7,54 @@ document.addEventListener('DOMContentLoaded', function() {
   let selectedVendor = "";
   let orderData = {};
   
-  // DOM Elements
+  // Eléments DOM
   const submitButton = document.getElementById('submit-order');
   const screenshotModal = document.getElementById('screenshot-modal');
   const vendorModal = document.getElementById('vendor-modal');
   const notYetBtn = document.getElementById('not-yet-btn');
   const screenshotTakenBtn = document.getElementById('screenshot-taken-btn');
   const continueToVendorBtn = document.getElementById('continue-to-vendor');
+ const confirmationModal = document.getElementById('confirmation-modal');
+  const confirmationOkBtn = document.getElementById('confirmation-ok-btn');
   
-  // Initialize the page
+  // Initialisation de la Page
   function initialize() {
     console.log("=== INITIALISATION PAGE CONFIRMATION ===");
     
-    // Get order data from various sources
+    // Récupérer les données de commande à partir de différentes sources.
     loadOrderData();
     
-    // Check if we have order data, redirect if not
+    // Vérifier si nous disposons des données de commande -> rediriger si ce n'est pas le cas.
     if (!orderData.orderNumber) {
       console.log("Pas de données de commande, redirection vers l'accueil");
-      window.location.href = './HomePage.html';
+      window.location.href = '/index.html';
       return;
     }
     
-    // Populate the page with order data
+    // Remplir la page avec les données de commande.
     populateOrderData();
     
-    // Setup event listeners
+    // Configurer les écouteurs d'événements.
     setupEventListeners();
-    
-    // Enable submit button after 3 seconds
-    setTimeout(() => {
+
+     setTimeout(() => {
       if (submitButton) {
         submitButton.disabled = false;
         submitButton.textContent = 'Soumettre la Commande';
       }
-    }, 3000);
+    }, 500);
     
     console.log("=== INITIALISATION TERMINÉE ===");
   }
   
-  // Load order data from localStorage and URL params
+  // Charger les données de commande à partir du localStorage et des paramètres URL.
   function loadOrderData() {
     try {
-      // Get order number from URL
+      // Obtenir le numéro de commande à partir de l'URL
       const urlParams = new URLSearchParams(window.location.search);
       const orderNumber = urlParams.get('order');
       
-      // Get encrypted form data
+      // Obtenir les données du formulaire cryptées
       const encryptedData = localStorage.getItem("secureCheckoutData");
       let formData = null;
       
@@ -61,21 +62,21 @@ document.addEventListener('DOMContentLoaded', function() {
         formData = decryptData(encryptedData);
       }
       
-      // Get cart data
+      // Obtenir les données du panier
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
       
-      // Get selected methods
+      // Obtenir les méthodes sélectionnées
       const selectedShippingMethod = localStorage.getItem("selectedShippingMethod") || "Livraison Standard";
       const selectedPaymentMethod = localStorage.getItem("selectedPaymentMethod") || "PayPal";
       
-      // Build order data object
+      // Créer un objet de données de commande
       orderData = {
         orderNumber: orderNumber || generateOrderNumber(),
         orderDate: new Date().toISOString(),
         name: formData?.customerInfo?.name || 'Client',
         email: formData?.customerInfo?.email || 'Non renseigné',
         phoneNumber: formData?.customerInfo?.phone || 'Non renseigné',
-        telegram: formData?.customerInfo?.discord || 'Non renseigné',
+        discord: formData?.customerInfo?.discord || 'Non renseigné',
         address: formData?.shippingInfo?.address || 'Non renseigné',
         city: formData?.shippingInfo?.city || 'Non renseigné',
         country: formData?.shippingInfo?.country || 'Non renseigné',
@@ -97,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Decrypt form data
+  // Décrypter les données du formulaire
   function decryptData(encryptedData) {
     try {
       const decoded = decodeURIComponent(atob(encryptedData));
@@ -109,13 +110,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Generate order number
+  // Générer un numéro de commande
   function generateOrderNumber() {
     const timestamp = Date.now().toString().slice(-8);
     return `PM-${timestamp}`;
   }
   
-  // Format date for display
+  // Formater la date pour l'affichage
   function formatDate(dateString) {
     if (!dateString) return new Date().toLocaleDateString('fr-FR');
     
@@ -129,11 +130,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Populate the page with order data
+  // Remplir la page avec les données de la commande
   function populateOrderData() {
     console.log("Population des données sur la page...");
     
-    // Order header
+    // En-têtes de la Commande
     const orderNumberEl = document.getElementById('order-number');
     const orderDateEl = document.getElementById('order-date');
     const customerNameEl = document.getElementById('customer-name');
@@ -142,33 +143,33 @@ document.addEventListener('DOMContentLoaded', function() {
     if (orderDateEl) orderDateEl.textContent = formatDate(orderData.orderDate);
     if (customerNameEl) customerNameEl.textContent = orderData.name;
     
-    // Customer information
+    // Informations Client
     document.getElementById('contact-name').textContent = orderData.name;
     document.getElementById('contact-email').textContent = orderData.email;
     document.getElementById('contact-phone').textContent = orderData.phoneNumber;
-    document.getElementById('contact-telegram').textContent = orderData.telegram;
+    document.getElementById('contact-discord').textContent = orderData.discord;
     
-    // Shipping information
+    // Informations de livraison
     document.getElementById('shipping-address').textContent = orderData.address;
     document.getElementById('shipping-city').textContent = orderData.city;
     document.getElementById('shipping-country').textContent = orderData.country;
     document.getElementById('shipping-postal').textContent = orderData.postalCode;
     
-    // Shipping and payment methods
+    // Modes de livraison et de paiement
     document.getElementById('shipping-method').textContent = orderData.shippingMethod.name;
     document.getElementById('shipping-delivery').textContent = orderData.shippingMethod.delivery;
     document.getElementById('payment-method').textContent = orderData.paymentMethod;
     
-    // Order items
+    // Articles Commandés
     populateOrderItems();
     
-    // Order summary
+    // Récapitulatif de la commande
     calculateAndDisplayTotals();
     
     console.log("Population des données terminée");
   }
   
-  // Populate order items
+  // Remplir les articles commandés
   function populateOrderItems() {
     const orderItemsContainer = document.getElementById('order-items');
     if (!orderItemsContainer) return;
@@ -191,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Calculate and display totals
+  // Calculer et afficher les totaux
   function calculateAndDisplayTotals() {
     const subtotal = orderData.orderItems.reduce(
       (total, item) => total + (item.price * item.quantity), 
@@ -201,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const shippingCost = orderData.shippingMethod.price || 0;
     const total = subtotal + shippingCost;
     
-    // Update display
+    // Mettre à jour l'affichage
     document.getElementById('subtotal').textContent = `€${subtotal.toFixed(2)}`;
     document.getElementById('shipping-cost').textContent = shippingCost === 0 ? 'Gratuit' : `€${shippingCost.toFixed(2)}`;
     document.getElementById('total-cost').textContent = `€${total.toFixed(2)}`;
@@ -209,16 +210,16 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("Totaux calculés:", { subtotal, shippingCost, total });
   }
   
-  // Setup event listeners
+  // Configurer les écouteurs d'événements
   function setupEventListeners() {
-    // Submit button click
+    // Clic sur le bouton « Soumettre »
     if (submitButton) {
       submitButton.addEventListener('click', handleSubmitClick);
     } else {
       console.error('❌ Bouton submit non trouvé');
     }
     
-    // Screenshot modal buttons
+    // Boutons modaux de capture d'écran
     if (notYetBtn) {
       notYetBtn.addEventListener('click', () => {
         console.log('Clic sur "Pas encore"');
@@ -234,14 +235,23 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error('❌ Bouton "J\'ai pris une capture" non trouvé');
     }
     
-    // Vendor modal button
+    // Bouton modal du fournisseur
     if (continueToVendorBtn) {
       continueToVendorBtn.addEventListener('click', openVendorDiscord);
     } else {
       console.error('❌ Bouton "Continuer vers le Vendeur" non trouvé');
     }
+
+    // Bouton OK du modal de confirmation
+    if (confirmationOkBtn) {
+      confirmationOkBtn.addEventListener('click', () => {
+      window.location.href = '/index.html';
+      });
+    } else {
+      console.error('❌ Bouton "OK Confirmation" non trouvé');
+    }
     
-    // Close modals when clicking outside
+    // Fermer les modaux en cliquant en dehors
     [screenshotModal, vendorModal].forEach(modal => {
       if (modal) {
         modal.addEventListener('click', function(e) {
@@ -261,22 +271,24 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("Event listeners configurés");
   }
   
-  // Handle submit button click
-  function handleSubmitClick() {
-    console.log("Clic sur le bouton de soumission");
-    
-    if (!screenshotTaken) {
-      // Première fois : demander capture d'écran
-      console.log("Première soumission : demande de capture d'écran");
-      openModal(screenshotModal);
-    } else {
-      // Deuxième fois (après capture confirmée) : afficher modal vendeur directement
-      console.log("Deuxième soumission : affichage du modal vendeur");
-      showVendorModal();
-    }
+  // Gérer le clic du bouton « Soumettre »
+  function handleSubmitClick(e) {
+    e.preventDefault();
+  if (isSubmitting) {
+    console.log("Déjà en cours, clic ignoré.");
+    return;
   }
+
+  if (!screenshotTaken) {
+    console.log("Demande capture d'écran");
+    openModal(screenshotModal);
+  } else {
+    console.log("Capture OK, envoi commande");
+    showVendorModal();
+  }
+}
   
-  // Handle user confirming they took a screenshot
+  // Gérer la confirmation par l'utilisateur qu'il a pris une capture d'écran
   function confirmScreenshotTaken() {
     console.log("Capture d'écran confirmée");
     screenshotTaken = true;
@@ -287,33 +299,32 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Capture d\'écran confirmée, retour à la page principale');
   }
   
-  // Submit order via Discord
-  async function submitOrder() {
-    console.log("Soumission de la commande...");
-    setSubmitting(true);
-    
-    try {
-      // Send order data to Discord instead of Telegram
-      const success = await DiscordOrderService.sendOrder(orderData);
-      
-      if (success) {
-        console.log("Commande envoyée avec succès vers Discord");
-        return true; // Retourner le succès
-      } else {
-        console.error("Échec de l'envoi de la commande vers Discord");
-        alert("Erreur lors de l'envoi de la commande. Veuillez réessayer.");
-        return false;
-      }
-    } catch (error) {
-      console.error("Erreur lors de la soumission:", error);
-      alert("Une erreur s'est produite. Veuillez réessayer.");
+  // Envoyer la commande via Discord
+ async function submitOrder() {
+  console.log("Soumission de la commande...");
+  setSubmitting(true);
+
+  try {
+    const success = await DiscordOrderService.sendOrder(orderData);
+
+    if (success) {
+      console.log("Commande envoyée avec succès vers Discord");
+      return true;
+    } else {
+      console.error("Échec de l'envoi de la commande vers Discord");
+      // Supprime cette ligne : alert("Erreur lors de l'envoi de la commande. Veuillez réessayer.");
       return false;
-    } finally {
-      setSubmitting(false);
     }
+  } catch (error) {
+    console.error("Erreur lors de la soumission:", error);
+    // Supprime cette ligne : alert("Une erreur s'est produite. Veuillez réessayer.");
+    return false;
+  } finally {
+    setSubmitting(false); // Toujours réactiver le bouton
   }
+}
   
-  // Send order to Discord (remplace l'ancienne fonction Telegram)
+  // Envoyer la commande à Discord 
   async function sendOrderToDiscord(orderData) {
     try {
       console.log("Envoi des données de commande vers Discord...");
@@ -323,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
         numeroCommande: orderData.orderNumber,
         nom: orderData.name,
         email: orderData.email,
-        pseudoDiscord: orderData.telegram, // Le champ telegram contient maintenant le pseudo Discord
+        pseudoDiscord: orderData.discord,
         telephone: orderData.phoneNumber,
         adresse: orderData.address,
         ville: orderData.city,
@@ -363,9 +374,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Show vendor modal
+  // Afficher la fenêtre modale du fournisseur
   function showVendorModal() {
-    selectedVendor = "MolarMarket";
+    selectedVendor = "Incognito Market";
     console.log('Affichage du modal vendeur...');
     
     // Envoyer les données vers Discord avant d'afficher le modal
@@ -375,77 +386,65 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Handle vendor selection
+  // Gérer la sélection du fournisseur
   function handleVendorSelect(vendor) {
     selectedVendor = vendor;
     console.log("Vendeur sélectionné:", vendor);
   }
   
-  // Open vendor Discord (remplace l'ancienne fonction Telegram)
+  // Ouvrir Discord du vendeur
   function openVendorDiscord() {
-    console.log("Redirection vers Discord du vendeur:", selectedVendor);
-    
-    // Save order completion to localStorage
-    localStorage.setItem('orderCompleted', JSON.stringify({
-      orderNumber: orderData.orderNumber,
-      completedAt: new Date().toISOString(),
-      vendor: selectedVendor
-    }));
-    
-    // 🛒 RÉINITIALISER LE PANIER
-    console.log("Réinitialisation du panier...");
-    
-    // Vider toutes les données du panier
-    localStorage.removeItem('cart');
-    localStorage.removeItem('propMoneyCart');
-    localStorage.removeItem('secureCheckoutData');
-    localStorage.removeItem('selectedShippingMethod');
-    localStorage.removeItem('selectedPaymentMethod');
-    
-    // Réinitialiser le compteur du panier dans la navbar si présent
-    const cartCountElement = document.querySelector('.cart-count');
-    if (cartCountElement) {
-      cartCountElement.textContent = '0';
-      cartCountElement.style.display = 'flex';
-    }
-    
-    console.log("✅ Panier réinitialisé avec succès");
-    
-    // Open Discord server
-    const discordUrl = 'https://discord.gg/beC8cFZaXH';
-    console.log("Ouverture de Discord:", discordUrl);
-    window.open(discordUrl, '_blank');
-    
-    // Close modal
-    closeModal(vendorModal);
-    
-    // Afficher un message de confirmation
-    setTimeout(() => {
-      alert("✅ Commande finalisée !\n\n🛒 Votre panier a été vidé.\nVous allez être redirigé vers Discord pour contacter le vendeur.\n\nMerci pour votre commande !");
-      
-      // Optionnel: rediriger vers la page d'accueil après un délai
-      setTimeout(() => {
-        window.location.href = '../HomePage.html';
-      }, 2000);
-    }, 500);
+  console.log("Redirection vers Discord du vendeur:", selectedVendor);
+
+  // Enregistrer la fin de la commande dans localStorage
+  localStorage.setItem('orderCompleted', JSON.stringify({
+    orderNumber: orderData.orderNumber,
+    completedAt: new Date().toISOString(),
+    vendor: selectedVendor
+  }));
+
+  // 🛒 RÉINITIALISER LE PANIER
+  console.log("Réinitialisation du panier...");
+  localStorage.removeItem('cart');
+  localStorage.removeItem('propMoneyCart');
+  localStorage.removeItem('secureCheckoutData');
+  localStorage.removeItem('selectedShippingMethod');
+  localStorage.removeItem('selectedPaymentMethod');
+
+  // Réinitialiser le compteur du panier
+  const cartCountElement = document.querySelector('.cart-count');
+  if (cartCountElement) {
+    cartCountElement.textContent = '0';
+    cartCountElement.style.display = 'flex';
   }
-  
-  // Set submitting state
+
+  console.log("✅ Panier réinitialisé avec succès");
+
+  // Ouvrir le lien Discord
+  const discordUrl = 'https://discord.gg/beC8cFZaXH';
+  console.log("Ouverture de Discord:", discordUrl);
+  window.open(discordUrl, '_blank');
+
+  // Fermer le modal vendeur
+  closeModal(vendorModal);
+
+  // ✅ Afficher le message de remerciement après 1 seconde
+  setTimeout(() => {
+  console.log("🎉 Ouverture du modal de remerciement");
+  openModal(confirmationModal);
+  }, 1000)};
+
+  // Définir l'état d'envoie
   function setSubmitting(submitting) {
-    isSubmitting = submitting;
-    
-    if (submitButton) {
-      if (submitting) {
-        submitButton.disabled = true;
-        submitButton.textContent = 'Envoi en cours...';
-      } else {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Soumettre la Commande';
-      }
-    }
+  isSubmitting = submitting;
+
+  if (submitButton) {
+    submitButton.disabled = submitting;
+    submitButton.textContent = submitting ? 'Envoi en cours...' : 'Soumettre la Commande';
   }
+}
   
-  // Open modal
+  // Ouvrir le Modal
   function openModal(modal) {
     if (modal) {
       console.log('Ouverture du modal:', modal.id);
@@ -456,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Close modal
+  // Fermer le Modal
   function closeModal(modal) {
     if (modal) {
       console.log('Fermeture du modal:', modal.id);
@@ -467,7 +466,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Public API for debugging
+  // Public API pour debugger
   window.confirmationPage = {
     orderData,
     initialize,
@@ -478,6 +477,6 @@ document.addEventListener('DOMContentLoaded', function() {
     sendOrderToDiscord
   };
   
-  // Initialize the page
+  // Initialiser la page
   initialize();
 });

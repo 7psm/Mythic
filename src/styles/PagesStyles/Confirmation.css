@@ -66,6 +66,25 @@
   margin-bottom: 15px;
 }
 
+.confirmation-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: left;
+  margin: 20px auto;
+  max-width: 500px;
+}
+
+.confirmation-message .icon {
+  font-size: 24px;
+}
+
+.confirmation-message .text p {
+  margin: 0;
+  line-height: 1.4;
+}
+
 /* Card Header */
 .card-header {
   padding: 12px 10px;
@@ -452,6 +471,11 @@
 .vendor-name i {
   color: var(--gold-primary, #ffd700);
   font-size: 16px;
+}
+
+#continue-to-vendor {
+  display: block;
+  margin: 20px auto 0 auto; /* top auto bottom auto */
 }
 
 /* Radio Indicator */
