@@ -234,5 +234,49 @@
     </main>
 </div>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('finaliserCommande');
+
+  btn.addEventListener('click', async () => {
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const discord = document.getElementById('telegram').value;
+
+    const orderData = {
+      orderNumber: generateOrderNumber(),
+      name,
+      email,
+      discord,
+      orderItems: [], // tu peux remplir ça si tu veux envoyer les produits
+      total: "???", // tu peux mettre le total si tu veux
+    };
+
+    try {
+      const res = await fetch('/.netlify/functions/discord-webhook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        alert('✅ Commande envoyée à Discord !');
+        window.location.href = './Confirmation.html'; // redirige vers la page de confirmation
+      } else {
+        alert('❌ Erreur : ' + result.error);
+      }
+    } catch (err) {
+      console.error('Erreur :', err);
+      alert('Erreur lors de l’envoi de la commande.');
+    }
+  });
+
+  function generateOrderNumber() {
+    return Math.floor(Math.random() * 1000000);
+  }
+});
+
+</script>
     </body>
 </html>

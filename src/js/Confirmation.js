@@ -326,3 +326,26 @@ document[_$b(8)](_$b(0), function() {
         }
     }, 1000);
 })();
+
+async function envoyerCommandeDiscord(orderData) {
+const response = await fetch('/.netlify/functions/discord-webhook', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    orderNumber: orderData.orderNumber,
+    name: orderData.name,
+    email: orderData.email,
+    items: orderData.orderItems,
+    total: orderData.total,
+    discordTag: orderData.discord,
+  }),
+});
+
+
+  const result = await response.json();
+  if (result.success) {
+    console.log('✅ Commande envoyée à Discord');
+  } else {
+    console.error('❌ Erreur Discord:', result.error);
+  }
+}
