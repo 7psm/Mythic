@@ -317,5 +317,4 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeProductOptions();
   updateCartCount();
 
-  console.log("Application initialisée avec le billet:", selectedBill);
 });
