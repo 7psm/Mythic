@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const notYetBtn = document.getElementById('not-yet-btn');
   const screenshotTakenBtn = document.getElementById('screenshot-taken-btn');
   const continueToVendorBtn = document.getElementById('continue-to-vendor');
- const confirmationModal = document.getElementById('confirmation-modal');
+  const confirmationModal = document.getElementById('confirmation-modal');
   const confirmationOkBtn = document.getElementById('confirmation-ok-btn');
   
   // Initialisation de la Page
@@ -303,27 +303,30 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // Envoyer la commande via Discord
- async function submitOrder() {
+  async function submitOrder() {
   console.log("Soumission de la commande...");
   setSubmitting(true);
 
   try {
-    const success = await DiscordOrderService.sendOrder(orderData);
+    // Envoi des données de commande au serveur Express
+    const response = await fetch('http://localhost:3001/api/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderData)
+    });
+    const data = await response.json();
 
-    if (success) {
-      console.log("Commande envoyée avec succès vers Discord");
+    if (data.success) {
+      console.log("Commande enregistrée côté serveur");
+      // Tu peux ensuite appeler Discord ou autre
       return true;
     } else {
-      console.error("Échec de l'envoi de la commande vers Discord");
-      // Supprime cette ligne : alert("Erreur lors de l'envoi de la commande. Veuillez réessayer.");
       return false;
     }
   } catch (error) {
-    console.error("Erreur lors de la soumission:", error);
-    // Supprime cette ligne : alert("Une erreur s'est produite. Veuillez réessayer.");
     return false;
   } finally {
-    setSubmitting(false); // Toujours réactiver le bouton
+    setSubmitting(false);
   }
 }
   
@@ -597,6 +600,8 @@ document.addEventListener('DOMContentLoaded', function() {
     loadOrderData,
     sendOrderToDiscord
   };
+
+  localStorage.clear(); // Nettoyer le localStorage pour éviter les conflits
   
   // Initialiser la page
   initialize();
