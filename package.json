@@ -18,6 +18,11 @@
   },
   "homepage": "https://github.com/AimbotBabyalone/mythic#readme",
   "devDependencies": {
-    "netlify-cli": "^23.1.4"
+    "netlify-cli": "^23.1.4",
+    "terser": "^5.43.1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
   }
 }
