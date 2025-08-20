@@ -462,7 +462,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Envoi vers Netlify Function
     const baseUrl = window.location.origin;
     
-    const response = await fetch(`${baseUrl}/netlify/functions/discord-webhook`, {
+    const response = await fetch(`${baseUrl}/.netlify/functions/discord-webhook`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

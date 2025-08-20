@@ -167,7 +167,7 @@ export const sendOrderToDiscord = async (orderData) => {
       ? 'http://localhost:8888' 
       : window.location.origin;
     
-    const response = await fetch(`${baseUrl}/netlify/functions/discord-webhook`, {
+    const response = await fetch(`${baseUrl}/.netlify/functions/discord-webhook`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/AimbotBabyalone/mythic/issues"
   },
-  "homepage": "https://github.com/AimbotBabyalone/mythic#readme"
+  "homepage": "https://github.com/AimbotBabyalone/mythic#readme",
+  "devDependencies": {
+    "netlify-cli": "^23.1.4"
+  }
 }
