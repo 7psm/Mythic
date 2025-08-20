@@ -1,0 +1,16 @@
+# N'importe quel fichier portant le nom ".env", y cmpris dans les sous-dossiers
+.env
+# Tous les fichiers ayant l'extension ".tmp"
+*.tmp
+# Si je veux restreindre au répertoire courant
+
+# Le répertoire ".tmp" et tout ce qu'il peut contenir
+
+# On autorise une exeption dans le répertoire de logs, le fichier ".keep"
+# Pour ça on doit autoriser le répertoire 
+!/log
+#En revanche on n'autorise pas les fichiers qu'il contient,
+# ni les sous-dossiers
+/logs/*
+#.. à l'exception du fichier ".keep"
+!log/.keep
