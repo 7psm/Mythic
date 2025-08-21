@@ -14,3 +14,5 @@
 /logs/*
 #.. à l'exception du fichier ".keep"
 !log/.keep
+# Local Netlify folder
+.netlify
