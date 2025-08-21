@@ -21,7 +21,7 @@
     "@babel/cli": "^7.28.3",
     "@babel/core": "^7.28.3",
     "@babel/preset-react": "^7.27.1",
-    "netlify-cli": "^23.1.4",
+    "netlify-cli": "^23.2.1",
     "terser": "^5.43.1"
   },
   "dependencies": {
