@@ -13,9 +13,8 @@
         <link rel="stylesheet" href="../styles/ResponsiveStyle.css">
         <link rel="stylesheet" href="../styles/NavBar.css">
         <script src="/OBF/Product.min.js"></script>
-        <script src="/OBF/Context/OrderContext.min.js"></script>
-        <script src="/OBF/Confirmation.min.js"></script>
-        <script src="../Utils/discordNotification.js"></script>
+        <script src="/src/Context/OrderContext.js"></script>
+        <script src="/src/js/Confirmation.js"></script>
 
 <!-- ///////////////////////////////////////////////////////////////////
      ////////////////////       Fonts & Icons       ////////////////////
@@ -175,7 +174,7 @@
                 </div>
             
                 <div class="action-buttons">
-                    <button class="submit-button" id="submit-order" disabled>
+                    <button class="submit-button" id="submit-order" type="buttton" disabled>
                         Soumettre la Commande
                     </button>
                 </div>
@@ -224,7 +223,8 @@
           <div class="modal-content">
             <h2 class="modal-title">✅ Commande finalisée !</h2>
             <p>🛒 Votre panier a été vidé !</p>
-            <p> 👔 Vous allez être redirigé vers Discord pour une mise en contact avec le vendeur.</p>
+            <p>👔 Vous allez être redirigé vers Discord pour une mise en contact avec le vendeur.</p>
+            <p>📧 Un mail de confirmation vous a été envoyé !</p>
             <p>Merci pour votre commande !</p>
             <div class="modal-buttons">
               <button class="primary-button" id="confirmation-ok-btn">Retour à l'accueil
