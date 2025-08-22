@@ -91,64 +91,72 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function initializeSelections() {
-    // Aucun moyen de paiement sélectionné
-    paymentOptions.forEach(opt => opt.classList.remove("selected"));
+    // Paiement: conserver une présélection si existante, sinon sélectionner la première option
+    const hasPreselectedPayment = Array.from(paymentOptions).some(opt => opt.classList.contains("selected"));
+    if (!hasPreselectedPayment && paymentOptions.length > 0) {
+      const firstPayment = paymentOptions[0];
+      firstPayment.classList.add("selected");
+      const name = firstPayment.querySelector("span, .payment-method-name")?.textContent.trim() || "";
+      localStorage.setItem("selectedPaymentMethod", name);
+    }
 
-    // Livraison gratuite par défaut
-    let freeSelected = false;
-    shippingOptions.forEach(opt => {
-      const priceText = opt.querySelector(".shipping-price")?.textContent.toLowerCase() || "";
-      const nameText = opt.querySelector(".shipping-name")?.textContent || "";
-      if (!freeSelected && priceText.includes("gratuit")) {
-        opt.classList.add("selected");
+    // Livraison: conserver une présélection; sinon choisir "Gratuit" si disponible, sinon la première
+    let selectedShipping = document.querySelector(".shipping-option.selected");
+    if (!selectedShipping) {
+      let chosen = Array.from(shippingOptions).find(opt => (opt.querySelector(".shipping-price")?.textContent.toLowerCase() || "").includes("gratuit"));
+      if (!chosen && shippingOptions.length > 0) chosen = shippingOptions[0];
+      if (chosen) {
+        chosen.classList.add("selected");
+        const nameText = chosen.querySelector(".shipping-name")?.textContent || "";
         localStorage.setItem("selectedShippingMethod", nameText);
-        freeSelected = true;
       }
-    });
+    } else {
+      const nameText = selectedShipping.querySelector(".shipping-name")?.textContent || "";
+      localStorage.setItem("selectedShippingMethod", nameText);
+    }
+
+    updateSubmitButtonText();
   }
 
-  function setupFormValidation() {
-    if (!form || !submitButton) return;
-    submitButton.addEventListener("click", async e => {
-      e.preventDefault();
+  async function handleSubmit(e) {
+    e.preventDefault();
 
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      if (cart.length === 0) return;
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    if (cart.length === 0) return;
 
-      let allValid = true;
-      form.querySelectorAll("input[required]").forEach(f => {
-        if (!f.value.trim()) { f.style.borderColor = "#ff4444"; allValid = false; }
-        else f.style.borderColor = "";
+    let allValid = true;
+    form.querySelectorAll("input[required]").forEach(f => {
+      if (!f.value.trim()) { f.style.borderColor = "#ff4444"; allValid = false; }
+      else f.style.borderColor = "";
+    });
+
+    if (!document.querySelector(".payment-option.selected") || !document.querySelector(".shipping-option.selected")) {
+      allValid = false;
+    }
+
+    if (!allValid) return;
+
+    const dataToSend = saveFormDataSecurely();
+
+    try {
+      const response = await fetch("https://mythic-api.onrender.com/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSend)
       });
 
-      if (!document.querySelector(".payment-option.selected") || !document.querySelector(".shipping-option.selected")) {
-        allValid = false;
+      if (!response.ok) {
+        console.error("Réponse serveur non OK", response.status);
+        return;
       }
 
-      if (!allValid) return;
+      const result = await response.json();
+      if (result.success) window.location.href = "/src/pages/Confirmation.html";
+      else console.error("Erreur serveur:", result.message);
 
-      const dataToSend = saveFormDataSecurely();
-
-      try {
-        const response = await fetch("https://mythic-api.onrender.com/api/order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dataToSend)
-        });
-
-        if (!response.ok) {
-          console.error("Réponse serveur non OK", response.status);
-          return;
-        }
-
-        const result = await response.json();
-        if (result.success) window.location.href = "/pages/confirmation.html";
-        else console.error("Erreur serveur:", result.message);
-
-      } catch (err) {
-        console.error("Erreur fetch API:", err);
-      }
-    });
+    } catch (err) {
+      console.error("Erreur fetch API:", err);
+    }
   }
 
   function initialize() {
@@ -156,7 +164,9 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeSelections();
     setupOptionListeners(paymentOptions, "selectedPaymentMethod");
     setupOptionListeners(shippingOptions, "selectedShippingMethod");
-    setupFormValidation();
+
+    if (submitButton) submitButton.addEventListener("click", handleSubmit);
+    if (form) form.addEventListener("submit", handleSubmit);
 
     if (form) {
       form.querySelectorAll("input").forEach(f => {
