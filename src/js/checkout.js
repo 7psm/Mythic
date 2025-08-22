@@ -7,6 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ENCRYPTION_KEY = "checkout_secure_key_2024";
 
+  // 📧 Configuration EmailJS (remplacer par vos IDs)
+  const EMAILJS_CONFIG = {
+    SERVICE_ID: "service_xxxxxxx",  // Remplacer
+    TEMPLATE_ID: "template_xxxxxx", // Remplacer  
+    PUBLIC_KEY: "your_public_key"   // Remplacer
+  };
+
   function calculateOrderTotal() {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     const subtotal = cart.reduce((t, item) => t + item.price * item.quantity, 0);
@@ -38,10 +45,17 @@ document.addEventListener("DOMContentLoaded", () => {
     catch { return null; }
   }
 
+  function generateOrderNumber() {
+    const randomSix = Math.floor(100000 + Math.random() * 900000);
+    const randomFour = Math.floor(1000 + Math.random() * 9000);
+    return `PM-${randomSix}-${randomFour}`;
+  }
+
   function saveFormDataSecurely() {
     if (!form) return;
     const formData = {
       timestamp: new Date().toISOString(),
+      orderNumber: generateOrderNumber(),
       customerInfo: {
         name: form.querySelector("#name")?.value || "",
         email: form.querySelector("#email")?.value || "",
@@ -118,6 +132,56 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSubmitButtonText();
   }
 
+  // 📧 Fonction d'envoi d'email avec EmailJS
+  async function sendConfirmationEmail(orderData) {
+    try {
+      // Charger EmailJS si pas déjà fait
+      if (!window.emailjs) {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+        document.head.appendChild(script);
+        await new Promise(resolve => script.onload = resolve);
+      }
+
+      // Initialiser EmailJS
+      emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+
+      // Préparer les données pour le template
+      const templateParams = {
+        to_email: orderData.customerInfo.email,
+        customer_name: orderData.customerInfo.name,
+        order_number: orderData.orderNumber,
+        order_date: new Date().toLocaleDateString('fr-FR'),
+        total_amount: `€${orderData.total.toFixed(2)}`,
+        shipping_method: orderData.preferences.shippingMethod,
+        payment_method: orderData.preferences.paymentMethod,
+        order_items: orderData.cart.map(item => 
+          `${item.name} x${item.quantity} - €${(item.price * item.quantity).toFixed(2)}`
+        ).join('\n'),
+        customer_email: orderData.customerInfo.email,
+        customer_phone: orderData.customerInfo.phone || 'Non renseigné',
+        customer_discord: orderData.customerInfo.discord || 'Non renseigné',
+        shipping_address: orderData.shippingInfo.address || 'Non renseigné',
+        shipping_city: orderData.shippingInfo.city || 'Non renseigné',
+        shipping_country: orderData.shippingInfo.country || 'Non renseigné'
+      };
+
+      // Envoyer l'email
+      await emailjs.send(
+        EMAILJS_CONFIG.SERVICE_ID,
+        EMAILJS_CONFIG.TEMPLATE_ID,
+        templateParams
+      );
+
+      console.log('✅ Email de confirmation envoyé !');
+      return { success: true };
+
+    } catch (error) {
+      console.error('❌ Erreur envoi email:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -139,6 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const dataToSend = saveFormDataSecurely();
 
     try {
+      // 1. Sauvegarder dans l'API (optionnel)
       const response = await fetch("https://mythic-api.onrender.com/api/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -151,8 +216,22 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const result = await response.json();
-      if (result.success) window.location.href = "/src/pages/Confirmation.html";
-      else console.error("Erreur serveur:", result.message);
+      
+      if (result.success) {
+        // 2. Envoyer l'email avec EmailJS (en arrière-plan)
+        sendConfirmationEmail(dataToSend).then(emailResult => {
+          if (emailResult.success) {
+            console.log('📧 Email envoyé avec succès');
+          } else {
+            console.log('⚠️ Email non envoyé, mais commande validée');
+          }
+        });
+
+        // 3. Rediriger immédiatement
+        window.location.href = "/src/pages/Confirmation.html";
+      } else {
+        console.error("Erreur serveur:", result.message);
+      }
 
     } catch (err) {
       console.error("Erreur fetch API:", err);
