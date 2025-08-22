@@ -1,5 +1,5 @@
 // Méthode de Livraison Disponible
-export const shippingMethods = [{
+const shippingMethods = [{
   id: 1,
   name: "Livraison Express",
   price: 10,
