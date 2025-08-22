@@ -1,74 +1,62 @@
-// server.js
-import express from 'express';
-import path from 'path';
-import fs from 'fs';
-import cors from 'cors';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// API/server.js
+import express from "express";
+import cors from "cors";
+import path from "path";
+import fs from "fs";
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
-// ========================
-// MIDDLEWARES
-// ========================
-app.use(cors()); // Autoriser toutes les origines, tu peux restreindre si besoin
-app.use(express.json()); // Parse les requêtes JSON
+// Middlewares
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Servir les fichiers statiques (frontend)
-app.use(express.static(path.join(__dirname, '../src')));
-
-// ========================
+// ------------------
 // API Routes
-// ========================
-const ordersFilePath = path.join(__dirname, 'orders.json');
+// ------------------
 
-// POST /api/order -> ajoute une commande
-app.post('/api/order', (req, res) => {
-  const order = req.body;
-
-  if (!order || Object.keys(order).length === 0) {
-    return res.status(400).json({ success: false, message: 'Données de commande manquantes' });
-  }
-
-  // Lire les commandes existantes
-  let orders = [];
-  if (fs.existsSync(ordersFilePath)) {
-    const data = fs.readFileSync(ordersFilePath, 'utf-8');
-    try {
-      orders = JSON.parse(data);
-    } catch (err) {
-      console.error('Erreur lecture orders.json:', err);
-      orders = [];
-    }
-  }
-
-  // Ajouter la nouvelle commande
-  orders.push(order);
-
-  // Écrire dans le fichier
-  try {
-    fs.writeFileSync(ordersFilePath, JSON.stringify(orders, null, 2));
-    console.log('✅ Commande ajoutée:', order.orderNumber);
-    return res.json({ success: true, message: 'Commande enregistrée' });
-  } catch (err) {
-    console.error('Erreur écriture orders.json:', err);
-    return res.status(500).json({ success: false, message: 'Impossible d\'enregistrer la commande' });
-  }
+// Récupérer toutes les commandes
+app.get("/api/orders", (req, res) => {
+  const ordersPath = path.join(__dirname, "orders.json");
+  fs.readFile(ordersPath, "utf8", (err, data) => {
+    if (err) return res.status(500).json({ error: "Impossible de lire orders.json" });
+    res.json(JSON.parse(data));
+  });
 });
 
-// ========================
-// Catch-all pour frontend
-// ========================
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../src/index.html'));
+// Ajouter une commande
+app.post("/api/orders", (req, res) => {
+  const ordersPath = path.join(__dirname, "orders.json");
+  fs.readFile(ordersPath, "utf8", (err, data) => {
+    if (err) return res.status(500).json({ error: "Impossible de lire orders.json" });
+
+    const orders = JSON.parse(data);
+    const newOrder = req.body;
+
+    orders.push(newOrder);
+
+    fs.writeFile(ordersPath, JSON.stringify(orders, null, 2), (err) => {
+      if (err) return res.status(500).json({ error: "Impossible d'ajouter la commande" });
+      res.status(201).json({ message: "Commande ajoutée avec succès", order: newOrder });
+    });
+  });
 });
 
-// ========================
-// Lancement du serveur
-// ========================
+// ------------------
+// Serve Frontend
+// ------------------
+const __dirname = path.resolve(); // Pour pouvoir utiliser path.join avec ES modules
+app.use(express.static(path.join(__dirname, "../"))); // Racine du projet contenant index.html
+
+// Toutes les autres routes redirigent vers index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../index.html"));
+});
+
+// ------------------
+// Start server
+// ------------------
 app.listen(PORT, () => {
-  console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
