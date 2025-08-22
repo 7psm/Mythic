@@ -1,4 +1,5 @@
 import sgMail from '@sendgrid/mail';
+import nodemailer from 'nodemailer';
 import { generateConfirmationEmail } from './templates/confirmationTemplate.js';
 import crypto from 'crypto';
 
@@ -9,16 +10,39 @@ class SecureEmailService {
   }
 
   validateConfig() {
-    if (!process.env.SENDGRID_API_KEY) {
-      throw new Error('SENDGRID_API_KEY manquant');
+    const emailService = process.env.EMAIL_SERVICE || 'gmail';
+    
+    if (emailService === 'sendgrid') {
+      if (!process.env.SENDGRID_API_KEY) {
+        throw new Error('SENDGRID_API_KEY manquant');
+      }
+    } else if (emailService === 'gmail') {
+      if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+        throw new Error('GMAIL_USER et GMAIL_APP_PASSWORD manquants');
+      }
     }
+    
     if (!process.env.EMAIL_FROM) {
       throw new Error('EMAIL_FROM manquant');
     }
   }
 
   initializeService() {
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const emailService = process.env.EMAIL_SERVICE || 'gmail';
+    
+    if (emailService === 'sendgrid') {
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      console.log('✅ Service SendGrid initialisé');
+    } else if (emailService === 'gmail') {
+      this.transporter = nodemailer.createTransporter({
+        service: 'gmail',
+        auth: {
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_APP_PASSWORD
+        }
+      });
+      console.log('✅ Service Gmail initialisé');
+    }
   }
 
   // Validation email sécurisée
@@ -93,31 +117,52 @@ class SecureEmailService {
           name: process.env.EMAIL_FROM_NAME || 'MythicMarket'
         },
         subject: `✅ Confirmation de commande - ${cleanData.orderNumber}`,
-        html: emailHTML,
-        // Tracking et sécurité
-        trackingSettings: {
-          clickTracking: { enable: false },
-          openTracking: { enable: false }
-        },
-        // Headers de sécurité
-        headers: {
-          'X-Priority': '1',
-          'X-MSMail-Priority': 'High',
-          'Importance': 'high'
-        }
+        html: emailHTML
       };
 
-      // 5. Envoi sécurisé
-      const result = await sgMail.send(mailOptions);
-      
-      console.log(`✅ Email de confirmation envoyé à ${this.maskEmail(cleanData.customerInfo.email)}`);
-      console.log(`📧 ID Message: ${result[0].headers['x-message-id']}`);
-      
-      return { 
-        success: true, 
-        messageId: result[0].headers['x-message-id'],
-        timestamp: new Date().toISOString()
-      };
+      // 5. Envoi selon le service
+      const emailService = process.env.EMAIL_SERVICE || 'gmail';
+      let result;
+
+      if (emailService === 'sendgrid') {
+        // SendGrid
+        mailOptions.trackingSettings = {
+          clickTracking: { enable: false },
+          openTracking: { enable: false }
+        };
+        result = await sgMail.send(mailOptions);
+        
+        console.log(`✅ Email SendGrid envoyé à ${this.maskEmail(cleanData.customerInfo.email)}`);
+        console.log(`📧 ID Message: ${result[0].headers['x-message-id']}`);
+        
+        return { 
+          success: true, 
+          messageId: result[0].headers['x-message-id'],
+          service: 'sendgrid',
+          timestamp: new Date().toISOString()
+        };
+
+      } else if (emailService === 'gmail') {
+        // Gmail/Nodemailer
+        const gmailOptions = {
+          from: `${process.env.EMAIL_FROM_NAME || 'MythicMarket'} <${process.env.EMAIL_FROM}>`,
+          to: cleanData.customerInfo.email,
+          subject: mailOptions.subject,
+          html: mailOptions.html
+        };
+        
+        result = await this.transporter.sendMail(gmailOptions);
+        
+        console.log(`✅ Email Gmail envoyé à ${this.maskEmail(cleanData.customerInfo.email)}`);
+        console.log(`📧 ID Message: ${result.messageId}`);
+        
+        return { 
+          success: true, 
+          messageId: result.messageId,
+          service: 'gmail',
+          timestamp: new Date().toISOString()
+        };
+      }
 
     } catch (error) {
       console.error('❌ Erreur envoi email:', error);
@@ -129,6 +174,7 @@ class SecureEmailService {
       return { 
         success: false, 
         error: error.message,
+        service: process.env.EMAIL_SERVICE || 'gmail',
         timestamp: new Date().toISOString()
       };
     }
@@ -145,24 +191,30 @@ class SecureEmailService {
   // Méthode pour tester la configuration
   async testEmailService() {
     try {
+      const emailService = process.env.EMAIL_SERVICE || 'gmail';
+      
       const testMail = {
         to: process.env.EMAIL_FROM, // S'envoyer un test
-        from: {
-          email: process.env.EMAIL_FROM,
-          name: process.env.EMAIL_FROM_NAME || 'MythicMarket'
-        },
-        subject: '🧪 Test MythicMarket Email Service',
+        subject: `🧪 Test MythicMarket Email Service (${emailService})`,
         html: `
           <div style="padding: 20px; font-family: Arial, sans-serif;">
             <h1 style="color: #28a745;">✅ Service email fonctionnel !</h1>
             <p>Ce test confirme que votre configuration email fonctionne correctement.</p>
+            <p><strong>Service:</strong> ${emailService}</p>
             <p><strong>Timestamp:</strong> ${new Date().toISOString()}</p>
           </div>
         `
       };
+
+      if (emailService === 'sendgrid') {
+        testMail.from = { email: process.env.EMAIL_FROM, name: process.env.EMAIL_FROM_NAME || 'MythicMarket' };
+        await sgMail.send(testMail);
+      } else if (emailService === 'gmail') {
+        testMail.from = `${process.env.EMAIL_FROM_NAME || 'MythicMarket'} <${process.env.EMAIL_FROM}>`;
+        await this.transporter.sendMail(testMail);
+      }
       
-      await sgMail.send(testMail);
-      console.log('✅ Test email service réussi');
+      console.log(`✅ Test email service réussi (${emailService})`);
       return true;
     } catch (error) {
       console.error('❌ Test email service échoué:', error);
@@ -175,9 +227,9 @@ class SecureEmailService {
     if (!process.env.ADMIN_EMAIL) return;
 
     try {
+      const emailService = process.env.EMAIL_SERVICE || 'gmail';
       const adminMail = {
         to: process.env.ADMIN_EMAIL,
-        from: process.env.EMAIL_FROM,
         subject: `🔔 Nouvelle commande - ${orderData.orderNumber}`,
         html: `
           <h2>Nouvelle commande reçue</h2>
@@ -188,8 +240,15 @@ class SecureEmailService {
           <p><strong>Articles:</strong> ${orderData.orderItems.length}</p>
         `
       };
+
+      if (emailService === 'sendgrid') {
+        adminMail.from = process.env.EMAIL_FROM;
+        await sgMail.send(adminMail);
+      } else if (emailService === 'gmail') {
+        adminMail.from = process.env.EMAIL_FROM;
+        await this.transporter.sendMail(adminMail);
+      }
       
-      await sgMail.send(adminMail);
       console.log('✅ Notification admin envoyée');
     } catch (error) {
       console.error('❌ Erreur notification admin:', error);
