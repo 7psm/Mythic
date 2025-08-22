@@ -13,7 +13,8 @@
         <link rel="stylesheet" href="../styles/ResponsiveStyle.css">
         <link rel="stylesheet" href="../styles/NavBar.css">
         <script src="/OBF/Context/OrderContext.min.js"></script>
-        <script src="/OBF/Checkout.min.js"></script>
+        <script src="/src/js/checkout.js"></script>
+        <script src="/OBF/Product.min.js"></script>
 
 <!-- ///////////////////////////////////////////////////////////////////
      ////////////////////       Fonts & Icons       ////////////////////
@@ -102,7 +103,7 @@
           <a href="TrustSafetyPage.html" class="trust-link">En savoir plus sur la confiance et la sécurité →</a>
         </section>
 
-        <form action="/confirmation" method="POST" class="checkout-form" novalidate>
+        <form action="Confirmation.html" method="POST" class="checkout-form" novalidate autocomplete="off">
           <h2 class="section-title">Informations Client</h2>
         
           <div class="field-group">
@@ -169,7 +170,7 @@
               </div>
               <div class="shipping-details">
                 <p class="shipping-name">Livraison Express</p>
-                <p class="shipping-time">15-20min</p>
+                <p class="shipping-time">2-4H</p>
               </div>
               <div class="shipping-price">+ 2.50€</div>
             </div>
