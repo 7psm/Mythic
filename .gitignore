@@ -16,3 +16,4 @@
 !log/.keep
 # Local Netlify folder
 .netlify
+"node_modules" 
