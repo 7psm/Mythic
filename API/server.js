@@ -11,6 +11,7 @@ console.log("✅ Imports réussis");
 
 const app = express();
 const PORT = process.env.PORT || 3001; // Render utilise process.env.PORT
+const cors = require('cors');
 
 // Équivalent de __dirname pour les modules ES
 const __filename = fileURLToPath(import.meta.url);
@@ -22,6 +23,7 @@ console.log(`📁 __dirname: ${__dirname}`);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({origin: "https://mythicmarket.netlify.app"}));
 
 // ------------------
 // API Routes (AVANT la route catch-all)
