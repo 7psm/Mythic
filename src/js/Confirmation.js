@@ -1,56 +1,43 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // =======================
-  // Variables globales
-  // =======================
+// 🔧 Nettoyage immédiat de l'URL
+(function immediateURLClean() {
+  try {
+    const cleanURL = window.location.origin + window.location.pathname;
+    window.history.replaceState({}, document.title, cleanURL);
+    console.log("🔧 URL nettoyée :", cleanURL);
+  } catch (error) {
+    console.log("⚠️ Impossible de nettoyer l'URL:", error);
+  }
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
   let screenshotTaken = false;
   let isSubmitting = false;
   let selectedVendor = ".uwg9";
   let orderData = {};
 
-  // =======================
-  // Éléments DOM - Cache des références
-  // =======================
   const DOM = {
     submitButton: document.getElementById('submit-order'),
     screenshotModal: document.getElementById('screenshot-modal'),
     vendorModal: document.getElementById('vendor-modal'),
     thankYouModal: document.getElementById('confirmation-modal'),
+    notYetBtn: document.getElementById('not-yet-btn'),
     screenshotTakenBtn: document.getElementById('screenshot-taken-btn'),
     continueToVendorBtn: document.getElementById('continue-to-vendor'),
     confirmationOkBtn: document.getElementById('confirmation-ok-btn')
   };
 
-  // =======================
-  // INITIALISATION
-  // =======================
   function initialize() {
-    cleanURL();
+    console.log("🚀 Initialisation page confirmation");
     loadOrderData();
     populateOrderData();
     setupEventListeners();
-    
-    if (DOM.submitButton) {
-      DOM.submitButton.disabled = false;
-    }
+
+    if (DOM.submitButton) DOM.submitButton.disabled = false;
   }
 
-  // =======================
-  // Nettoyage de l'URL
-  // =======================
-  function cleanURL() {
-    if (window.history.replaceState) {
-      const cleanURL = window.location.pathname;
-      window.history.replaceState({}, document.title, cleanURL);
-    }
-  }
-
-  // =======================
-  // Chargement des données sensibles
-  // =======================
   function loadOrderData() {
     const encryptedData = localStorage.getItem("secureCheckoutData");
-    let formData = encryptedData ? decryptData(encryptedData) : null;
-
+    const formData = encryptedData ? decryptData(encryptedData) : null;
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     const selectedShippingMethod = localStorage.getItem("selectedShippingMethod") || "Livraison Standard";
     const selectedPaymentMethod = localStorage.getItem("selectedPaymentMethod") || "PayPal";
@@ -76,12 +63,10 @@ document.addEventListener('DOMContentLoaded', function() {
     };
   }
 
-  // Normalise et calcule le délai estimé en fonction du libellé choisi
   function getEstimatedDelivery(methodLabel) {
     const label = (methodLabel || '').toLowerCase();
     if (label.includes('express')) return '2-4H';
     if (label.includes('standard') || label.includes('classique')) return '6-12h';
-    // Valeur par défaut prudente
     return '6-12h';
   }
 
@@ -102,32 +87,24 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function populateOrderItems() {
-    const orderItemsContainer = document.getElementById('order-items');
-    if (!orderItemsContainer) return;
-
-    orderItemsContainer.innerHTML = '';
-    
+    const container = document.getElementById('order-items');
+    if (!container) return;
+    container.innerHTML = '';
     orderData.orderItems.forEach(item => {
-      const itemElement = document.createElement('div');
-      itemElement.className = 'order-item';
-      
-      const itemName = document.createElement('span');
-      itemName.className = 'item-name';
-      itemName.textContent = item.name;
-      
-      // Ajouter le badge quantité comme span à l'intérieur de item-name (conforme au CSS .item-name span)
-      const quantityBadge = document.createElement('span');
-      quantityBadge.textContent = `x${item.quantity || 1}`;
-      itemName.appendChild(quantityBadge);
-      
-      const itemPrice = document.createElement('span');
-      itemPrice.className = 'item-price';
-      itemPrice.textContent = `€${item.price.toFixed(2)}`;
-      
-      itemElement.appendChild(itemName);
-      itemElement.appendChild(itemPrice);
-      
-      orderItemsContainer.appendChild(itemElement);
+      const div = document.createElement('div');
+      div.className = 'order-item';
+      const name = document.createElement('span');
+      name.className = 'item-name';
+      name.textContent = item.name;
+      const quantity = document.createElement('span');
+      quantity.textContent = `x${item.quantity || 1}`;
+      name.appendChild(quantity);
+      const price = document.createElement('span');
+      price.className = 'item-price';
+      price.textContent = `€${item.price.toFixed(2)}`;
+      div.appendChild(name);
+      div.appendChild(price);
+      container.appendChild(div);
     });
   }
 
@@ -135,23 +112,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const subtotal = orderData.orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const shippingCost = orderData.shippingMethod.price;
     const total = subtotal + shippingCost;
-
-    // Cache des éléments de totaux
-    const totalElements = {
-      subtotal: document.getElementById('subtotal'),
-      shippingCost: document.getElementById('shipping-cost'),
-      totalCost: document.getElementById('total-cost')
-    };
-
-    if (totalElements.subtotal) totalElements.subtotal.textContent = `€${subtotal.toFixed(2)}`;
-    if (totalElements.shippingCost) totalElements.shippingCost.textContent = shippingCost > 0 ? `€${shippingCost.toFixed(2)}` : 'Gratuit';
-    if (totalElements.totalCost) totalElements.totalCost.textContent = `€${total.toFixed(2)}`;
+    const subtotalEl = document.getElementById('subtotal');
+    const shippingEl = document.getElementById('shipping-cost');
+    const totalEl = document.getElementById('total-cost');
+    if (subtotalEl) subtotalEl.textContent = `€${subtotal.toFixed(2)}`;
+    if (shippingEl) shippingEl.textContent = shippingCost > 0 ? `€${shippingCost.toFixed(2)}` : 'Gratuit';
+    if (totalEl) totalEl.textContent = `€${total.toFixed(2)}`;
   }
 
-
-
   function populateOrderData() {
-    // Cache des éléments DOM pour éviter les recherches répétées
     const elements = {
       orderNumber: document.getElementById('order-number'),
       orderDate: document.getElementById('order-date'),
@@ -168,123 +137,108 @@ document.addEventListener('DOMContentLoaded', function() {
       shippingDelivery: document.getElementById('shipping-delivery'),
       paymentMethod: document.getElementById('payment-method')
     };
-
-    // Remplir les informations de base
-    if (elements.orderNumber) elements.orderNumber.textContent = orderData.orderNumber;
-    if (elements.orderDate) elements.orderDate.textContent = new Date(orderData.orderDate).toLocaleDateString('fr-FR');
-    if (elements.customerName) elements.customerName.textContent = orderData.name;
-    if (elements.contactName) elements.contactName.textContent = orderData.name;
-    if (elements.contactEmail) elements.contactEmail.textContent = orderData.email;
-    if (elements.contactPhone) elements.contactPhone.textContent = orderData.phoneNumber;
-    if (elements.contactDiscord) elements.contactDiscord.textContent = orderData.discord;
-    
-    // Remplir les informations de livraison
-    if (elements.shippingAddress) elements.shippingAddress.textContent = orderData.address;
-    if (elements.shippingCity) elements.shippingCity.textContent = orderData.city;
-    if (elements.shippingCountry) elements.shippingCountry.textContent = orderData.country;
-    if (elements.shippingPostal) elements.shippingPostal.textContent = orderData.postalCode;
-    
-    // Remplir la méthode de livraison
-    if (elements.shippingMethod) elements.shippingMethod.textContent = orderData.shippingMethod.name;
-    if (elements.shippingDelivery) elements.shippingDelivery.textContent = orderData.shippingMethod.delivery;
-    
-    // Remplir la méthode de paiement
-    if (elements.paymentMethod) elements.paymentMethod.textContent = orderData.paymentMethod;
-    
-    // Remplir les articles et totaux
+    for (let key in elements) {
+      if (!elements[key]) continue;
+      switch(key) {
+        case 'orderNumber': elements[key].textContent = orderData.orderNumber; break;
+        case 'orderDate': elements[key].textContent = new Date(orderData.orderDate).toLocaleDateString('fr-FR'); break;
+        case 'customerName': case 'contactName': elements[key].textContent = orderData.name; break;
+        case 'contactEmail': elements[key].textContent = orderData.email; break;
+        case 'contactPhone': elements[key].textContent = orderData.phoneNumber; break;
+        case 'contactDiscord': elements[key].textContent = orderData.discord; break;
+        case 'shippingAddress': elements[key].textContent = orderData.address; break;
+        case 'shippingCity': elements[key].textContent = orderData.city; break;
+        case 'shippingCountry': elements[key].textContent = orderData.country; break;
+        case 'shippingPostal': elements[key].textContent = orderData.postalCode; break;
+        case 'shippingMethod': elements[key].textContent = orderData.shippingMethod.name; break;
+        case 'shippingDelivery': elements[key].textContent = orderData.shippingMethod.delivery; break;
+        case 'paymentMethod': elements[key].textContent = orderData.paymentMethod; break;
+      }
+    }
     populateOrderItems();
     calculateAndDisplayTotals();
   }
 
-  // =======================
-  // Événements
-  // =======================
   function setupEventListeners() {
     if (DOM.submitButton) DOM.submitButton.addEventListener('click', handleSubmitClick);
+    if (DOM.notYetBtn) DOM.notYetBtn.addEventListener('click', () => closeModal(DOM.screenshotModal));
     if (DOM.screenshotTakenBtn) DOM.screenshotTakenBtn.addEventListener('click', handleScreenshotTaken);
     if (DOM.continueToVendorBtn) DOM.continueToVendorBtn.addEventListener('click', handleVendorSelection);
     if (DOM.confirmationOkBtn) DOM.confirmationOkBtn.addEventListener('click', handleThankYouBackHome);
+
+    [DOM.screenshotModal, DOM.vendorModal, DOM.thankYouModal].forEach(modal => {
+      if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeModal(modal); });
+    });
   }
 
-  // Redirection vers l'accueil et reset du panier depuis le modal de remerciement
-  function handleThankYouBackHome() {
-    clearStorage();
-    window.location.href = '/index.html';
-  }
-
-  // =======================
-  // Gestion du screenshot
-  // =======================
-  function handleSubmitClick() {
-    if (!screenshotTaken) {
-      openModal(DOM.screenshotModal);
-    } else {
-      openVendorModalAfterDelay();
-    }
+  function handleSubmitClick(e) {
+    e.preventDefault();
+    if (!screenshotTaken) openModal(DOM.screenshotModal);
+    else openVendorModalAfterDelay();
   }
 
   function handleScreenshotTaken() {
     screenshotTaken = true;
     closeModal(DOM.screenshotModal);
-    openVendorModalAfterDelay();
+    if (DOM.submitButton) {
+      DOM.submitButton.textContent = "Finaliser la commande";
+      DOM.submitButton.style.backgroundColor = "#28a745";
+    }
   }
 
   function openVendorModalAfterDelay() {
-    setTimeout(() => {
-      openModal(DOM.vendorModal);
-      
-      // Sélection automatique du vendeur par défaut
-      const defaultVendorOption = document.querySelector('.vendor-option[data-vendor="MolarMarket"]');
-      if (defaultVendorOption) {
-        defaultVendorOption.classList.add('selected');
-        const radioIndicator = defaultVendorOption.querySelector('.radio-indicator');
-        if (radioIndicator) {
-          radioIndicator.classList.add('checked');
-        }
-      }
-    }, 3000);
+    openModal(DOM.vendorModal);
+    const defaultVendorOption = document.querySelector('.vendor-option[data-vendor=".uwg9"]');
+    if (defaultVendorOption) {
+      defaultVendorOption.classList.add('selected');
+      const radioIndicator = defaultVendorOption.querySelector('.radio-indicator');
+      if (radioIndicator) radioIndicator.classList.add('checked');
+    }
   }
 
-  // =======================
-  // Gestion du modal Vendor
-  // =======================
   function handleVendorSelection() {
-    selectedVendor = "MolarMarket";
-    
+    selectedVendor = ".uwg9";
     closeModal(DOM.vendorModal);
-    submitOrderToServer();
-    
-    // Ouvrir Discord dans un nouvel onglet
+
+    // 🔗 Redirection directe vers Discord
     window.open("https://discord.gg/beC8cFZaXH", "_blank");
-    
-    // Ouvrir le modal de remerciement immédiatement
-    openModal(DOM.thankYouModal);
+
+    // Affichage modal remerciement
+    setTimeout(() => openModal(DOM.thankYouModal), 500);
+
+    // Envoi commande serveur
+    submitOrderToServer();
   }
 
-  // =======================
-  // Envoi des données sensibles à ton API Express
-  // =======================
   async function submitOrderToServer() {
     if (isSubmitting) return;
     isSubmitting = true;
     try {
+      const dataToSend = { ...orderData, selectedVendor, submittedAt: new Date().toISOString() };
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
       const response = await fetch('http://localhost:3001/api/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...orderData, selectedVendor })
+        body: JSON.stringify(dataToSend),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const result = await response.json();
+      console.log(result.success ? '✅ Commande envoyée' : '❌ Erreur serveur', result.message);
     } catch (error) {
-      // Gérer l'erreur silencieusement
+      console.error('❌ Erreur envoi serveur:', error.message);
     } finally {
       isSubmitting = false;
-      clearStorage();
     }
   }
 
-  // =======================
-  // Nettoyage du stockage local
-  // =======================
+  function handleThankYouBackHome() {
+    clearStorage();
+    window.location.href = '/index.html';
+  }
+
   function clearStorage() {
     localStorage.removeItem('cart');
     localStorage.removeItem('checkoutData');
@@ -292,19 +246,8 @@ document.addEventListener('DOMContentLoaded', function() {
     sessionStorage.removeItem('checkoutData');
   }
 
-  // =======================
-  // Utilitaires modals
-  // =======================
-  function openModal(modal) { 
-    if (modal) modal.style.display = 'flex'; 
-  }
-  
-  function closeModal(modal) { 
-    if (modal) modal.style.display = 'none'; 
-  }
+  function openModal(modal) { if (modal) modal.style.display = 'flex'; }
+  function closeModal(modal) { if (modal) modal.style.display = 'none'; }
 
-  // =======================
-  // Initialisation
-  // =======================
   initialize();
 });
