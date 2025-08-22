@@ -44,6 +44,40 @@ app.get("/api/orders", (req, res) => {
   });
 });
 
+// Ajouter une commande (route alternative pour compatibilité frontend)
+app.post("/api/order", (req, res) => {
+  const ordersPath = path.join(__dirname, "orders.json");
+  fs.readFile(ordersPath, "utf8", (err, data) => {
+    if (err) {
+      console.error("Erreur lecture orders.json:", err);
+      return res.status(500).json({ error: "Impossible de lire orders.json", success: false });
+    }
+    
+    try {
+      const orders = JSON.parse(data);
+      const newOrder = {
+        id: Date.now(),
+        ...req.body,
+        createdAt: new Date().toISOString()
+      };
+      
+      orders.push(newOrder);
+      
+      fs.writeFile(ordersPath, JSON.stringify(orders, null, 2), (err) => {
+        if (err) {
+          console.error("Erreur écriture orders.json:", err);
+          return res.status(500).json({ error: "Impossible d'ajouter la commande", success: false });
+        }
+        console.log("✅ Commande ajoutée:", newOrder);
+        res.status(201).json({ message: "Commande ajoutée avec succès", order: newOrder, success: true });
+      });
+    } catch (parseErr) {
+      console.error("Erreur parsing JSON:", parseErr);
+      res.status(500).json({ error: "Fichier JSON invalide", success: false });
+    }
+  });
+});
+
 // Ajouter une commande
 app.post("/api/orders", (req, res) => {
   const ordersPath = path.join(__dirname, "orders.json");
