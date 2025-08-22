@@ -1,10 +1,9 @@
 {
   "name": "mythic",
   "version": "1.0.0",
-  "description": "- Ajout de git dans le projet ✅\r - Ajout de Node.js dans le projet ✅\r - Pages Principales et Script Fonctionnels (70%) ✅",
+  "description": "IncognitoMarket Project",
   "main": "API/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node API/server.js"
   },
   "repository": {
@@ -14,10 +13,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AimbotBabyalone/mythic/issues"
-  },
-  "homepage": "https://github.com/AimbotBabyalone/mythic#readme",
   "devDependencies": {
     "@babel/cli": "^7.28.3",
     "@babel/core": "^7.28.3",
@@ -28,8 +23,5 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0"
-  },
-  "engines": {
-  "node": ">=18.0.0"
-  } 
+  }
 }
