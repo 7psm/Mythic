@@ -112,8 +112,8 @@ app.post("/api/order", async (req, res) => {
           
           console.log(`✅ Email envoyé pour commande ${newOrder.orderNumber}`);
           
-          // Optionnel: Notification admin
-          await emailService.sendAdminNotification(newOrder);
+          // Optionnel: Log de succès
+          console.log(`📧 Email confirmé pour ${newOrder.orderNumber}`);
         }
       } catch (emailError) {
         console.error(`❌ Erreur email pour commande ${newOrder.orderNumber}:`, emailError);
@@ -199,7 +199,7 @@ app.get("*", (req, res) => {
 // Route de test email (à supprimer en production)
 app.post("/api/test-email", async (req, res) => {
   try {
-    const testResult = await emailService.testEmailService();
+    const testResult = await emailService.testEmail();
     res.json({ success: testResult, message: testResult ? "Email test envoyé" : "Échec test email" });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });

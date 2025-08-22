@@ -7,12 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ENCRYPTION_KEY = "checkout_secure_key_2024";
 
-  // 📧 Configuration EmailJS (remplacer par vos IDs)
-  const EMAILJS_CONFIG = {
-    SERVICE_ID: "service_xxxxxxx",  // Remplacer
-    TEMPLATE_ID: "template_xxxxxx", // Remplacer  
-    PUBLIC_KEY: "your_public_key"   // Remplacer
-  };
+  // Plus besoin de configuration côté frontend
 
   function calculateOrderTotal() {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -132,55 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSubmitButtonText();
   }
 
-  // 📧 Fonction d'envoi d'email avec EmailJS
-  async function sendConfirmationEmail(orderData) {
-    try {
-      // Charger EmailJS si pas déjà fait
-      if (!window.emailjs) {
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
-        document.head.appendChild(script);
-        await new Promise(resolve => script.onload = resolve);
-      }
-
-      // Initialiser EmailJS
-      emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-
-      // Préparer les données pour le template
-      const templateParams = {
-        to_email: orderData.customerInfo.email,
-        customer_name: orderData.customerInfo.name,
-        order_number: orderData.orderNumber,
-        order_date: new Date().toLocaleDateString('fr-FR'),
-        total_amount: `€${orderData.total.toFixed(2)}`,
-        shipping_method: orderData.preferences.shippingMethod,
-        payment_method: orderData.preferences.paymentMethod,
-        order_items: orderData.cart.map(item => 
-          `${item.name} x${item.quantity} - €${(item.price * item.quantity).toFixed(2)}`
-        ).join('\n'),
-        customer_email: orderData.customerInfo.email,
-        customer_phone: orderData.customerInfo.phone || 'Non renseigné',
-        customer_discord: orderData.customerInfo.discord || 'Non renseigné',
-        shipping_address: orderData.shippingInfo.address || 'Non renseigné',
-        shipping_city: orderData.shippingInfo.city || 'Non renseigné',
-        shipping_country: orderData.shippingInfo.country || 'Non renseigné'
-      };
-
-      // Envoyer l'email
-      await emailjs.send(
-        EMAILJS_CONFIG.SERVICE_ID,
-        EMAILJS_CONFIG.TEMPLATE_ID,
-        templateParams
-      );
-
-      console.log('✅ Email de confirmation envoyé !');
-      return { success: true };
-
-    } catch (error) {
-      console.error('❌ Erreur envoi email:', error);
-      return { success: false, error: error.message };
-    }
-  }
+  // L'email est maintenant envoyé de manière sécurisée par le backend
 
   async function handleSubmit(e) {
     e.preventDefault();
