@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const dataToSend = saveFormDataSecurely();
 
       try {
-        const response = await fetch("/api/order", {
+        const response = await fetch("https://mythic-api.onrender.com/api/order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dataToSend)
@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const result = await response.json();
-        if (result.success) window.location.href = "/confirmation";
+        if (result.success) window.location.href = "/confirmation.html";
         else console.error("Erreur serveur:", result.message);
 
       } catch (err) {
