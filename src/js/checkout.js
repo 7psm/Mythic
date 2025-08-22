@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const result = await response.json();
-        if (result.success) window.location.href = "/pages/confirmation.html";
+        if (result.success) window.location.href = "/src/pages/Confirmation.html";
         else console.error("Erreur serveur:", result.message);
 
       } catch (err) {
