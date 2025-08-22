@@ -2,12 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-
+const bodyParser = require('body-parser');
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '10mb' })); // Pour gros objets JSON
+app.use(express.static(path.join(__dirname, '../src')));
 
 // ========================================
 // Servir les fichiers statiques
@@ -57,6 +58,11 @@ function writeOrders(orders) {
 // ========================================
 // Routes
 // ========================================
+
+app.post('/api/order', (req, res) => {
+    console.log('Commande reçue:', req.body);
+    res.json({ success: true, message: 'Commande reçue sur Railway !' });
+});
 
 // Page de test
 app.get('/api/test', (req, res) => {
