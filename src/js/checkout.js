@@ -113,40 +113,74 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      if (cart.length === 0) return;
+      if (cart.length === 0) {
+        alert("Votre panier est vide !");
+        return;
+      }
 
       let allValid = true;
       form.querySelectorAll("input[required]").forEach(f => {
-        if (!f.value.trim()) { f.style.borderColor = "#ff4444"; allValid = false; }
+        if (!f.value.trim()) { 
+          f.style.borderColor = "#ff4444"; 
+          allValid = false; 
+        }
         else f.style.borderColor = "";
       });
 
-      if (!document.querySelector(".payment-option.selected") || !document.querySelector(".shipping-option.selected")) {
+      if (!document.querySelector(".payment-option.selected")) {
+        alert("Veuillez sélectionner un moyen de paiement");
         allValid = false;
       }
 
-      if (!allValid) return;
+      if (!document.querySelector(".shipping-option.selected")) {
+        alert("Veuillez sélectionner une méthode de livraison");
+        allValid = false;
+      }
 
+      if (!allValid) {
+        alert("Veuillez remplir tous les champs obligatoires");
+        return;
+      }
+
+      // Sauvegarder les données du formulaire
       const dataToSend = saveFormDataSecurely();
+      
+      // Afficher un message de confirmation
+      submitButton.textContent = "Traitement en cours...";
+      submitButton.disabled = true;
 
       try {
-        const response = await fetch("https://mythic-api.onrender.com/api/order", {
+        // ENVOI DES DONNÉES À SERVER.JS
+        const response = await fetch("/api/order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dataToSend)
         });
 
-        if (!response.ok) {
-          console.error("Réponse serveur non OK", response.status);
-          return;
+        if (response.ok) {
+          const result = await response.json();
+          console.log("✅ Commande traitée avec succès:", result);
+          
+          // Stocker l'ID de commande pour confirmation.html
+          localStorage.setItem("lastOrderId", result.order.id);
+          
+          // Redirection vers confirmation.html
+          submitButton.textContent = "Redirection...";
+          setTimeout(() => {
+            window.location.href = "/src/pages/Confirmation.html";
+          }, 1000);
+          
+        } else {
+          throw new Error(`Erreur serveur: ${response.status}`);
         }
-
-        const result = await response.json();
-        if (result.success) window.location.href = "/src/pages/Confirmation.html";
-        else console.error("Erreur serveur:", result.message);
-
-      } catch (err) {
-        console.error("Erreur fetch API:", err);
+        
+      } catch (error) {
+        console.error("❌ Erreur lors du traitement:", error);
+        alert("Erreur lors du traitement de la commande. Veuillez réessayer.");
+        
+        // Réactiver le bouton en cas d'erreur
+        submitButton.textContent = "Finaliser la Commande";
+        submitButton.disabled = false;
       }
     });
   }

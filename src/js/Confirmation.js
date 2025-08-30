@@ -1,5 +1,5 @@
 // 🔧 URL de l'API (à remplacer par l'URL publique de ton serveur)
-const API_URL = "https://mythic-api.onrender.com/"; // Exemple
+const API_URL = "http://localhost:3001"; // Local development
 
 (function immediateURLClean() {
   try {
