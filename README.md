@@ -43,15 +43,13 @@ Ce repository GitHub contient du code propriétaire et confidentiel pour le proj
 - **Système de mail** : Privé
 
 ### 📋 **Contenu Masqué**
-- Frontend React/Vue.js
-- Backend Node.js/Express
+- Backend 
 - Système de mail sécurisé
 - Configuration serveur
 - Variables d'environnement
 - Templates d'emails
 
 ### 🔐 **Sécurité**
-- Tous les fichiers sont masqués par `.gitignore`
 - Credentials et secrets protégés
 - Code propriétaire non exposé
 - Repository à usage interne uniquement
