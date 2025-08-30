@@ -1,182 +1,64 @@
-# 🚀 MythicMarket - E-commerce Discord Service
+# Incognito Market Beta 
 
-## 📖 Description
+## Programme du Dev
 
-**MythicMarket** est une plateforme e-commerce moderne et sécurisée spécialement conçue pour les services Discord. Le projet comprend un frontend statique et un backend API avec système d'envoi d'emails automatique.
+### Beta : 
+- 🎈
 
-## ✨ Fonctionnalités
+** A FINIR :**
+- Intégré le système de commande via le bot. (A la validation de la commande,je reçois un embed dans un salon "Orders" avec le récapitulatif)
+- Mise en place de sécurité au sein du site
 
-- 🛒 **Gestion de panier avancée** avec localStorage
-- 💳 **Processus de checkout sécurisé** avec chiffrement des données
-- 📧 **Système d'emails automatique** pour les confirmations de commande
-- 🔐 **API sécurisée** avec validation des données
-- 📱 **Interface responsive** et moderne
-- 🎨 **Thème personnalisable** avec variables CSS
+### V1 : Version complète pour PC 
+**Updates v1 :**
+- Ajout de responsive autres écran pc
+- Ajout d'un système de mise à jour (vérifie la version du site entre l'actuelle et la nouvelle. Si non identique, refresh auto de la page, sinon, rien)
+- Ajout d'API pour faciliter la gestion du site
+- Amélioration de la sécurité du site
+- Ajouter un système de mail en PHP (permet au client de reçevoir égallement un mail avec le récapitulatif de commande)
+- Ajouter page 'Error 404'
 
-## 🏗️ Architecture
+### V2 : Version Complète Mobile
+**Updates v2 :**
+- Ajout de responsive autres écran mobile
+- Amélioration du système de mise à jour
+- Amélioration de la sécurité
+- Optimisation du code côté Client 
 
-```
-🌐 Frontend (Netlify)
-├── Interface utilisateur (HTML/CSS/JS)
-├── Gestion du panier
-├── Processus de checkout
-└── Pages de confirmation
+### V3 : Passage au Backend Full Stack (TSX/REACT)
+- Passage complet au backend afin de rendre le site plus fluide
+- Simplification du code, fichiers donc site + léger des 2 côtés
 
-🔧 Backend (Render.com)
-├── API Express.js
-├── Système d'envoi d'emails
-├── Stockage des commandes
-└── Validation des données
-```
 
-## 🚀 Installation et Déploiement
+# 🔒 Repository Privé - MythicMarket
 
-### Prérequis
-- Node.js 18+
-- Compte Gmail avec mot de passe d'application
-- Comptes Render.com et Netlify
+## ⚠️ **ATTENTION : Ce repository est PRIVÉ**
 
-### 1. Installation Locale
-```bash
-# Cloner le repository
-git clone https://github.com/AimbotBabyalone/Mythic.git
-cd Mythic
+Ce repository GitHub contient du code propriétaire et confidentiel pour le projet **MythicMarket**.
 
-# Installer les dépendances
-npm install
+### 🚫 **Accès Restreint**
+- **Code source** : Non visible
+- **Configuration** : Protégée
+- **Données sensibles** : Sécurisées
+- **Système de mail** : Privé
 
-# Configurer les variables d'environnement
-cp env-example.txt .env
-# Éditer .env avec vos vraies valeurs
+### 📋 **Contenu Masqué**
+- Frontend React/Vue.js
+- Backend Node.js/Express
+- Système de mail sécurisé
+- Configuration serveur
+- Variables d'environnement
+- Templates d'emails
 
-# Démarrer le serveur local
-npm start
-```
+### 🔐 **Sécurité**
+- Tous les fichiers sont masqués par `.gitignore`
+- Credentials et secrets protégés
+- Code propriétaire non exposé
+- Repository à usage interne uniquement
 
-### 2. Configuration des Variables d'Environnement
-Créez un fichier `.env` basé sur `env-example.txt` :
-
-```env
-GMAIL_USER=votre-email@gmail.com
-GMAIL_APP_PASSWORD=votre-mot-de-passe-app
-CORS_ORIGIN=http://localhost:3001
-NODE_ENV=development
-PORT=3001
-```
-
-### 3. Déploiement Backend (Render.com)
-1. Créer un compte sur [Render.com](https://render.com)
-2. Connecter votre repo GitHub
-3. Créer un "Web Service" avec :
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
-   - **Environment Variables**: Configurer selon `env-production-example.txt`
-
-### 4. Déploiement Frontend (Netlify)
-1. Connecter votre repo GitHub à Netlify
-2. Configurer le déploiement automatique
-3. Le site sera accessible sur votre domaine Netlify
-
-## 📁 Structure du Projet
-
-```
-Mythic/
-├── API/                    # Backend API
-│   ├── server.js          # Serveur principal
-│   └── orders.json        # Stockage des commandes
-├── MailSystem/            # Système d'emails
-│   ├── emailService.js    # Service d'envoi d'emails
-│   ├── config.js          # Configuration email
-│   └── logger.js          # Système de logging
-├── src/                   # Code source frontend
-│   ├── js/               # JavaScript
-│   ├── styles/           # CSS et styles
-│   └── pages/            # Pages HTML
-├── public/                # Assets statiques
-├── netlify.toml          # Configuration Netlify
-├── render.yaml            # Configuration Render.com
-└── package.json           # Dépendances Node.js
-```
-
-## 🔧 Configuration
-
-### Variables d'Environnement Production
-```env
-GMAIL_USER=votre-email@gmail.com
-GMAIL_APP_PASSWORD=votre-mot-de-passe-app
-CORS_ORIGIN=https://votre-site.netlify.app
-NODE_ENV=production
-PORT=10000
-```
-
-### Configuration CORS
-Le serveur est configuré pour accepter les requêtes depuis votre domaine Netlify. Modifiez `CORS_ORIGIN` dans vos variables d'environnement.
-
-## 📧 Système d'Emails
-
-Le système utilise **Nodemailer** avec Gmail pour envoyer automatiquement :
-- Confirmations de commande
-- Notifications de statut
-- Emails de suivi
-
-### Configuration Gmail
-1. Activer l'authentification à 2 facteurs
-2. Générer un mot de passe d'application
-3. Utiliser ces informations dans `.env`
-
-## 🛡️ Sécurité
-
-- **Chiffrement des données** sensibles
-- **Validation des entrées** côté serveur
-- **Protection CORS** configurée
-- **Variables d'environnement** pour les secrets
-- **Logging sécurisé** sans exposition de données sensibles
-
-## 🐛 Dépannage
-
-### Problèmes Courants
-
-1. **Site Netlify ne trouve pas index.html**
-   - Vérifier la configuration `netlify.toml`
-   - S'assurer que le fichier `_redirects` est présent
-
-2. **Emails ne s'envoient pas**
-   - Vérifier les variables d'environnement sur Render.com
-   - Vérifier le mot de passe d'application Gmail
-
-3. **Erreurs CORS**
-   - Vérifier que `CORS_ORIGIN` pointe vers votre domaine Netlify
-
-### Logs et Debug
-- Consulter les logs sur Render.com
-- Vérifier la console du navigateur
-- Utiliser les outils de développement
-
-## 📚 Documentation
-
-- `DEPLOIEMENT_NETLIFY.md` - Guide complet de déploiement
-- `RESUME_FINAL.md` - Résumé des fonctionnalités
-- `env-production-example.txt` - Variables d'environnement production
-
-## 🤝 Contribution
-
-1. Fork le projet
-2. Créer une branche feature (`git checkout -b feature/AmazingFeature`)
-3. Commit les changements (`git commit -m 'Add AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
-
-## 📄 Licence
-
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
-
-## 📞 Support
-
-Pour toute question ou problème :
-1. Consulter la documentation
-2. Vérifier les issues GitHub
-3. Contacter l'équipe de développement
+### 📞 **Contact**
+Pour plus d'informations sur ce projet, contactez l'équipe de développement.
 
 ---
 
-**MythicMarket** - Votre solution e-commerce moderne et sécurisée pour Discord ! 🚀
+**© 2024 MythicMarket - Tous droits réservés**
