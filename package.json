@@ -1,0 +1,23 @@
+{
+  "name": "mythic",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "API Mythic avec Express",
+  "main": "API/server.js",
+  "scripts": {
+    "start": "node API/server.js",
+    "dev": "nodemon API/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.7",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

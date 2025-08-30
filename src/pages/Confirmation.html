@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IncognitoMarket - No.1 Shop All Over Discord</title>
+    <link rel="icon" href="/public/logo.png"/>
+<!-- /////////////////////////////////////////////////////////////////////////
+     ////////////////////       Importation & Files       ////////////////////
+     /////////////////////////////////////////////////////////////////////////-->
+        <link rel="stylesheet" href="/src/styles/PagesStyles/Confirmation.css">
+        <link rel="stylesheet" href="/src/styles/GlobalStyle.css">
+        <link rel="stylesheet" href="/src/styles/ResponsiveStyle.css">
+        <link rel="stylesheet" href="/src/styles/NavBar.css">
+        <script src="/OBF/Product.min.js"></script>
+        <script src="../js/Confirmation.js" type="module" defer></script>
+
+<!-- ///////////////////////////////////////////////////////////////////
+     ////////////////////       Fonts & Icons       ////////////////////
+     ///////////////////////////////////////////////////////////////////-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+
+    <body>
+        <div class="page-container">       
+            <!-- ////////////////////////////////////////////////////////////
+                 ////////////////////       NavBar       ////////////////////
+                 ////////////////////////////////////////////////////////////-->
+            <nav class="navbar-container">
+              <div class="nav-links">
+                <a href="/index.html" class="nav-link">Accueil</a>
+                <a href="./Products.html" class="nav-link">Produits</a>
+                <a href="./TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
+                <a href="./Contact.html" class="nav-link">Contact</a>
+              </div>
+              <div class="action-buttons">
+                <a href="./Cart.html" class="cart-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  <span class="cart-count">0</span>
+                </a>
+                <a href="./Contact.html" class="contact-button">Contact</a>
+              </div>
+            </nav>
+        
+             <!-- Main Content -->
+            <main class="main-content">
+                <div class="confirmation-header">
+                    <h1>Confirmation de Commande</h1>
+                    <p>Merci pour votre commande ! Voici le récapitulatif de votre achat.</p>
+                </div>
+            
+                <div class="confirmation-card">
+                    <div class="card-header">
+                        <div class="order-info">
+                            <h2 id="customer-name">Nom du Client</h2>
+                            <p id="order-date">Date de la commande</p>
+                        </div>
+
+                        <div class="order-number">
+                            <span>Numéro de Commande</span>
+                            <span id="order-number">CMD-12345678</span>
+                        </div>
+                    </div>
+                
+                    <div class="card-content">
+                        <div class="two-columns">
+                            <div class="column">
+                                <h3 class="section-title">Informations Client</h3>
+                                <div class="info-grid">
+                                    <div class="info-group">
+                                        <h4>Contact</h4>
+                                        <p id="contact-name">Nom du client</p>
+                                    </div>
+
+                                    <div class="info-group">
+                                        <h4>Email</h4>
+                                        <p id="contact-email">email@exemple.com</p>
+                                    </div>
+
+                                    <div class="info-group">
+                                        <h4>Téléphone</h4>
+                                        <p id="contact-phone">+33 1 23 45 67 89</p>
+                                    </div>
+
+                                    <div class="info-group">
+                                        <h4>Discord</h4>
+                                        <p id="contact-discord">@pseudo</p>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="column">
+                                <h3 class="section-title">Informations de Livraison</h3>
+                                <div class="info-grid">
+                                    <div class="info-group">
+                                        <h4>Adresse</h4>
+                                        <p id="shipping-address">Adresse</p>
+                                    </div>
+
+                                    <div class="info-group">
+                                        <h4>Ville</h4>
+                                        <p id="shipping-city">Ville</p>
+                                    </div>
+
+                                    <div class="info-group">
+                                        <h4>Pays</h4>
+                                        <p id="shipping-country">Pays</p>
+                                    </div>
+
+                                    <div class="info-group">
+                                        <h4>Code Postal</h4>
+                                        <p id="shipping-postal">Code Postal</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <h3 class="section-title">Méthode de Livraison</h3>
+                        <div class="info-grid">
+                            <div class="info-group">
+                                <h4>Livraison</h4>
+                                <p id="shipping-method">Livraison Standard</p>
+                            </div>
+
+                            <div class="info-group">
+                                <h4>Délai Estimé</h4>
+                                <p id="shipping-delivery">Délai</p>
+                            </div>
+                        </div>
+                    
+                        <h3 class="section-title">Méthode de Paiement</h3>
+                        <div class="info-group" style="margin-bottom: 15px;">
+                            <p id="payment-method">PayPal</p>
+                        </div>
+                    
+                        <h3 class="section-title">Articles Commandés</h3>
+                        <div class="order-items-list" id="order-items">
+                            <!-- Les articles seront injectés ici par JavaScript -->
+                        </div>
+                    
+                        <div class="order-summary">
+                            <div class="summary-row">
+                                <span>Sous-total</span>
+                                <span id="subtotal">€0.00</span>
+                            </div>
+
+                            <div class="summary-row">
+                                <span>Livraison</span>
+                                <span id="shipping-cost">Gratuit</span>
+                            </div>
+
+                            <div class="summary-total">
+                                <span>Total</span>
+                                <span id="total-cost">€0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="screenshot-instructions">
+                    <h3>📱 Capture d'écran des Détails de Commande</h3>
+                    <p>Veuillez prendre une capture d'écran de cette page pour vos dossiers. Cette confirmation contient toutes les informations importantes de votre commande et servira de preuve d'achat.</p>
+                    <p>Cette dernière vous sera égallement envoyé par mail et en message privé sur discord.</p>
+                </div>
+            
+                <div class="action-buttons">
+                    <button class="submit-button" id="submit-order" type="buttton" disabled>
+                        Soumettre la Commande
+                    </button>
+                </div>
+            </main>
+
+            <!-- Screenshot Modal -->
+            <div class="modal" id="screenshot-modal">
+                <div class="modal-content">
+                    <h2 class="modal-title">Avez-vous pris une capture d'écran des détails de votre commande ? Ceci est nécessaire avant de soumettre.</h2>
+                    <div class="modal-buttons">
+                        <button class="secondary-button" id="not-yet-btn">
+                            Pas encore
+                        </button>
+                        <button class="primary-button" id="screenshot-taken-btn">
+                            Oui, j'ai pris une capture d'écran
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vendor Modal -->
+            <div class="modal" id="vendor-modal">
+                <div class="modal-content">
+                    <h2 class="modal-title">Commande Soumise avec Succès</h2>
+                    <p>Veuillez sélectionner un vendeur pour continuer votre achat</p>
+                    
+                    <div class="vendor-options">
+                        <div class="vendor-option selected" data-vendor=".uwg9">
+                            <div class="vendor-name">
+                                <i class="fa-brands fa-discord"></i>
+                                @.uwg9
+                            </div>
+                            <div class="radio-indicator checked"></div>
+                        </div>
+                    </div>
+                    
+                    <button class="primary-button" id="continue-to-vendor">
+                        Continuer vers le Vendeur
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div class="modal" id="confirmation-modal">
+          <div class="modal-content">
+            <h2 class="modal-title">✅ Commande finalisée !</h2>
+            <p>🛒 Votre panier a été vidé !</p>
+            <p>👔 Vous allez être redirigé vers Discord pour une mise en contact avec le vendeur.</p>
+            <p>📧 Un mail de confirmation vous a été envoyé !</p>
+            <p>Merci pour votre commande !</p>
+            <div class="modal-buttons">
+              <button class="primary-button" id="confirmation-ok-btn">Retour à l'accueil
+                <a href="/index.html"></a>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Debug Script -->
+        <script>
+            // Script de debug pour vérifier que les éléments sont trouvés
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('🔍 DEBUG - Vérification des éléments:');
+                console.log('Submit button:', document.getElementById('submit-order') ? '✅' : '❌');
+                console.log('Screenshot modal:', document.getElementById('screenshot-modal') ? '✅' : '❌');
+                console.log('Vendor modal:', document.getElementById('vendor-modal') ? '✅' : '❌');
+                console.log('Screenshot taken btn:', document.getElementById('screenshot-taken-btn') ? '✅' : '❌');
+                console.log('Continue to vendor btn:', document.getElementById('continue-to-vendor') ? '✅' : '❌');
+            });
+        </script>
+
+        
+    </body>
+</html>

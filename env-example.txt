@@ -1,0 +1,48 @@
+# ========================================
+# EXEMPLE DE FICHIER .ENV
+# ========================================
+# Ce fichier montre la structure des variables d'environnement
+# COPIEZ-LE en .env et remplissez avec vos vraies valeurs
+
+# Configuration Email Gmail
+GMAIL_USER=votre-email@gmail.com
+GMAIL_APP_PASSWORD=votre-mot-de-passe-app-gmail
+
+# Configuration Serveur
+PORT=3001
+NODE_ENV=development
+HOST=localhost
+SERVER_TIMEOUT=30000
+
+# Configuration CORS
+CORS_ORIGIN=http://localhost:3001
+
+# Configuration Logging
+LOG_LEVEL=info
+EMAIL_LOGS=true
+LOG_TO_FILE=false
+
+# Configuration Email Templates
+EMAIL_TEMPLATE_CACHE=true
+EMAIL_CACHE_SIZE=100
+DEFAULT_LANGUAGE=fr
+
+# Configuration Email Avancée
+EMAIL_PORT=587
+EMAIL_SECURE=false
+EMAIL_POOL=true
+EMAIL_MAX_CONNECTIONS=5
+EMAIL_MAX_MESSAGES=100
+EMAIL_RATE_LIMIT=14
+EMAIL_RATE_DELTA=1000
+
+# Configuration TLS
+EMAIL_TLS_REJECT_UNAUTHORIZED=false
+
+# ========================================
+# INSTRUCTIONS D'INSTALLATION
+# ========================================
+# 1. Copiez ce fichier en .env
+# 2. Remplacez les valeurs par vos vraies informations
+# 3. Ne committez JAMAIS le fichier .env dans Git
+# 4. Ce fichier env-example.txt peut être commité en toute sécurité

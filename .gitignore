@@ -1,71 +1,95 @@
-# ========================================
-# GITIGNORE COMPLET - REPOSITORY PRIVÉ
-# ========================================
-# Tous les fichiers et dossiers sont masqués
-# Le repository GitHub sera complètement vide pour les visiteurs
 
 # ========================================
-# MASQUER TOUT LE PROJET
+# GITIGNORE SÉLECTIF - REPOSITORY PUBLIC
+# ========================================
+# Cache uniquement les informations sensibles
+# Le projet reste entièrement fonctionnel et visible
+
+# ========================================
+# FICHIERS SENSIBLES À CACHER
 # ========================================
 
-# Dossiers principaux
-src/
-public/
-API/
-MailSystem/
-OBF/
-Maintenance/
-
-# Fichiers de configuration
-package.json
-package-lock.json
-babel.config.json
-
-# Fichiers sensibles
+# Variables d'environnement et secrets
 .env
+.env.local
+.env.production
+.env.development
 config.json
 secrets.json
 *.key
 *.pem
 *.p12
+*.crt
+
+# Fichiers de configuration avec mots de passe
+MailSystem/.env
+MailSystem/config.json
+MailSystem/secrets.json
 
 # Logs et fichiers temporaires
 *.log
 *.tmp
 *.temp
+logs/
+temp/
 
-# Dépendances Node.js
+# Fichiers de cache
+.cache/
+.cache-*/
+
+# ========================================
+# DÉPENDANCES NODE.JS
+# ========================================
+# Ces dossiers sont volumineux et peuvent être régénérés
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Fichiers système
+# ========================================
+# FICHIERS SYSTÈME
+# ========================================
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Fichiers d'éditeur
+# ========================================
+# FICHIERS D'ÉDITEUR
+# ========================================
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# Fichiers de build
-dist/
-build/
-*.min.js
-*.min.css
+*~
 
 # ========================================
-# RÈGLE GLOBALE - TOUT MASQUER
+# FICHIERS DE BUILD (optionnel)
 # ========================================
-# Cette règle masque TOUS les fichiers
-# sauf .gitignore et .git/
-*
-!/.gitignore
-!/.git/
+# Décommentez si vous voulez cacher les builds
+# dist/
+# build/
+# *.min.js
+# *.min.css
 
 # ========================================
-# EXCEPTIONS (optionnel)
+# FICHIERS DE DÉPLOIEMENT
 # ========================================
-# Si vous voulez montrer certains fichiers :
-# !/README.md
-# !/LICENSE
-# !/CHANGELOG.md 
+# Cache les fichiers de déploiement spécifiques
+.netlify/
+.vercel/
+render.yaml
+railway.toml
+
+# ========================================
+# FICHIERS DE SÉCURITÉ
+# ========================================
+# Cache les fichiers contenant des clés ou tokens
+.env.*
+secrets/
+keys/
+tokens/ 
