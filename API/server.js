@@ -6,12 +6,13 @@ import cors from "cors";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from 'url';
+import emailService from '../MailSystem/emailService.js';
+import { validateConfig } from '../MailSystem/config.js';
 
 console.log("✅ Imports réussis");
 
 const app = express();
-const PORT = process.env.PORT || 3001; // Render utilise process.env.PORT
-const cors = require('cors');
+const PORT = process.env.PORT || 3001;
 
 // Équivalent de __dirname pour les modules ES
 const __filename = fileURLToPath(import.meta.url);
@@ -19,98 +20,93 @@ const __dirname = path.dirname(__filename);
 
 console.log(`📁 __dirname: ${__dirname}`);
 
+// Validation de la configuration email au démarrage
+console.log("🔧 Validation de la configuration email...");
+if (validateConfig()) {
+  console.log("✅ Configuration email valide");
+} else {
+  console.log("❌ Configuration email manquante - emails désactivés");
+}
+
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || "http://localhost:3001",
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({origin: "https://mythicmarket.netlify.app"}));
 
 // ------------------
-// API Routes (AVANT la route catch-all)
+// API Routes
 // ------------------
 
 // Récupérer toutes les commandes
-app.get("/api/orders", (req, res) => {
-  const ordersPath = path.join(__dirname, "orders.json");
-  fs.readFile(ordersPath, "utf8", (err, data) => {
-    if (err) {
-      console.error("Erreur lecture orders.json:", err);
-      return res.status(500).json({ error: "Impossible de lire orders.json" });
-    }
-    try {
-      res.json(JSON.parse(data));
-    } catch (parseErr) {
-      console.error("Erreur parsing JSON:", parseErr);
-      res.status(500).json({ error: "Fichier JSON invalide" });
-    }
-  });
+app.get("/api/orders", async (req, res) => {
+  try {
+    const ordersPath = path.join(__dirname, "orders.json");
+    const data = await fs.promises.readFile(ordersPath, "utf8");
+    const orders = JSON.parse(data);
+    res.json(orders);
+  } catch (error) {
+    console.error("❌ Erreur lecture orders.json:", error);
+    res.status(500).json({ error: "Impossible de lire orders.json" });
+  }
 });
 
-// Ajouter une commande (route alternative pour compatibilité frontend)
-app.post("/api/order", (req, res) => {
-  const ordersPath = path.join(__dirname, "orders.json");
-  fs.readFile(ordersPath, "utf8", (err, data) => {
-    if (err) {
-      console.error("Erreur lecture orders.json:", err);
-      return res.status(500).json({ error: "Impossible de lire orders.json", success: false });
+// Ajouter une commande avec envoi d'email
+app.post("/api/order", async (req, res) => {
+  try {
+    const ordersPath = path.join(__dirname, "orders.json");
+    const data = await fs.promises.readFile(ordersPath, "utf8");
+    const orders = JSON.parse(data);
+    
+    const newOrder = {
+      id: Date.now(),
+      ...req.body,
+      createdAt: new Date().toISOString(),
+      emailSent: false
+    };
+    
+    orders.push(newOrder);
+    
+    await fs.promises.writeFile(ordersPath, JSON.stringify(orders, null, 2));
+    console.log("✅ Commande ajoutée:", newOrder);
+    
+    // Envoi d'email en arrière-plan (non-bloquant)
+    if (newOrder.email && newOrder.email !== 'Non renseigné') {
+      setImmediate(async () => {
+        try {
+          const emailSent = await emailService.sendConfirmationEmail(newOrder);
+          if (emailSent) {
+            newOrder.emailSent = true;
+            const updatedOrders = orders.map(order => 
+              order.id === newOrder.id ? { ...order, emailSent: true } : order
+            );
+            await fs.promises.writeFile(ordersPath, JSON.stringify(updatedOrders, null, 2));
+            console.log(`✅ Email envoyé et statut mis à jour pour la commande ${newOrder.orderNumber}`);
+          }
+        } catch (emailError) {
+          console.error("❌ Erreur envoi email:", emailError);
+        }
+      });
+    } else {
+      console.log("⚠️ Pas d'email valide pour l'envoi de confirmation");
     }
     
-    try {
-      const orders = JSON.parse(data);
-      const newOrder = {
-        id: Date.now(),
-        ...req.body,
-        createdAt: new Date().toISOString()
-      };
-      
-      orders.push(newOrder);
-      
-      fs.writeFile(ordersPath, JSON.stringify(orders, null, 2), (err) => {
-        if (err) {
-          console.error("Erreur écriture orders.json:", err);
-          return res.status(500).json({ error: "Impossible d'ajouter la commande", success: false });
-        }
-        console.log("✅ Commande ajoutée:", newOrder);
-        res.status(201).json({ message: "Commande ajoutée avec succès", order: newOrder, success: true });
-      });
-    } catch (parseErr) {
-      console.error("Erreur parsing JSON:", parseErr);
-      res.status(500).json({ error: "Fichier JSON invalide", success: false });
-    }
-  });
-});
-
-// Ajouter une commande
-app.post("/api/orders", (req, res) => {
-  const ordersPath = path.join(__dirname, "orders.json");
-  fs.readFile(ordersPath, "utf8", (err, data) => {
-    if (err) {
-      console.error("Erreur lecture orders.json:", err);
-      return res.status(500).json({ error: "Impossible de lire orders.json" });
-    }
+    res.status(201).json({ 
+      message: "Commande ajoutée avec succès", 
+      order: newOrder, 
+      success: true,
+      emailStatus: newOrder.email && newOrder.email !== 'Non renseigné' ? 'en cours d\'envoi' : 'pas d\'email'
+    });
     
-    try {
-      const orders = JSON.parse(data);
-      const newOrder = {
-        id: Date.now(), // Ajouter un ID unique
-        ...req.body,
-        createdAt: new Date().toISOString()
-      };
-      
-      orders.push(newOrder);
-      
-      fs.writeFile(ordersPath, JSON.stringify(orders, null, 2), (err) => {
-        if (err) {
-          console.error("Erreur écriture orders.json:", err);
-          return res.status(500).json({ error: "Impossible d'ajouter la commande" });
-        }
-        res.status(201).json({ message: "Commande ajoutée avec succès", order: newOrder });
-      });
-    } catch (parseErr) {
-      console.error("Erreur parsing JSON:", parseErr);
-      res.status(500).json({ error: "Fichier JSON invalide" });
-    }
-  });
+  } catch (error) {
+    console.error("❌ Erreur traitement commande:", error);
+    res.status(500).json({ 
+      error: "Erreur lors du traitement de la commande", 
+      success: false 
+    });
+  }
 });
 
 // ------------------
