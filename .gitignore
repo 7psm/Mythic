@@ -20,7 +20,6 @@ Maintenance/
 package.json
 package-lock.json
 babel.config.json
-README.md
 
 # Fichiers sensibles
 .env
