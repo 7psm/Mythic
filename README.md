@@ -6,9 +6,8 @@
 - 🎈
 
 ** A FINIR :**
-- Intégré le système de commande via le bot. (A la validation de la commande, le client reçoit un MP du bot avec son récap (embed) et moi un embed dans un salon "Orders" avec le récapitulatif)
+- Intégré le système de commande via le bot. (A la validation de la commande,je reçois un embed dans un salon "Orders" avec le récapitulatif)
 - Mise en place de sécurité au sein du site
-- Crypté et Protéger les données des clients (notamment les infos sur les coordonnées bancaire)
 
 ### V1 : Version complète pour PC 
 **Updates v1 :**
