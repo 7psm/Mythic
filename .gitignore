@@ -1,19 +1,72 @@
-# N'importe quel fichier portant le nom ".env", y cmpris dans les sous-dossiers
+# ========================================
+# GITIGNORE COMPLET - REPOSITORY PRIVÉ
+# ========================================
+# Tous les fichiers et dossiers sont masqués
+# Le repository GitHub sera complètement vide pour les visiteurs
+
+# ========================================
+# MASQUER TOUT LE PROJET
+# ========================================
+
+# Dossiers principaux
+src/
+public/
+API/
+MailSystem/
+OBF/
+Maintenance/
+
+# Fichiers de configuration
+package.json
+package-lock.json
+babel.config.json
+README.md
+
+# Fichiers sensibles
 .env
-# Tous les fichiers ayant l'extension ".tmp"
+config.json
+secrets.json
+*.key
+*.pem
+*.p12
+
+# Logs et fichiers temporaires
+*.log
 *.tmp
-# Si je veux restreindre au répertoire courant
+*.temp
 
-# Le répertoire ".tmp" et tout ce qu'il peut contenir
+# Dépendances Node.js
+node_modules/
 
-# On autorise une exeption dans le répertoire de logs, le fichier ".keep"
-# Pour ça on doit autoriser le répertoire 
-!/log
-#En revanche on n'autorise pas les fichiers qu'il contient,
-# ni les sous-dossiers
-/logs/*
-#.. à l'exception du fichier ".keep"
-!log/.keep
-# Local Netlify folder
-.netlify
-"node_modules" 
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers d'éditeur
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Fichiers de build
+dist/
+build/
+*.min.js
+*.min.css
+
+# ========================================
+# RÈGLE GLOBALE - TOUT MASQUER
+# ========================================
+# Cette règle masque TOUS les fichiers
+# sauf .gitignore et .git/
+*
+!/.gitignore
+!/.git/
+
+# ========================================
+# EXCEPTIONS (optionnel)
+# ========================================
+# Si vous voulez montrer certains fichiers :
+# !/README.md
+# !/LICENSE
+# !/CHANGELOG.md 
