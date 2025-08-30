@@ -1,0 +1,122 @@
+# ========================================
+# CONFIGURATION RENDER.COM - MYTHICMARKET
+# ========================================
+# Configuration pour le déploiement du backend sur Render.com
+
+services:
+  # ========================================
+  # SERVICE BACKEND API
+  # ========================================
+  - type: web
+    name: mythic-api
+    env: node
+    region: oregon
+    plan: free
+    
+    # ========================================
+    # COMMANDES DE BUILD ET DÉMARRAGE
+    # ========================================
+    buildCommand: npm install
+    startCommand: npm start
+    
+    # ========================================
+    # VARIABLES D'ENVIRONNEMENT
+    # ========================================
+    envVars:
+      - key: NODE_ENV
+        value: production
+      
+      - key: PORT
+        value: 10000
+      
+      - key: HOST
+        value: 0.0.0.0
+      
+      - key: SERVER_TIMEOUT
+        value: 30000
+      
+      - key: CORS_ORIGIN
+        value: https://votre-site.netlify.app
+      
+      - key: LOG_LEVEL
+        value: info
+      
+      - key: EMAIL_LOGS
+        value: true
+      
+      - key: LOG_TO_FILE
+        value: false
+      
+      - key: EMAIL_TEMPLATE_CACHE
+        value: true
+      
+      - key: EMAIL_CACHE_SIZE
+        value: 100
+      
+      - key: DEFAULT_LANGUAGE
+        value: fr
+      
+      - key: EMAIL_PORT
+        value: 587
+      
+      - key: EMAIL_SECURE
+        value: false
+      
+      - key: EMAIL_POOL
+        value: true
+      
+      - key: EMAIL_MAX_CONNECTIONS
+        value: 5
+      
+      - key: EMAIL_MAX_MESSAGES
+        value: 100
+      
+      - key: EMAIL_RATE_LIMIT
+        value: 14
+      
+      - key: EMAIL_RATE_DELTA
+        value: 1000
+      
+      - key: EMAIL_TLS_REJECT_UNAUTHORIZED
+        value: false
+    
+    # ========================================
+    # VARIABLES SENSIBLES (SECRETS)
+    # ========================================
+    # Ces variables doivent être configurées manuellement sur Render.com
+    # car elles contiennent des informations sensibles
+    # 
+    # GMAIL_USER=votre-email@gmail.com
+    # GMAIL_APP_PASSWORD=votre-mot-de-passe-app
+    # 
+    # Pour les configurer :
+    # 1. Allez sur Render.com Dashboard
+    # 2. Sélectionnez votre service
+    # 3. Allez dans "Environment"
+    # 4. Ajoutez ces variables manuellement
+    
+    # ========================================
+    # VÉRIFICATION DE SANTÉ
+    # ========================================
+    healthCheckPath: /api/health
+    
+    # ========================================
+    # REDÉMARRAGE AUTOMATIQUE
+    # ========================================
+    autoDeploy: true
+    
+    # ========================================
+    # RESSOURCES
+    # ========================================
+    # Plan gratuit de Render.com
+    # CPU: 0.1 vCPU
+    # RAM: 512 MB
+    # Stockage: 1 GB
+    
+    # ========================================
+    # NOTES IMPORTANTES
+    # ========================================
+    # 1. Ce fichier doit être dans le dossier .netlify/
+    # 2. Render.com détectera automatiquement cette configuration
+    # 3. Le backend sera déployé sur Render.com
+    # 4. Configurez manuellement les variables sensibles

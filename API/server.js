@@ -59,7 +59,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/api/orders", async (req, res) => {
   try {
     // Chemin vers le fichier JSON des commandes
-    const ordersPath = path.join(__dirname, "orders.json");
+  const ordersPath = path.join(__dirname, "orders.json");
     
     // Lecture asynchrone du fichier des commandes
     const data = await fs.promises.readFile(ordersPath, "utf8");
@@ -77,14 +77,14 @@ app.get("/api/orders", async (req, res) => {
 app.post("/api/order", async (req, res) => {
   try {
     // Chemin vers le fichier JSON des commandes
-    const ordersPath = path.join(__dirname, "orders.json");
+  const ordersPath = path.join(__dirname, "orders.json");
     
     // Lecture des commandes existantes
     const data = await fs.promises.readFile(ordersPath, "utf8");
-    const orders = JSON.parse(data);
+      const orders = JSON.parse(data);
     
     // Création d'une nouvelle commande avec métadonnées
-    const newOrder = {
+      const newOrder = {
       id: Date.now(),                    // ID unique basé sur le timestamp
       ...req.body,                       // Toutes les données de la commande
       createdAt: new Date().toISOString(), // Date de création
@@ -92,11 +92,11 @@ app.post("/api/order", async (req, res) => {
     };
     
     // Ajout de la commande à la liste
-    orders.push(newOrder);
-    
+      orders.push(newOrder);
+      
     // Sauvegarde asynchrone dans le fichier JSON
     await fs.promises.writeFile(ordersPath, JSON.stringify(orders, null, 2));
-    console.log("✅ Commande ajoutée:", newOrder);
+        console.log("✅ Commande ajoutée:", newOrder);
     
     // =============================================
     // ENVOI D'EMAIL DE CONFIRMATION (NON-BLOQUANT)

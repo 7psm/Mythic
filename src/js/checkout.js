@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         // ENVOI DES DONNÉES À SERVER.JS
-        const response = await fetch("https://mythic-api.onrender.com", {
+        const response = await fetch("https://mythic-api.onrender.com/api/order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dataToSend)

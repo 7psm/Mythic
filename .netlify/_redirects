@@ -1,0 +1,27 @@
+# ========================================
+# REDIRECTIONS NETLIFY - MYTHICMARKET
+# ========================================
+# Fichier de redirection pour le routage côté client (SPA)
+
+# Redirection principale pour toutes les routes
+# Assure que index.html gère toutes les routes
+/* /index.html 200
+
+# ========================================
+# REDIRECTIONS SPÉCIFIQUES (optionnel)
+# ========================================
+# Vous pouvez ajouter des redirections spécifiques ici
+
+# Exemple : redirection d'une ancienne URL vers une nouvelle
+# /ancienne-page /nouvelle-page 301
+
+# Exemple : redirection avec paramètres
+# /produit/:id /produits.html?id=:id 200
+
+# ========================================
+# NOTES IMPORTANTES
+# ========================================
+# 1. Ce fichier doit être dans le dossier .netlify/
+# 2. Netlify l'utilisera automatiquement
+# 3. Le code 200 permet le routage côté client
+# 4. Toutes les routes seront gérées par index.html

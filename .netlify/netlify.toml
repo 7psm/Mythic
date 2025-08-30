@@ -1,0 +1,99 @@
+# ========================================
+# CONFIGURATION NETLIFY - MYTHICMARKET
+# ========================================
+# Configuration pour le déploiement du frontend sur Netlify
+
+[build]
+  # Dossier à publier (racine du projet)
+  publish = "."
+  
+  # Pas de commande de build nécessaire pour un site statique
+  # command = "npm run build"  # Supprimé car non défini dans package.json
+
+[build.environment]
+  # Version de Node.js pour Netlify
+  NODE_VERSION = "18"
+
+# ========================================
+# REDIRECTIONS ET ROUTAGE
+# ========================================
+# Redirection pour le routage côté client (SPA)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# ========================================
+# EN-TÊTES DE SÉCURITÉ
+# ========================================
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Sécurité
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Cache pour les fichiers statiques
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ========================================
+# EN-TÊTES SPÉCIFIQUES PAR TYPE DE FICHIER
+# ========================================
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "text/css"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/javascript"
+
+[[headers]]
+  for = "*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/webp"
+
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/png"
+
+# ========================================
+# CONFIGURATION AVANCÉE
+# ========================================
+[build.processing]
+  # Optimisation des images
+  images = true
+  
+  # Minification du CSS et JS
+  css = true
+  js = true
+  
+  # Compression des fichiers
+  html = true
+
+# ========================================
+# VARIABLES D'ENVIRONNEMENT
+# ========================================
+[context.production.environment]
+  NODE_ENV = "production"
+  CORS_ORIGIN = "https://votre-site.netlify.app"
+
+[context.deploy-preview.environment]
+  NODE_ENV = "preview"
+  CORS_ORIGIN = "https://deploy-preview-*.netlify.app"
+
+# ========================================
+# NOTES IMPORTANTES
+# ========================================
+# 1. Ce fichier doit être dans le dossier .netlify/
+# 2. Netlify détectera automatiquement cette configuration
+# 3. Le frontend sera déployé sur Netlify
+# 4. Le backend doit être déployé séparément sur Render.com

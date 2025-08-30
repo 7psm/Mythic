@@ -20,6 +20,7 @@ secrets.json
 *.pem
 *.p12
 *.crt
+.txt
 
 # Fichiers de configuration avec mots de passe
 MailSystem/.env
@@ -80,9 +81,8 @@ desktop.ini
 # FICHIERS DE DÉPLOIEMENT
 # ========================================
 # Cache les fichiers de déploiement spécifiques
-.netlify/
+# .netlify/  # Dossier de configuration visible
 .vercel/
-render.yaml
 railway.toml
 
 # ========================================
