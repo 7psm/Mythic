@@ -129,20 +129,21 @@ app.post("/api/order", async (req, res) => {
     // =============================================
     
     // Vérification de la présence d'un email valide
-    if (newOrder.email && newOrder.email !== 'Non renseigné') {
+    const customerEmail = newOrder.email || (newOrder.customerInfo && newOrder.customerInfo.email);
+    if (customerEmail && customerEmail !== 'Non renseigné') {
       // Utilisation de setImmediate pour l'envoi en arrière-plan
       setImmediate(async () => {
         try {
           // Tentative d'envoi de l'email de confirmation
           const emailResult = await emailService.sendOrderConfirmation({
-            customerEmail: newOrder.email,
-            customerName: newOrder.customerName || 'Client',
+            customerEmail: customerEmail,
+            customerName: newOrder.customerInfo?.name || newOrder.customerName || 'Client',
             orderNumber: newOrder.orderNumber || newOrder.id,
-            totalAmount: newOrder.totalAmount || 0,
-            items: newOrder.items || [],
-            shippingMethod: newOrder.shippingMethod,
-            shippingCost: newOrder.shippingCost,
-            paymentMethod: newOrder.paymentMethod
+            totalAmount: newOrder.total || newOrder.totalAmount || 0,
+            items: newOrder.cart || newOrder.items || [],
+            shippingMethod: newOrder.preferences?.shippingMethod || newOrder.shippingMethod,
+            shippingCost: newOrder.shippingCost || 0,
+            paymentMethod: newOrder.preferences?.paymentMethod || newOrder.paymentMethod
           });
           
           if (emailResult.success) {
@@ -170,7 +171,7 @@ app.post("/api/order", async (req, res) => {
       message: "Commande ajoutée avec succès", 
       order: newOrder, 
       success: true,
-      emailStatus: newOrder.email && newOrder.email !== 'Non renseigné' ? 'en cours d\'envoi' : 'pas d\'email'
+      emailStatus: customerEmail && customerEmail !== 'Non renseigné' ? 'en cours d\'envoi' : 'pas d\'email'
     });
     
   } catch (error) {
