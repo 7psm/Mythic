@@ -50,7 +50,13 @@ if (configValidation.isValid) {
 
 // Configuration CORS pour permettre les requêtes depuis le frontend
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || "http://localhost:3001",  // Origine autorisée
+  origin: [
+    "http://localhost:3001",
+    "http://localhost:3000", 
+    "https://mythicmarket.netlify.app",
+    "https://mythicmarket.netlify.app/",
+    process.env.CORS_ORIGIN
+  ].filter(Boolean),  // Filtre les valeurs undefined
   credentials: true  // Permet l'envoi de cookies et d'en-têtes d'authentification
 }));
 
