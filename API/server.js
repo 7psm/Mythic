@@ -12,8 +12,9 @@ import cors from "cors";                 // Middleware pour gérer les requêtes
 import path from "path";                 // Utilitaire pour manipuler les chemins de fichiers
 import fs from "fs";                     // Module système de fichiers
 import { fileURLToPath } from 'url';     // Utilitaire pour obtenir __dirname en modules ES
-import emailService from '../MailSystem/emailService.js';  // Service d'envoi d'emails
+import emailService from '../MailSystem/emailService-simple.js';  // Service d'envoi d'emails
 import { validateConfig } from '../MailSystem/config.js';  // Validation de la configuration
+import emailRoutes from '../MailSystem/routes.js';         // Routes dédiées au système d'email
 
 console.log("✅ Imports réussis");
 
@@ -29,8 +30,16 @@ console.log(`📁 __dirname: ${__dirname}`);
 
 // Validation de la configuration email au démarrage du serveur
 console.log("🔧 Validation de la configuration email...");
-if (validateConfig()) {
+const configValidation = validateConfig();
+if (configValidation.isValid) {
   console.log("✅ Configuration email valide");
+  // Initialisation du service email
+  console.log("🔧 Initialisation du service email...");
+  emailService.initializeTransporter().then(() => {
+    console.log("✅ Service email initialisé avec succès");
+  }).catch((error) => {
+    console.error("❌ Erreur initialisation service email:", error);
+  });
 } else {
   console.log("❌ Configuration email manquante - emails désactivés");
 }
@@ -55,6 +64,9 @@ app.use(express.urlencoded({ extended: true }));
 // ROUTES DE L'API
 // =============================================
 
+// Routes dédiées au système d'email
+app.use('/api/email', emailRoutes);
+
 // Route GET pour récupérer toutes les commandes
 app.get("/api/orders", async (req, res) => {
   try {
@@ -77,11 +89,19 @@ app.get("/api/orders", async (req, res) => {
 app.post("/api/order", async (req, res) => {
   try {
     // Chemin vers le fichier JSON des commandes
-  const ordersPath = path.join(__dirname, "orders.json");
+    const ordersPath = path.join(__dirname, "orders.json");
     
-    // Lecture des commandes existantes
-    const data = await fs.promises.readFile(ordersPath, "utf8");
-      const orders = JSON.parse(data);
+    // Lecture des commandes existantes avec gestion d'erreur
+    let orders = [];
+    try {
+      const data = await fs.promises.readFile(ordersPath, "utf8");
+      if (data.trim()) { // Vérifier que le fichier n'est pas vide
+        orders = JSON.parse(data);
+      }
+    } catch (readError) {
+      console.log("📝 Initialisation du fichier orders.json");
+      orders = []; // Initialiser avec un tableau vide si erreur
+    }
     
     // Création d'une nouvelle commande avec métadonnées
       const newOrder = {
@@ -108,9 +128,18 @@ app.post("/api/order", async (req, res) => {
       setImmediate(async () => {
         try {
           // Tentative d'envoi de l'email de confirmation
-          const emailSent = await emailService.sendConfirmationEmail(newOrder);
+          const emailResult = await emailService.sendOrderConfirmation({
+            customerEmail: newOrder.email,
+            customerName: newOrder.customerName || 'Client',
+            orderNumber: newOrder.orderNumber || newOrder.id,
+            totalAmount: newOrder.totalAmount || 0,
+            items: newOrder.items || [],
+            shippingMethod: newOrder.shippingMethod,
+            shippingCost: newOrder.shippingCost,
+            paymentMethod: newOrder.paymentMethod
+          });
           
-          if (emailSent) {
+          if (emailResult.success) {
             // Mise à jour du statut d'envoi si réussi
             newOrder.emailSent = true;
             
@@ -146,6 +175,67 @@ app.post("/api/order", async (req, res) => {
     });
   }
 });
+
+// =============================================
+// ENDPOINT POUR ENVOYER UN EMAIL DE CONFIRMATION
+// =============================================
+app.post('/api/send-order-email', async (req, res) => {
+  try {
+    const { customerEmail, customerName, orderNumber, totalAmount, items, shippingMethod, shippingCost, paymentMethod } = req.body;
+
+    // Validation des données requises
+    if (!customerEmail || !customerName || !orderNumber || !totalAmount) {
+      return res.status(400).json({
+        success: false,
+        error: "Données manquantes pour l'envoi d'email"
+      });
+    }
+
+    console.log("📧 Demande d'envoi d'email pour la commande:", orderNumber);
+    console.log("👤 Client:", customerName, `(${customerEmail})`);
+
+    // Préparation des données pour l'email
+    const orderData = {
+      customerEmail,
+      customerName,
+      orderNumber,
+      totalAmount,
+      items: items || [],
+      shippingMethod: shippingMethod || "Livraison Standard",
+      shippingCost: shippingCost || 0,
+      paymentMethod: paymentMethod || "Non spécifié"
+    };
+
+    // Envoi de l'email via le service
+    const emailResult = await emailService.sendOrderConfirmation(orderData);
+
+    if (emailResult.success) {
+      console.log("✅ Email envoyé avec succès pour la commande:", orderNumber);
+      res.json({
+        success: true,
+        message: "Email de confirmation envoyé avec succès",
+        messageId: emailResult.messageId,
+        orderNumber
+      });
+    } else {
+      console.error("❌ Échec de l'envoi d'email:", emailResult.error);
+      res.status(500).json({
+        success: false,
+        error: "Échec de l'envoi de l'email",
+        details: emailResult.error
+      });
+    }
+
+  } catch (error) {
+    console.error("❌ Erreur lors de l'envoi d'email:", error);
+    res.status(500).json({
+      success: false,
+      error: "Erreur interne du serveur lors de l'envoi d'email"
+    });
+  }
+});
+
+
 
 // =============================================
 // SERVIR LE FRONTEND

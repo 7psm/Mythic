@@ -248,7 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
           submitButton.textContent = "Redirection...";
           setTimeout(() => {
             window.location.href = "/src/pages/Confirmation.html";
-          }, 1000);
+          }, 500);
           
         } else {
           throw new Error(`Erreur serveur: ${response.status}`);

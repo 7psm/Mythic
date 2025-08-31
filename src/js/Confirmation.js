@@ -5,7 +5,7 @@
 // Il récupère les données du checkout et envoie la commande au serveur
 
 // 🔧 URL de l'API (à remplacer par l'URL publique de ton serveur)
-const API_URL = "https://mythic-api.onrender.com"; // Local development
+const API_URL = "http://localhost:3001"; // Local development
 
 // =============================================
 // NETTOYAGE IMMÉDIAT DE L'URL
@@ -340,6 +340,17 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       
       const result = await response.json();
+      
+      // Si la commande est créée avec succès, envoyer l'email de confirmation
+      if (result.success && result.order) {
+        console.log("📧 Envoi de l'email de confirmation...");
+        await sendOrderConfirmationEmail(dataToSend);
+      } else {
+        // Fallback : envoi direct si l'API échoue
+        console.log("📧 Envoi direct de l'email...");
+        await sendOrderConfirmationEmail(dataToSend);
+      }
+      
       return result.success;  // Retourne le statut de succès
       
     } catch (error) {
@@ -348,6 +359,58 @@ document.addEventListener('DOMContentLoaded', function() {
     } finally { 
       isSubmitting = false;  // Réinitialise le flag de soumission
     }
+  }
+
+  // =============================================
+  // ENVOI DE L'EMAIL DE CONFIRMATION
+  // =============================================
+  async function sendOrderConfirmationEmail(orderData) {
+    try {
+      // Préparation des données pour l'email
+      const emailData = {
+        customerEmail: orderData.email,
+        customerName: orderData.name,
+        orderNumber: orderData.orderNumber,
+        totalAmount: calculateOrderTotal(orderData.orderItems, orderData.shippingMethod.price),
+        items: orderData.orderItems.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        shippingMethod: orderData.shippingMethod.name,
+        shippingCost: orderData.shippingMethod.price,
+        paymentMethod: orderData.paymentMethod
+      };
+
+      // Envoi de l'email via l'API
+      const emailResponse = await fetch(`${API_URL}/api/send-order-email`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify(emailData)
+      });
+
+      const emailResult = await emailResponse.json();
+      
+      if (emailResult.success) {
+        console.log("✅ Email de confirmation envoyé avec succès !");
+        console.log("📧 Message ID:", emailResult.messageId);
+      } else {
+        console.error("❌ Échec de l'envoi de l'email:", emailResult.error);
+      }
+      
+    } catch (error) {
+      console.error("❌ Erreur lors de l'envoi de l'email:", error);
+    }
+  }
+
+  // =============================================
+  // CALCUL DU TOTAL DE LA COMMANDE
+  // =============================================
+  function calculateOrderTotal(items, shippingCost = 0) {
+    const subtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return (subtotal + shippingCost).toFixed(2);
   }
 
   // =============================================

@@ -20,10 +20,15 @@ secrets.json
 *.pem
 *.p12
 *.crt
-.txt
+# *.txt  # COMMENTÉ pour permettre les fichiers de configuration
+
+# Fichiers de données sensibles
+API/orders.json
+API/data/
+API/database/
 
 # Fichiers de configuration avec mots de passe
-MailSystem/.env
+# MailSystem/.env  # COMMENTÉ pour permettre la configuration email
 MailSystem/config.json
 MailSystem/secrets.json
 

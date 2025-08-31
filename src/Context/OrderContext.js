@@ -1,3 +1,9 @@
+// =============================================
+// ORDER CONTEXT - MythicMarket (JavaScript Vanilla)
+// =============================================
+// Ce fichier gère le contexte des commandes et le panier
+// Version JavaScript vanilla (pas React)
+
 // Méthode de Livraison Disponible
 const shippingMethods = [
   {
@@ -14,18 +20,18 @@ const shippingMethods = [
   },  
 ];
 
-// Default to Classic  shipping
+// Default to Classic shipping
 const defaultShippingMethod = shippingMethods[1];
 
 // Available payment methods
-export const paymentMethods = [
+const paymentMethods = [
   "Bank Transfer",
   "Card",
   "PayPal"
 ];
 
 // Sample product catalog - this would normally come from your product database
-export const productCatalog = [
+const productCatalog = [
   {
     id: 1,
     name: "50 Euro Prop Bills",
@@ -57,128 +63,134 @@ const defaultOrderData = {
   orderDate: ''
 };
 
-const OrderContext = createContext(undefined);
+// Global order state
+let orderData = { ...defaultOrderData };
 
-export const OrderProvider = ({ children }) => {
-  const [orderData, setOrderData] = useState(() => {
-    // Try to load from localStorage, or use defaults
-    const savedCart = localStorage.getItem('propMoneyCart');
-    if (savedCart) {
-      try {
-        const parsed = JSON.parse(savedCart);
-        return {
-          ...defaultOrderData,
-          orderItems: parsed.orderItems || defaultOrderData.orderItems
-        };
-      } catch (error) {
-        // Silently fallback to default
-        return defaultOrderData;
-      }
+// Initialize order data from localStorage
+const initializeOrderData = () => {
+  const savedCart = localStorage.getItem('propMoneyCart');
+  if (savedCart) {
+    try {
+      const parsed = JSON.parse(savedCart);
+      orderData = {
+        ...defaultOrderData,
+        orderItems: parsed.orderItems || defaultOrderData.orderItems
+      };
+    } catch (error) {
+      console.error('Error loading cart from localStorage:', error);
+      orderData = { ...defaultOrderData };
     }
-    return defaultOrderData;
-  });
-
-  // Save cart to localStorage when it changes
-  useEffect(() => {
-    localStorage.setItem('propMoneyCart', JSON.stringify({ 
-      orderItems: orderData.orderItems 
-    }));
-  }, [orderData.orderItems]);
-
-  const updateOrderData = (data) => {
-    setOrderData(prev => ({ ...prev, ...data }));
-  };
-
-  const generateOrderNumber = () => {
-    const timestamp = new Date().getTime().toString().slice(-6);
-    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-    const orderNumber = `PM-${timestamp}-${random}`;
-    updateOrderData({ orderNumber, orderDate: new Date().toISOString() });
-    return orderNumber;
-  };
-
-  const resetOrderData = () => {
-    // Reset everything except cart items
-    setOrderData(prev => ({
-      ...defaultOrderData,
-      orderItems: prev.orderItems
-    }));
-  };
-
-  const calculateTotal = () => {
-    const subtotal = orderData.orderItems.reduce(
-      (total, item) => total + item.price * item.quantity, 
-      0
-    );
-    return subtotal + orderData.shippingMethod.price;
-  };
-
-  // Cart management functions
-  const addToCart = (item) => {
-    setOrderData(prev => {
-      const existingItem = prev.orderItems.find(i => i.id === item.id);
-      
-      if (existingItem) {
-        // Item already in cart, update quantity
-        return {
-          ...prev,
-          orderItems: prev.orderItems.map(i => 
-            i.id === item.id 
-              ? { ...i, quantity: i.quantity + item.quantity } 
-              : i
-          )
-        };
-      } else {
-        // Add new item to cart
-        return {
-          ...prev,
-          orderItems: [...prev.orderItems, item]
-        };
-      }
-    });
-  };
-
-  const removeFromCart = (id) => {
-    setOrderData(prev => ({
-      ...prev,
-      orderItems: prev.orderItems.filter(item => item.id !== id)
-    }));
-  };
-
-  const updateQuantity = (id, quantity) => {
-    if (quantity < 1) return;
-    
-    setOrderData(prev => ({
-      ...prev,
-      orderItems: prev.orderItems.map(item => 
-        item.id === id ? { ...item, quantity } : item
-      )
-    }));
-  };
-
-  return (
-    <OrderContext.Provider 
-      value={{ 
-        orderData, 
-        updateOrderData, 
-        generateOrderNumber, 
-        resetOrderData,
-        calculateTotal,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        shippingMethods
-      }}
-    >
-      {children}
-    </OrderContext.Provider>
-  );
+  }
+  return orderData;
 };
 
-export const useOrder = () => {
-  const context = useContext(OrderContext);
-  if (context === undefined) {
-    throw new Error('useOrder must be used within an OrderProvider');
+// Save cart to localStorage
+const saveCartToStorage = () => {
+  localStorage.setItem('propMoneyCart', JSON.stringify({ 
+    orderItems: orderData.orderItems 
+  }));
+};
+
+// Update order data
+const updateOrderData = (data) => {
+  orderData = { ...orderData, ...data };
+  return orderData;
+};
+
+// Generate order number
+const generateOrderNumber = () => {
+  const timestamp = new Date().getTime().toString().slice(-6);
+  const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+  const orderNumber = `PM-${timestamp}-${random}`;
+  updateOrderData({ orderNumber, orderDate: new Date().toISOString() });
+  return orderNumber;
+};
+
+// Reset order data
+const resetOrderData = () => {
+  // Reset everything except cart items
+  orderData = {
+    ...defaultOrderData,
+    orderItems: orderData.orderItems
+  };
+  return orderData;
+};
+
+// Calculate total
+const calculateTotal = () => {
+  const subtotal = orderData.orderItems.reduce(
+    (total, item) => total + item.price * item.quantity, 
+    0
+  );
+  return subtotal + orderData.shippingMethod.price;
+};
+
+// Cart management functions
+const addToCart = (item) => {
+  const existingItem = orderData.orderItems.find(i => i.id === item.id);
+  
+  if (existingItem) {
+    // Item already in cart, update quantity
+    orderData.orderItems = orderData.orderItems.map(i => 
+      i.id === item.id 
+        ? { ...i, quantity: i.quantity + item.quantity } 
+        : i
+    );
+  } else {
+    // Add new item to cart
+    orderData.orderItems = [...orderData.orderItems, item];
   }
-  return context;
+  
+  saveCartToStorage();
+  return orderData.orderItems;
+};
+
+const removeFromCart = (id) => {
+  orderData.orderItems = orderData.orderItems.filter(item => item.id !== id);
+  saveCartToStorage();
+  return orderData.orderItems;
+};
+
+const updateQuantity = (id, quantity) => {
+  if (quantity < 1) return orderData.orderItems;
+  
+  orderData.orderItems = orderData.orderItems.map(item => 
+    item.id === id ? { ...item, quantity } : item
+  );
+  
+  saveCartToStorage();
+  return orderData.orderItems;
+};
+
+// Get current order data
+const getOrderData = () => orderData;
+
+// Get cart items
+const getCartItems = () => orderData.orderItems;
+
+// Get cart count
+const getCartCount = () => {
+  return orderData.orderItems.reduce((acc, item) => acc + (item.quantity || 0), 0);
+};
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  initializeOrderData();
+});
+
+// Export functions for use in other files
+window.OrderContext = {
+  shippingMethods,
+  paymentMethods,
+  productCatalog,
+  getOrderData,
+  getCartItems,
+  getCartCount,
+  updateOrderData,
+  generateOrderNumber,
+  resetOrderData,
+  calculateTotal,
+  addToCart,
+  removeFromCart,
+  updateQuantity
 };
