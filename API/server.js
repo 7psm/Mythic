@@ -262,9 +262,110 @@ app.get("*", (req, res) => {
   });
 });
 
-// =============================================
+// ========================================
+// SYSTÈME DE MAINTENANCE SÉCURISÉ
+// ========================================
+
+// Variable globale pour le statut de maintenance
+let maintenanceStatus = {
+  status: 'online',
+  timestamp: new Date().toISOString(),
+  lastUpdatedBy: 'system'
+};
+
+// Endpoint pour récupérer le statut de maintenance (public)
+app.get('/api/maintenance/status', (req, res) => {
+  res.json({
+    status: maintenanceStatus.status,
+    timestamp: maintenanceStatus.timestamp,
+    lastUpdatedBy: maintenanceStatus.lastUpdatedBy
+  });
+});
+
+// Endpoint pour mettre à jour le statut de maintenance (sécurisé)
+app.post('/api/maintenance/update', (req, res) => {
+  const { status, adminKey } = req.body;
+  
+  // Vérification de la clé d'administration
+  if (adminKey !== process.env.MAINTENANCE_ADMIN_KEY) {
+    return res.status(401).json({ 
+      error: 'Clé d\'administration invalide',
+      message: 'Accès refusé au système de maintenance'
+    });
+  }
+  
+  // Validation du statut
+  const validStatuses = ['online', 'maintenance', 'offline', 'critical'];
+  if (!validStatuses.includes(status)) {
+    return res.status(400).json({ 
+      error: 'Statut invalide',
+      message: 'Les statuts valides sont: online, maintenance, offline, critical'
+    });
+  }
+  
+  try {
+    // Mise à jour du statut
+    maintenanceStatus = {
+      status: status,
+      timestamp: new Date().toISOString(),
+      lastUpdatedBy: 'admin'
+    };
+    
+    console.log(`🔧 Statut de maintenance mis à jour: ${status}`);
+    
+    res.json({
+      success: true,
+      message: `Statut mis à jour: ${status}`,
+      data: maintenanceStatus
+    });
+    
+  } catch (error) {
+    console.error('❌ Erreur lors de la mise à jour du statut:', error);
+    res.status(500).json({ 
+      error: 'Erreur serveur',
+      message: 'Impossible de mettre à jour le statut'
+    });
+  }
+});
+
+// Endpoint pour réinitialiser le statut (sécurisé)
+app.post('/api/maintenance/reset', (req, res) => {
+  const { adminKey } = req.body;
+  
+  if (adminKey !== process.env.MAINTENANCE_ADMIN_KEY) {
+    return res.status(401).json({ 
+      error: 'Clé d\'administration invalide',
+      message: 'Accès refusé au système de maintenance'
+    });
+  }
+  
+  try {
+    maintenanceStatus = {
+      status: 'online',
+      timestamp: new Date().toISOString(),
+      lastUpdatedBy: 'admin'
+    };
+    
+    console.log('🔄 Statut de maintenance réinitialisé');
+    
+    res.json({
+      success: true,
+      message: 'Statut réinitialisé à "online"',
+      data: maintenanceStatus
+    });
+    
+  } catch (error) {
+    console.error('❌ Erreur lors de la réinitialisation:', error);
+    res.status(500).json({ 
+      error: 'Erreur serveur',
+      message: 'Impossible de réinitialiser le statut'
+    });
+  }
+});
+
+// ========================================
 // DÉMARRAGE DU SERVEUR
-// =============================================
+// ========================================
 
 // Démarrage du serveur sur le port configuré
 app.listen(PORT, () => {
