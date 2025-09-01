@@ -176,14 +176,6 @@
       <button onclick="updateStatus('critical')">⚠️ Critical</button>
     </div>
     <div id="adminMessage" style="text-align: center; color: #aaa; font-size: 0.9rem;"></div>
-    <div style="text-align: center; margin-top: 20px;">
-      <button onclick="resetStatus()" style="background: #f39c12; border-color: #e67e22; color: white; margin-right: 10px;">
-        🔄 Reset
-      </button>
-      <button onclick="closeAdminPanel()" style="background: #e74c3c; border-color: #c0392b; color: white;">
-        ❌ Fermer le Panel
-      </button>
-    </div>
   </div>
 
   <!-- Status Box (visible pour tous) -->
@@ -194,9 +186,6 @@
   <div class="auto-refresh">Actualisation automatique toutes les 30 secondes</div>
 
   <script>
-    // Configuration de l'API
-    const API_BASE_URL = 'https://mythic-api.onrender.com';
-    
     const statuses = {
       online: {
         tag: "🟢 En ligne",
@@ -241,38 +230,51 @@
     };
 
     let isAdmin = false;
-    let adminKey = '';
 
-    // Vérifier si c'est l'admin (sécurisé)
+    // Vérifier si c'est l'admin (tu peux changer cette logique)
     function checkAdmin() {
-      const inputKey = prompt("🔐 Clé d'administration :");
-      if (inputKey && inputKey.trim()) {
-        adminKey = inputKey.trim();
-        // Tester la clé en essayant de récupérer le statut
-        testAdminAccess();
+      const adminKey = prompt("Clé administrateur :");
+      if (adminKey === "admin123") { // Change cette clé !
+        isAdmin = true;
+        document.getElementById("adminPanel").style.display = "block";
+        document.getElementById("adminMessage").textContent = "Connecté en tant qu'administrateur";
       }
     }
 
-    // Tester l'accès administrateur
-    async function testAdminAccess() {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/maintenance/status`);
-        if (response.ok) {
-          isAdmin = true;
-          document.getElementById("adminPanel").style.display = "block";
-          document.getElementById("adminMessage").textContent = "✅ Connecté en tant qu'administrateur";
-          loadStatus(); // Charger le statut actuel
-        }
-      } catch (error) {
-        console.error('Erreur de connexion:', error);
-        document.getElementById("adminMessage").textContent = "❌ Erreur de connexion à l'API";
-      }
+    // Fermer le panel admin
+    function closeAdminPanel() {
+      document.getElementById("adminPanel").style.display = "none";
+      document.getElementById("adminMessage").textContent = "";
+      isAdmin = false; // Reset admin status
+      adminKey = ''; // Reset admin key
+      
+      // Mettre à jour le statut affiché immédiatement
+      loadStatus();
+      
+      // Afficher un message de confirmation temporaire
+      const statusBox = document.getElementById("statusBox");
+      const currentContent = statusBox.innerHTML;
+      
+      // Ajouter un message de confirmation en haut
+      const confirmationMessage = `
+        <div style="background: rgba(67, 184, 97, 0.2); border: 1px solid #43b861; color: #43b861; padding: 12px; border-radius: 8px; margin-bottom: 16px; text-align: center;">
+          ✅ Panel admin fermé - Statut mis à jour
+        </div>
+        ${currentContent}
+      `;
+      
+      statusBox.innerHTML = confirmationMessage;
+      
+      // Faire disparaître le message après 3 secondes
+      setTimeout(() => {
+        loadStatus(); // Recharger le statut final
+      }, 3000);
     }
 
-    // Charger le status depuis l'API Render
+    // Charger le status depuis le JSON
     async function loadStatus() {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/maintenance/status`);
+        const response = await fetch('/status.json');
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
@@ -319,95 +321,32 @@
       `;
     }
 
-    // Mettre à jour le status via l'API (admin seulement)
+    // Mettre à jour le status (admin seulement)
     async function updateStatus(statusType) {
-      if (!isAdmin || !adminKey) {
-        document.getElementById("adminMessage").textContent = "❌ Accès administrateur requis";
-        return;
-      }
+      if (!isAdmin) return;
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/maintenance/update`, {
+        const response = await fetch('/update-status', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             status: statusType,
-            adminKey: adminKey
+            timestamp: new Date().toISOString()
           })
         });
 
         if (response.ok) {
-          const result = await response.json();
-          document.getElementById("adminMessage").textContent = `✅ ${result.message}`;
-          
-          // Recharger immédiatement
-          setTimeout(() => {
-            loadStatus();
-          }, 1000);
-          
-          // Message temporaire qui disparaît après 3 secondes
-          setTimeout(() => {
-            document.getElementById("adminMessage").textContent = "✅ Connecté en tant qu'administrateur";
-          }, 3000);
-          
+          document.getElementById("adminMessage").textContent = `Status mis à jour : ${statusType}`;
+          loadStatus(); // Recharger immédiatement
         } else {
-          const errorData = await response.json();
-          document.getElementById("adminMessage").textContent = `❌ ${errorData.message || 'Erreur lors de la mise à jour'}`;
+          document.getElementById("adminMessage").textContent = "Erreur lors de la mise à jour";
         }
       } catch (error) {
         console.error('Erreur:', error);
-        document.getElementById("adminMessage").textContent = "❌ Erreur de connexion à l'API";
+        document.getElementById("adminMessage").textContent = "Erreur de connexion";
       }
-    }
-
-    // Réinitialiser le statut (admin seulement)
-    async function resetStatus() {
-      if (!isAdmin || !adminKey) {
-        document.getElementById("adminMessage").textContent = "❌ Accès administrateur requis";
-        return;
-      }
-
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/maintenance/reset`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            adminKey: adminKey
-          })
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          document.getElementById("adminMessage").textContent = `🔄 ${result.message}`;
-          
-          // Recharger immédiatement
-          setTimeout(() => {
-            loadStatus();
-          }, 1000);
-          
-        } else {
-          const errorData = await response.json();
-          document.getElementById("adminMessage").textContent = `❌ ${errorData.message || 'Erreur lors de la réinitialisation'}`;
-        }
-      } catch (error) {
-        console.error('Erreur:', error);
-        document.getElementById("adminMessage").textContent = "❌ Erreur de connexion à l'API";
-      }
-    }
-
-    // Fermer le panel admin
-    function closeAdminPanel() {
-      document.getElementById("adminPanel").style.display = "none";
-      document.getElementById("adminMessage").textContent = "";
-      isAdmin = false; // Reset admin status
-      adminKey = ''; // Reset admin key
-      
-      // Mettre à jour le statut affiché
-      loadStatus();
     }
 
     // Auto-refresh toutes les 30 secondes
@@ -417,7 +356,7 @@
     window.onload = function() {
       loadStatus();
       
-      // Vérifier si admin avec le raccourci clavier
+      // Vérifier si admin au clic sur le logo ou avec un raccourci clavier
       document.addEventListener('keydown', function(e) {
         if (e.ctrlKey && e.shiftKey && e.key === 'A') {
           e.preventDefault();
