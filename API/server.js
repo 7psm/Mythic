@@ -52,12 +52,18 @@ if (configValidation.isValid) {
 app.use(cors({
   origin: [
     "http://localhost:3001",
-    "http://localhost:3000", 
+    "http://localhost:3000",
+    "http://127.0.0.1:5501",  // Live Server local
+    "http://127.0.0.1:5500",  // Alternative Live Server port
+    "http://localhost:5501",  // Alternative localhost
+    "http://localhost:5500",  // Alternative localhost
     "https://mythicmarket.netlify.app",
     "https://mythicmarket.netlify.app/",
     process.env.CORS_ORIGIN
   ].filter(Boolean),  // Filtre les valeurs undefined
-  credentials: true  // Permet l'envoi de cookies et d'en-têtes d'authentification
+  credentials: true,  // Permet l'envoi de cookies et d'en-têtes d'authentification
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Méthodes autorisées
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']  // En-têtes autorisés
 }));
 
 // Middleware pour parser le JSON des requêtes
@@ -65,6 +71,15 @@ app.use(express.json());
 
 // Middleware pour parser les données de formulaire
 app.use(express.urlencoded({ extended: true }));
+
+// Middleware pour gérer les requêtes OPTIONS (preflight CORS)
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(200);
+});
 
 // =============================================
 // ROUTES DE L'API
