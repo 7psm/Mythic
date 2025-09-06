@@ -5,6 +5,11 @@
   box-sizing: border-box;
 }
 
+/* ESPACE POUR LA NAVBAR */
+.page-container {
+  padding-top: 80px;
+}
+
 :root {
   --background-dark: #0a0a0e;
   --gold-light: #f3e28f;

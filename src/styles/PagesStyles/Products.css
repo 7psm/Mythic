@@ -29,6 +29,7 @@
   background-repeat: no-repeat;
   background-attachment: fixed;
   position: relative;
+  padding-top: 80px;
 }
 .page-container::before {
   content: '';
