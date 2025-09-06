@@ -22,6 +22,9 @@ secrets.json
 *.crt
 # *.txt  # COMMENTÉ pour permettre les fichiers de configuration
 
+# Configuration API (contient des URLs sensibles)
+src/js/api-config.js
+
 # Fichiers de données sensibles
 API/orders.json
 API/data/
