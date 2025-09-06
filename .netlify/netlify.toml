@@ -97,3 +97,48 @@
 # 2. Netlify détectera automatiquement cette configuration
 # 3. Le frontend sera déployé sur Netlify
 # 4. Le backend doit être déployé séparément sur Render.com
+
+[build]
+  publish = "."
+  command = "echo 'No build command needed'"
+
+[[redirects]]
+  from = "/"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/products.html"
+  to = "/src/pages/Products.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact.html"
+  to = "/src/pages/Contact.html"
+  status = 200
+
+[[redirects]]
+  from = "/trust-safety.html"
+  to = "/src/pages/TrustSafetyPage.html"
+  status = 200
+
+[[redirects]]
+  from = "/cart.html"
+  to = "/src/pages/Cart.html"
+  status = 200
+
+[[redirects]]
+  from = "/checkout.html"
+  to = "/src/pages/Checkout.html"
+  status = 200
+
+[[redirects]]
+  from = "/confirmation.html"
+  to = "/src/pages/Confirmation.html"
+  status = 200
+
+# Catch all redirect
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
