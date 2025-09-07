@@ -2,32 +2,31 @@
 
 ## V1 : Version complète pour PC 
 
-## [1.0.0] - 2025-08-31
+## [1.0.1] - 2025-09-07
 
 ### 🔧 Modifié
-- **Architecture du projet** réorganisée pour la production
-- **Système de mail optimisé** avec configuration avancée
-- **Gestion des erreurs** améliorée côté serveur et client
-- **Sécurité renforcée** avec validation et chiffrement
+- N/A
 
 ### 🐛 Corrigé
-- **Problème de déploiement Netlify** avec configuration corrigée
-- **Erreurs CORS** avec configuration appropriée
-- **Problèmes de routage** avec redirections SPA
+- **Responsive** du mail sur mobile
+- **Modification des icons** qui etaient bug
 
-### 🚀 Déployé
-- **Frontend** déployé sur Netlify
-- **Backend** déployé sur Render.com
-- **Système d'emails** fonctionnel en production
-
+### 🚀 Nouveautés
+- Système de **Status**
+- Nouvelle **NavBar** plus moderne
+- ScrollBar **Invisible**
+- Suppression des **chemins** des fichiers dans l'url
 ---
 
 ## 📝 Notes de Version
 
-### Version 1.0.0
-- **Première version stable** du projet
-- **Déploiement complet** sur Netlify et Render.com
-- **Système d'emails** entièrement fonctionnel
+### Version 1.0.1
+- Système de status
+- Patch responsive mail sur mobile
+- Nouvelle Navbar + moderne (pc seulement)
+- Scroll Bar invisible (pc & mobile)
+- Suppression chemin fichiers dans le lien
+- Modification des icones (bug)
 
 ---
 
