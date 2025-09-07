@@ -1,9 +1,25 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Status | Incognito Market</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IncognitoMarket - No.1 Shop All Over Discord</title>
+    <link rel="icon" href="/public/logo.png">
+    <!-- /////////////////////////////////////////////////////////////////////////
+         ////////////////////       Importation & Files       ////////////////////
+         /////////////////////////////////////////////////////////////////////////-->
+    <link rel="stylesheet" href="../styles/GlobalStyle.css">
+    <link rel="stylesheet" href="../styles/NavBar.css">
+    <script src="/Crypted/Product.min.js" defer></script>
+    <script src="../js/navbar-script.js"></script>
+
+    <!-- ///////////////////////////////////////////////////////////////////
+         ////////////////////       Fonts & Icons       ////////////////////
+         ///////////////////////////////////////////////////////////////////-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -135,6 +151,34 @@
       flex-wrap: wrap;
     }
 
+    .updates-box {
+      background: #121212;
+      padding: 16px 20px 20px 20px; /* retiré padding top au-dessus du titre */
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+      margin-top: 12px;
+      white-space: pre-wrap;
+      color: #ddd;
+    }
+    .updates-box h3 { color: #f39c12; margin-bottom: 10px; letter-spacing: .2px; }
+    .updates-subtitle { color:#aaa; font-size:.9rem; margin-bottom:8px; }
+    .updates-list { list-style: none; padding-left: 0; margin: 10px 0 0 0; }
+    .updates-list li { 
+      margin: 8px 0; 
+      line-height: 1.5; 
+      color:#e6e6e6;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 8px 12px 8px 32px;
+      position: relative;
+    }
+    .updates-list li::before {
+      content: '\2022';
+      position: absolute; left: 12px; top: 8px;
+      color: #f5c84b; font-weight: 900;
+    }
+
     button {
       background: #222;
       border: 1px solid #444;
@@ -193,6 +237,16 @@
 </head>
 <body>
 
+    <nav class="navbar-container">
+            <div class="nav-links">
+                <a href="/index.html" class="nav-link">Mythic-Market</a>
+                <a href="Status.html" class="nav-link">Status</a>
+                <a href="" class="nav-link">Maintenance </a>
+                <a href="" class="nav-link">Incidents Antérieurs</a>
+            </div>
+            <div class="navbar-separator"></div>
+        </nav>
+
   <!-- Panel Admin (visible seulement pour l'admin) -->
   <div id="adminPanel" class="admin-panel" style="display: none;">
     <div class="admin-header">
@@ -204,8 +258,19 @@
       <button onclick="updateStatus('maintenance')">🛠 Maintenance</button>
       <button onclick="updateStatus('offline')">🔴 Offline</button>
       <button onclick="updateStatus('critical')">⚠️ Critical</button>
+      <button onclick="toggleUpdatesEditor()">📝 Update</button>
+      <button onclick="toggleUpdatesView()">📢 Afficher mises à jour</button>
+      <button onclick="toggleUpdatesEnabled(true)">✅ Activer</button>
+      <button onclick="toggleUpdatesEnabled(false)">⛔ Désactiver</button>
     </div>
     <div id="adminMessage" style="text-align: center; color: #aaa; font-size: 0.9rem;"></div>
+    <div id="updatesEditor" style="display:none; margin-top:12px;">
+      <textarea id="updatesText" style="width:100%; min-height:120px; background:#0f0f0f; color:#eee; border:1px solid #333; border-radius:8px; padding:10px;"></textarea>
+      <div style="display:flex; gap:10px; justify-content:center; margin-top:8px;">
+        <button onclick="saveUpdates()">💾 Enregistrer</button>
+        <button onclick="loadUpdates()">↻ Recharger</button>
+      </div>
+    </div>
   </div>
 
   <!-- Status Box (visible pour tous) -->
@@ -333,10 +398,16 @@
         <div class="details">
           ${status.details.map(d => `<p>${d}</p>`).join("")}
         </div>
+        <div id="updatesView" class="updates-box" style="display:none;">
+          <h3>📝 Nouveautés</h3>
+          <div id="updatesContent">Chargement des mises à jour...</div>
+        </div>
         <div class="status-footer">
           Propulsé par Mythic Status • Evann
         </div>
       `;
+      // Précharger le texte des mises à jour pour affichage rapide lors du clic
+      preloadUpdatesView();
     }
 
     // Afficher une erreur
@@ -393,6 +464,128 @@
         }
       });
     };
+
+    // =====================
+    // Updates (admin + public)
+    // =====================
+    async function loadUpdates() {
+      if (!isAdmin) return;
+      try {
+        const res = await fetch('http://localhost:3001/api/maintenance/updates');
+        const data = await res.json();
+        document.getElementById('updatesText').value = data?.updates?.text || '';
+        document.getElementById('adminMessage').textContent = 'Notes chargées';
+      } catch {
+        document.getElementById('adminMessage').textContent = 'Erreur chargement des notes';
+      }
+    }
+
+    async function loadUpdatesView() {
+      try {
+        const res = await fetch('http://localhost:3001/api/maintenance/updates');
+        const data = await res.json();
+        const view = document.getElementById('updatesView');
+        const content = document.getElementById('updatesContent');
+        if (!view || !content) return;
+        if (data?.updates?.enabled) {
+          const formatted = formatUpdatesText(data.updates.text || '');
+          content.innerHTML = formatted.html;
+          // Responsive margin-top selon longueur du contenu
+          const lines = formatted.count;
+          const base = 12; // px
+          const extra = Math.min(24, Math.floor(lines * 0.8));
+          document.getElementById('updatesView').style.marginTop = (base + extra) + 'px';
+          view.style.display = 'block';
+        } else {
+          view.style.display = 'none';
+        }
+      } catch {
+        const content = document.getElementById('updatesContent');
+        if (content) content.textContent = 'Impossible de charger les mises à jour.';
+      }
+    }
+
+    // Précharge le contenu, sans afficher
+    function preloadUpdatesView() { loadUpdatesView(); }
+
+    function toggleUpdatesEditor() {
+      if (!isAdmin) return;
+      const el = document.getElementById('updatesEditor');
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+      if (el.style.display === 'block') loadUpdates();
+    }
+
+    function toggleUpdatesView() {
+      const view = document.getElementById('updatesView');
+      if (!view) return;
+      const showing = view.style.display !== 'none';
+      if (showing) {
+        view.style.display = 'none';
+      } else {
+        view.style.display = 'block';
+        loadUpdatesView();
+      }
+    }
+
+    async function saveUpdates() {
+      if (!isAdmin) return;
+      const text = document.getElementById('updatesText').value;
+      try {
+        const res = await fetch('http://localhost:3001/api/maintenance/updates', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+        const data = await res.json();
+        if (data && data.success) {
+          document.getElementById('adminMessage').textContent = 'Notes enregistrées';
+          // Mettre à jour la vue si elle est ouverte
+          const view = document.getElementById('updatesView');
+          if (view && view.style.display !== 'none') loadUpdatesView();
+        } else {
+          document.getElementById('adminMessage').textContent = 'Échec enregistrement';
+        }
+      } catch {
+        document.getElementById('adminMessage').textContent = 'Erreur enregistrement';
+      }
+    }
+
+    // Mise en forme moderne du texte des nouveautés
+    function formatUpdatesText(text) {
+      const lines = (text || '').split(/\r?\n/).filter(l => l.trim().length > 0);
+      if (lines.length === 0) return { html: '<div class="updates-subtitle">Aucune mise à jour.</div>', count: 1 };
+
+      let html = '';
+      // Première ligne conservée comme titre s'il commence par un emoji ou un mot clé
+      const first = lines[0];
+      html += `<div class="updates-subtitle">${escapeHtml(first)}</div>`;
+
+      const items = lines.slice(1).map(l => l.replace(/^[-•\s]+/, '').trim());
+      if (items.length) {
+        html += '<ul class="updates-list">' + items.map(i => `<li>${escapeHtml(i)}</li>`).join('') + '</ul>';
+      }
+      return { html, count: Math.max(1, items.length) };
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    }
+
+    async function toggleUpdatesEnabled(enabled) {
+      if (!isAdmin) return;
+      try {
+        const res = await fetch('http://localhost:3001/api/maintenance/updates/toggle', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ enabled })
+        });
+        const data = await res.json();
+        document.getElementById('adminMessage').textContent = data.success ? (enabled ? 'Mises à jour activées' : 'Mises à jour désactivées') : 'Échec de l\'opération';
+        loadUpdatesView();
+      } catch {
+        document.getElementById('adminMessage').textContent = 'Erreur de communication';
+      }
+    }
   </script>
 
 </body>

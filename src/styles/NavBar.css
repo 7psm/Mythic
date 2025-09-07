@@ -108,8 +108,8 @@
   }
 }
 
-/* ACTION BUTTONS */
-.action-buttons {
+/* ACTION BUTTONS (scoped to navbar to avoid conflicts with page sections) */
+.navbar-container .action-buttons {
   display: flex;
   gap: 16px;
   align-items: center;
@@ -118,7 +118,7 @@
 }
 
 @media (max-width: 768px) {
-  .action-buttons {
+  .navbar-container .action-buttons {
     width: auto;
     justify-content: flex-end;
   }

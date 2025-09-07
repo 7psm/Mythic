@@ -230,35 +230,15 @@ document.addEventListener("DOMContentLoaded", () => {
       submitButton.disabled = true;
 
       try {
-        // ENVOI DES DONNÉES À SERVER.JS
-        const response = await fetch("https://mythic-api.onrender.com/api/order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dataToSend)
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          console.log("✅ Commande traitée avec succès:", result);
-          
-          // Stockage de l'ID de commande pour la page de confirmation
-          localStorage.setItem("lastOrderId", result.order.id);
-          
-          // Redirection vers la page de confirmation
-          submitButton.textContent = "Redirection...";
-          setTimeout(() => {
-            window.location.href = "/src/pages/Confirmation.html";
-          }, 500);
-          
-        } else {
-          throw new Error(`Erreur serveur: ${response.status}`);
-        }
-        
+        // Ne crée plus la commande ici pour éviter les doublons d'email.
+        // On redirige simplement vers la page de confirmation où la commande sera créée une seule fois.
+        submitButton.textContent = "Redirection...";
+        setTimeout(() => {
+          window.location.href = "/src/pages/Confirmation.html";
+        }, 500);
       } catch (error) {
-        console.error("❌ Erreur lors du traitement:", error);
-        alert("Erreur lors du traitement de la commande. Veuillez réessayer.");
-        
-        // Réactivation du bouton en cas d'erreur
+        console.error("❌ Erreur lors de la redirection:", error);
+        alert("Erreur lors de la redirection. Veuillez réessayer.");
         submitButton.textContent = "Finaliser la Commande";
         submitButton.disabled = false;
       }

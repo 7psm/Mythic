@@ -5,7 +5,7 @@
 // Il récupère les données du checkout et envoie la commande au serveur
 
 // 🔧 URL de l'API (à remplacer par l'URL publique de ton serveur)
-const API_URL = "http://localhost:3001"; // Local development
+const API_URL = "http://localhost:3001"; // Local development (unifié)
 
 // =============================================
 // NETTOYAGE IMMÉDIAT DE L'URL
@@ -341,15 +341,8 @@ document.addEventListener('DOMContentLoaded', function() {
       
       const result = await response.json();
       
-      // Si la commande est créée avec succès, envoyer l'email de confirmation
-      if (result.success && result.order) {
-        console.log("📧 Envoi de l'email de confirmation...");
-        await sendOrderConfirmationEmail(dataToSend);
-      } else {
-        // Fallback : envoi direct si l'API échoue
-        console.log("📧 Envoi direct de l'email...");
-        await sendOrderConfirmationEmail(dataToSend);
-      }
+      // Si la commande est créée avec succès, le serveur enverra l'email.
+      // On ne déclenche plus d'envoi côté client pour éviter les doublons.
       
       return result.success;  // Retourne le statut de succès
       

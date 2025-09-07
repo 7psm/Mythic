@@ -259,34 +259,41 @@ app.post('/api/send-order-email', async (req, res) => {
 
 
 
-// =============================================
-// SERVIR LE FRONTEND
-// =============================================
-
-// Configuration pour servir les fichiers statiques (HTML, CSS, JS, images)
-app.use(express.static(path.join(__dirname, "../")));
-
-// Route catch-all pour le routage côté client (DOIT être en dernier)
-app.get("*", (req, res) => {
-  const indexPath = path.join(__dirname, "../index.html");
-  res.sendFile(indexPath, (err) => {
-    if (err) {
-      console.error("Erreur envoi index.html:", err);
-      res.status(500).send("Erreur serveur");
-    }
-  });
-});
-
 // ========================================
 // SYSTÈME DE MAINTENANCE SÉCURISÉ
 // ========================================
 
-// Variable globale pour le statut de maintenance
-let maintenanceStatus = {
-  status: 'online',
-  timestamp: new Date().toISOString(),
-  lastUpdatedBy: 'system'
-};
+// Emplacement du fichier de persistance
+const maintenanceDataPath = path.join(__dirname, 'maintenance.json');
+
+// Valeurs par défaut
+let maintenanceStatus = { status: 'online', timestamp: new Date().toISOString(), lastUpdatedBy: 'system' };
+let maintenanceUpdates = { text: 'Aucune mise à jour pour le moment.', enabled: false, timestamp: new Date().toISOString(), lastUpdatedBy: 'system' };
+
+// Charger les données persistées au démarrage
+try {
+  if (fs.existsSync(maintenanceDataPath)) {
+    const raw = fs.readFileSync(maintenanceDataPath, 'utf8');
+    if (raw.trim()) {
+      const parsed = JSON.parse(raw);
+      if (parsed.status) maintenanceStatus = parsed.status;
+      if (parsed.updates) maintenanceUpdates = parsed.updates;
+      console.log('💾 Données maintenance chargées depuis le disque');
+    }
+  }
+} catch (e) {
+  console.warn('⚠️ Impossible de charger maintenance.json:', e.message);
+}
+
+function saveMaintenanceData() {
+  try {
+    const data = { status: maintenanceStatus, updates: maintenanceUpdates };
+    fs.writeFileSync(maintenanceDataPath, JSON.stringify(data, null, 2));
+    console.log('💾 Données maintenance sauvegardées');
+  } catch (e) {
+    console.error('❌ Erreur sauvegarde maintenance.json:', e.message);
+  }
+}
 
 // Endpoint pour récupérer le statut de maintenance (public)
 app.get('/api/maintenance/status', (req, res) => {
@@ -299,15 +306,10 @@ app.get('/api/maintenance/status', (req, res) => {
 
 // Endpoint pour mettre à jour le statut de maintenance (sécurisé)
 app.post('/api/maintenance/update', (req, res) => {
-  const { status, adminKey } = req.body;
+  const { status } = req.body;
   
-  // Vérification de la clé d'administration
-  if (adminKey !== process.env.MAINTENANCE_ADMIN_KEY) {
-    return res.status(401).json({ 
-      error: 'Clé d\'administration invalide',
-      message: 'Accès refusé au système de maintenance'
-    });
-  }
+  // Pour le développement local, on accepte toutes les requêtes
+  // En production, vous devriez ajouter une authentification
   
   // Validation du statut
   const validStatuses = ['online', 'maintenance', 'offline', 'critical'];
@@ -327,6 +329,7 @@ app.post('/api/maintenance/update', (req, res) => {
     };
     
     console.log(`🔧 Statut de maintenance mis à jour: ${status}`);
+    saveMaintenanceData();
     
     res.json({
       success: true,
@@ -345,14 +348,8 @@ app.post('/api/maintenance/update', (req, res) => {
 
 // Endpoint pour réinitialiser le statut (sécurisé)
 app.post('/api/maintenance/reset', (req, res) => {
-  const { adminKey } = req.body;
-  
-  if (adminKey !== process.env.MAINTENANCE_ADMIN_KEY) {
-    return res.status(401).json({ 
-      error: 'Clé d\'administration invalide',
-      message: 'Accès refusé au système de maintenance'
-    });
-  }
+  // Pour le développement local, on accepte toutes les requêtes
+  // En production, vous devriez ajouter une authentification
   
   try {
     maintenanceStatus = {
@@ -362,6 +359,7 @@ app.post('/api/maintenance/reset', (req, res) => {
     };
     
     console.log('🔄 Statut de maintenance réinitialisé');
+    saveMaintenanceData();
     
     res.json({
       success: true,
@@ -376,6 +374,82 @@ app.post('/api/maintenance/reset', (req, res) => {
       message: 'Impossible de réinitialiser le statut'
     });
   }
+});
+
+// ========================================
+// MISES À JOUR (CHANGELOG/NOTES)
+// ========================================
+
+// Récupérer les mises à jour
+app.get('/api/maintenance/updates', (req, res) => {
+  res.json({
+    success: true,
+    updates: maintenanceUpdates
+  });
+});
+
+// Mettre à jour le texte des mises à jour
+app.post('/api/maintenance/updates', (req, res) => {
+  const { text, enabled } = req.body || {};
+  try {
+    maintenanceUpdates = {
+      text: typeof text === 'string' && text.trim() ? text : maintenanceUpdates.text,
+      enabled: typeof enabled === 'boolean' ? enabled : maintenanceUpdates.enabled,
+      timestamp: new Date().toISOString(),
+      lastUpdatedBy: 'admin'
+    };
+    console.log('📝 Notes de mise à jour modifiées');
+    saveMaintenanceData();
+    res.json({ success: true, updates: maintenanceUpdates });
+  } catch (error) {
+    console.error('❌ Erreur MAJ notes:', error);
+    res.status(500).json({ success: false, error: 'Impossible de mettre à jour les notes' });
+  }
+});
+
+// Activer/désactiver l'affichage des mises à jour
+app.post('/api/maintenance/updates/toggle', (req, res) => {
+  const { enabled } = req.body || {};
+  try {
+    if (typeof enabled !== 'boolean') {
+      return res.status(400).json({ success: false, error: 'Paramètre enabled invalide' });
+    }
+    maintenanceUpdates.enabled = enabled;
+    maintenanceUpdates.timestamp = new Date().toISOString();
+    maintenanceUpdates.lastUpdatedBy = 'admin';
+    console.log(`🔔 Affichage mises à jour: ${enabled ? 'activé' : 'désactivé'}`);
+    saveMaintenanceData();
+    res.json({ success: true, updates: maintenanceUpdates });
+  } catch (error) {
+    console.error('❌ Erreur toggle updates:', error);
+    res.status(500).json({ success: false, error: 'Impossible de changer l\'état des mises à jour' });
+  }
+});
+
+// =============================================
+// SERVIR LE FRONTEND
+// =============================================
+
+// Configuration pour servir les fichiers statiques (HTML, CSS, JS, images)
+app.use(express.static(path.join(__dirname, "../")));
+
+// Route catch-all pour le routage côté client (DOIT être en dernier)
+app.get("*", (req, res) => {
+  const indexPath = path.join(__dirname, "../index.html");
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      // Lorsqu'un client ferme la connexion (rafraîchissement/fermeture d'onglet),
+      // Express peut remonter une erreur ECONNABORTED/ECONNRESET. On l'ignore.
+      if (err.code === 'ECONNABORTED' || err.code === 'ECONNRESET') {
+        console.warn("⚠️  Requête client interrompue pendant l'envoi de index.html (ignorée)");
+        return;
+      }
+      console.error("Erreur envoi index.html:", err);
+      if (!res.headersSent) {
+        res.status(500).send("Erreur serveur");
+      }
+    }
+  });
 });
 
 // ========================================

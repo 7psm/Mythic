@@ -137,17 +137,28 @@ export function getOrderConfirmationTemplate(orderData) {
     paymentMethod
   } = orderData;
 
-  // Génération de la liste des articles
+  // Helper pour formater les montants sur 2 décimales (9 -> 9.00, 2.5 -> 2.50)
+  const formatPrice = (value) => {
+    const num = Number(value || 0);
+    return num.toFixed(2);
+  };
+
+  // Calculs alignés sur la boutique (prix unitaires du site × quantités)
+  const subtotal = items.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 1), 0);
+  const shipping = Number(shippingCost || 0);
+  const total = subtotal + shipping;
+
+  // Génération de la liste des articles (utilise les prix produits du site)
   const itemsHtml = items.map(item => `
     <tr>
       <td style="padding: 12px 0; border-bottom: 1px solid #333333;">
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
           <tr>
             <td style="font-weight: 600; color: #ffffff; font-size: 0.95rem;">
-              ${item.name || 'Produit'}
+              ${item.name || 'Produit'} <span style="font-weight:700; font-size:0.8rem; color:#C9A94D;">x${item.quantity || 1}</span>
             </td>
             <td style="text-align: right; font-weight: 700; color: #ffffff; font-size: 0.95rem;">
-              ${item.price || 0} €
+              ${formatPrice(item.price)} €
             </td>
           </tr>
         </table>
@@ -232,15 +243,15 @@ export function getOrderConfirmationTemplate(orderData) {
             <table width="100%" cellspacing="0" cellpadding="0" border="0">
               <tr>
                 <td style="padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">Sous-total</td>
-                <td style="text-align: right; padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">${(totalAmount - (shippingCost || 0)).toFixed(2)} €</td>
+                <td style="text-align: right; padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">${formatPrice(subtotal)} €</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">Livraison</td>
-                <td style="text-align: right; padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">${shippingCost ? shippingCost + ' €' : 'Gratuit'}</td>
+                <td style="text-align: right; padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">${shipping > 0 ? formatPrice(shipping) + ' €' : 'Gratuit'}</td>
               </tr>
               <tr>
                 <td style="padding: 12px 0 0 0; border-top: 1px solid #333333; font-weight: 800; color: #ffffff; font-size: 1rem;" class="mobile-font-medium">Total</td>
-                <td style="text-align: right; padding: 12px 0 0 0; border-top: 1px solid #333333; font-weight: 800; color: #ffffff; font-size: 1rem;" class="mobile-font-medium">${totalAmount || 0} €</td>
+                <td style="text-align: right; padding: 12px 0 0 0; border-top: 1px solid #333333; font-weight: 800; color: #ffffff; font-size: 1rem;" class="mobile-font-medium">${formatPrice(total)} €</td>
               </tr>
             </table>
           </div>

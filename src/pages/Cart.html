@@ -15,7 +15,6 @@
   <script src="/Crypted/Cart.min.js"></script>
   <script src="/Crypted/Context/OrderContext.min.js"></script>
   <script src="/Crypted/Product.min.js"></script>
-  <script src="../js/navbar-script.js"></script>
 
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -33,7 +32,7 @@
         <a href="Products.html" class="nav-link">Produits</a>
         <a href="TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
         <a href="Contact.html" class="nav-link">Contact</a>
-        <a href="./Status.html">Status</a>
+        <a href="Status.html">Status</a>
       </div>
       <div class="action-buttons">
         <a href="Cart.html" class="cart-icon">
@@ -100,4 +99,35 @@
   </div>
 </body>
 
+<script>
+        // Script pour gérer l'état actif de la navbar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Récupérer l'URL actuelle
+            const currentPath = window.location.pathname;
+            const currentPage = currentPath.split('/').pop() || 'index.html';
+            
+            // Mapper les pages aux liens de navigation
+            const pageMapping = {
+                'index.html': '/index.html',
+                'contact.html': './contact.html',
+                'Products.html': '../src/pages/Products.html',
+                'TrustSafetyPage.html': '../src/pages/TrustSafetyPage.html'
+            };
+            
+            // Trouver le lien correspondant à la page actuelle
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                // Supprimer la classe active de tous les liens
+                link.classList.remove('active');
+                
+                // Vérifier si ce lien correspond à la page actuelle
+                const linkHref = link.getAttribute('href');
+                if (linkHref === currentPath || 
+                    linkHref === currentPage || 
+                    linkHref === pageMapping[currentPage]) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </html>
