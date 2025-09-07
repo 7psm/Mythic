@@ -20,6 +20,24 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <!-- Open Graph / Facebook / Discord -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://mythicmarket.netlify.app/">
+        <meta property="og:title" content="IncognitoMarket - No.1 Shop All Over Discord">
+        <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
+        <meta property="og:image" content="https://mythicmarket.netlify.app/public/banner.png">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta property="og:image:alt" content="IncognitoMarket Banner">
+        <meta property="og:image:type" content="public/banner.png">
+
+<!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://mythicmarket.netlify.app/">
+        <meta property="twitter:title" content="IncognitoMarket - No.1 Shop All Over Discord">
+        <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
+        <meta property="twitter:image" content="https://mythicmarket.netlify.app/public/banner.png">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -34,6 +52,9 @@
       padding: 20px;
       flex-direction: column;
     }
+
+    /* Espace sous la navbar fixe */
+    .top-spacer { height: 80px; width: 100%; }
 
     .status-container {
       max-width: 700px;
@@ -236,6 +257,16 @@
   </style>
 </head>
 <body>
+  <script>
+    (function(){
+      try{
+        var url=new URL(window.location.href);
+        if(url.search||url.hash){
+          history.replaceState({},document.title,url.origin+url.pathname);
+        }
+      }catch(e){}
+    })();
+  </script>
 
     <nav class="navbar-container">
             <div class="nav-links">
@@ -246,6 +277,8 @@
             </div>
             <div class="navbar-separator"></div>
         </nav>
+
+        <div class="top-spacer"></div>
 
   <!-- Panel Admin (visible seulement pour l'admin) -->
   <div id="adminPanel" class="admin-panel" style="display: none;">
