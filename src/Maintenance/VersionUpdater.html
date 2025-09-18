@@ -250,7 +250,7 @@
         </div>
 
         <p class="redirect-text">
-            Si rien ne se passe, <a href="../index.html" class="redirect-link">ouvrez ce lien dans votre navigateur</a>.
+            Si rien ne se passe, <a href="/index.html" class="redirect-link">ouvrez ce lien dans votre navigateur</a>.
         </p>
     </div>
 
@@ -488,13 +488,13 @@
 
                 // Redirection sécurisée - uniquement vers des URLs autorisées
                 const allowedUrls = [
-                    '../index.html',
-                    './index.html',
+                    '/index.html',
+                    '/index.html',
                     'index.html'
                 ];
                 
                 // Construire l'URL de redirection de manière sécurisée
-                let redirectUrl = '../index.html?fromSplash=true';
+                let redirectUrl = '/index.html?fromSplash=true';
                 
                 if (this.isVersionUpdated) {
                     // Ajouter des paramètres de cache busting sécurisés
@@ -509,7 +509,7 @@
                 } else {
                     // Fallback sécurisé
                     console.warn('⚠️ URL de redirection non autorisée, utilisation du fallback');
-                    window.location.href = '../index.html?fromSplash=true';
+                    window.location.href = '/index.html?fromSplash=true';
                 }
             }
 

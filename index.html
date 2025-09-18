@@ -14,8 +14,8 @@
         const fromSplash = urlParams.get('fromSplash');
         const isDirectAccess = !fromSplash && !sessionStorage.getItem('splashCompleted');
         if (isDirectAccess) {
-            // Rediriger vers le service de mise à jour de version
-            window.location.href = './src/maintenance/VersionUpdater.html';
+            // Rediriger vers le service de mise à jour de version (respecte la casse)
+            window.location.href = './src/Maintenance/VersionUpdater.html';
         } else {
             // Marquer que le splash a été complété
             sessionStorage.setItem('splashCompleted', 'true');
