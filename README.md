@@ -2,32 +2,27 @@
 
 ## V1 : Version complète pour PC 
 
-## [1.0.1] - 2025-09-07
+## [1.1.0] - 2025-09-18
 
-### 🔧 Modifié
+### 🚀 Fonctionnalités et améliorations 
+- 2 nouveaux produits disponibles sur le site
+- Système de **Vérification** de **Version **
+- Ajout responsive autres écrans PC
+
+### 🔧 Modifications
+- Le nom "IncognitoMarket" a été modifié par "MythicMarket"
+
+### 🐛 Fixes
 - N/A
-
-### 🐛 Corrigé
-- **Responsive** du mail sur mobile
-- **Modification des icons** qui etaient bug
-
-### 🚀 Nouveautés
-- Système de **Status**
-- Nouvelle **NavBar** plus moderne
-- ScrollBar **Invisible**
-- Suppression des **chemins** des fichiers dans l'url
 ---
 
 ## 📝 Notes de Version
 
-### Version 1.0.1
-- Système de status
-- Patch responsive mail sur mobile
-- Nouvelle Navbar + moderne (pc seulement)
-- Scroll Bar invisible (pc & mobile)
-- Suppression chemin fichiers dans le lien
-- Modification des icones (bug)
-
+### Version 1.1.0
+- 2 nouveaux produits disponibles sur le site
+- Système de **Vérification** de **Version **
+- Ajout responsive autres écrans PC
+- Le nom "IncognitoMarket" a été modifié par "MythicMarket"
 ---
 
 ## 🔮 Versions Futures
