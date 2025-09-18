@@ -36,14 +36,26 @@ const productCatalog = [
     id: 1,
     name: "50 Euro Prop Bills",
     basePrice: 100,
-    image: "/assets/50.webp",
+    image: "/public/50.webp",
   },
   {
     id: 2,
     name: "20 Euro Prop Bills",
     basePrice: 100,
-    image: "/assets/20.webp",
-  }
+    image: "/public/20.webp",
+  },
+  {
+    id: 3,
+    name: "10 Euro Prop Bills",
+    basePrice: 100,
+    image: "/public/10.webp",
+  },
+  {
+    id: 4,
+    name: "5 Euro Prop Bills",
+    basePrice: 100,
+    image: "/public/5.webp",
+  },
 ];
 
 const defaultOrderData = {

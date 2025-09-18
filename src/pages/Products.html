@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>IncognitoMarket - No.1 Shop All Over Discord</title>
+    <title>MythicMarket - No.1 Shop All Over Discord</title>
     <link rel="icon" href="/public/logo.png" />
 
     <!-- /////////////////////////////////////////////////////////////////////////
@@ -14,9 +14,13 @@
     <link rel="stylesheet" href="../styles/PagesStyles/Products.css" />
     <link rel="stylesheet" href="../styles/GlobalStyle.css" />
     <link rel="stylesheet" href="../styles/NavBar.css" />
+    <link rel="stylesheet" href="../styles/tw-breakpoints.css" />
+    <!-- Responsive Styles - Appliqué en dernier pour surcharger les styles principaux -->
+    
+   
 
     <!-- Script -->
-    <script src="/Crypted/Product.min.js" defer></script>
+    <script src="/src/js/Product.js" defer></script>
     <script src="/Crypted/Context/OrderContext.min.js"></script>
     <script src="../js/navbar-script.js"></script>
 
@@ -29,30 +33,23 @@
     <!-- Open Graph / Facebook / Discord -->
         <meta property="og:type" content="website">
         <meta property="og:url" content="https://mythicmarket.netlify.app/">
-        <meta property="og:title" content="IncognitoMarket - No.1 Shop All Over Discord">
+        <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
         <meta property="og:image" content="https://mythicmarket.netlify.app/public/banner.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
-        <meta property="og:image:alt" content="IncognitoMarket Banner">
+        <meta property="og:image:alt" content="MythicMarket Banner">
         <meta property="og:image:type" content="public/banner.png">
 
 <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:url" content="https://mythicmarket.netlify.app/">
-        <meta property="twitter:title" content="IncognitoMarket - No.1 Shop All Over Discord">
+        <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
         <meta property="twitter:image" content="https://mythicmarket.netlify.app/public/banner.png">
   </head>
   <body>
-    <script>
-      (function(){
-        try{
-          var u=new URL(window.location.href);
-          if(u.search||u.hash){history.replaceState({},document.title,u.origin+u.pathname)}
-        }catch(e){}
-      })();
-    </script>
+    <script src="../js/url-cleaner.js"></script>
     <div class="page-container">
       <!-- ////////////////////////////////////////////////////////////
            ////////////////////       Navigation            ///////////
@@ -84,13 +81,25 @@
             <div class="product-carousel">
               <div class="floating-container active" data-bill="50">
                 <div class="floating-bill active">
-                  <img class="bill" src="/public/50.webp" alt="Billet 50 euros" />
+                  <img class="bill" src="/public/flipped/50.webp" alt="Billet 50 euros" />
                   <img class="shadow" src="/public/shadow.png" alt="Ombre" />
                 </div>
               </div>
               <div class="floating-container" data-bill="20">
                 <div class="floating-bill active">
-                  <img class="bill" src="/public/20.webp" alt="Billet 20 euros" />
+                  <img class="bill" src="/public/flipped/20.webp" alt="Billet 20 euros" />
+                  <img class="shadow" src="/public/shadow.png" alt="Ombre" />
+                </div>
+              </div>
+              <div class="floating-container" data-bill="10">
+                <div class="floating-bill active">
+                  <img class="bill" src="/public/flipped/10.webp" alt="Billet 10 euros" />
+                  <img class="shadow" src="/public/shadow.png" alt="Ombre" />
+                </div>
+              </div>
+              <div class="floating-container" data-bill="5">
+                <div class="floating-bill active">
+                  <img class="bill" src="/public/flipped/5.webp" alt="Billet 5 euros" />
                   <img class="shadow" src="/public/shadow.png" alt="Ombre" />
                 </div>
               </div>
@@ -145,6 +154,80 @@
                 <button class="add-to-cart-button" type="button">Ajouter au Panier</button>
               </div>
             </div>
+
+    <!-- Produit 20€ – Discord Avatar Decoration-->
+            <div class="product-display" data-bill="10" style="display: none">
+              <div class="product-info">
+                <h2 class="product-name">DISCORD AVATAR DÉCORATIONS</h2>
+                <div class="product-price">Prix Discod → Prix Mythic Market</div>
+                <div class="product-price">LEGAL PAID</div>
+                <div class="amount-selector">
+                  <label class="amount-label">Choisissez votre décoration :</label>
+                    <div class="pricing-select">
+                      <div class="pricing-option selected" data-price="2.50" data-name="Avatar Décoration <s>2.99€</s>">
+                        <span class="amount">Décorations à <s>2.99€</s> </span><span class="price">2.50€</span>
+                      </div>
+                      <div class="pricing-option selected" data-price="3.20" data-name="Avatar Décoration <s>3.99€</s>">
+                        <span class="amount">Décorations à <s>3.99€</s> </span><span class="price">3.20€</span>
+                      </div>
+                      <div class="pricing-option" data-price="4.00" data-name="Avatar Décoration <s>4.99€</s>">
+                        <span class="amount">Décorations à <s>4.99€</s> </span><span class="price">4.00€</span>
+                      </div>
+                      <div class="pricing-option" data-price="4.25" data-name="Avatar Décoration <s>5.49€</s>">
+                        <span class="amount">Décorations à <s>5.49€</s> </span><span class="price">4.25€</span>
+                      </div>
+                      <div class="pricing-option" data-price="5.50" data-name="Avatar Décoration <s>6.99€</s>">
+                        <span class="amount">Décorations à <s>6.99€</s> </span><span class="price">5.50€</span>
+                      </div>
+                      <div class="pricing-option" data-price="7.00" data-name="Avatar Décoration <s>8.99€</s>">
+                        <span class="amount">Décorations à <s>8.99€</s> </span><span class="price">7.00€</span>
+                      </div>
+                      <div class="pricing-option" data-price="8.50" data-name="Avatar Décoration <s>9.99€</s>">
+                        <span class="amount">Décorations à <s>9.99€</s> </span><span class="price">8.50€</span>
+                      </div>
+                      <div class="pricing-option" data-price="9.50" data-name="Avatar Décoration <s>11.99€</s>">
+                        <span class="amount">Décorations à <s>11.99€</s> </span><span class="price">9.50€</span>
+                      </div>
+                    </div>
+                      <div class="amount-info">
+                        → 48H Gift Link <br>
+                        → Full warranty, 0% Autoclaim <br>
+                        → No Need Friend Request <br> <br>
+                        Vous Recevrez Votre Produit sur Discord
+                      </div>
+                  </div>
+                <button class="add-to-cart-button" type="button">Ajouter au Panier</button>
+              </div>
+            </div>
+
+            <!-- Produit 10€ – Discord Members-->
+            <div class="product-display" data-bill="5" style="display: none">
+              <div class="product-info">
+                <h2 class="product-name">DISCORD MEMBERS</h2>
+                <div class="product-price">LEGAL PAID</div>
+                <div class="amount-selector">
+                  <label class="amount-label">Choisissez votre abonnement :</label>
+                    <div class="pricing-select">
+
+                      <div class="pricing-option selected" data-price="10" data-name="Offline Members Discord x1000">
+                        <span class="amount">Offline Members x1000</span> <span class="price">10€</span>
+                      </div>
+
+                      <div class="pricing-option selected" data-price="12" data-name="Online Members Discord x1000">
+                        <span class="amount">Online Members x1000</span> <span class="price">12€</span>
+                      </div>
+                      </div>
+
+                      <div class="amount-info">
+                        → Generated <br>
+                        → Realistic Profile, Username, Avatar, HypeSquad, Bio <br>
+                        → 24/24 pour les membres en ligne <br> <br>
+                        Vous Recevrez Votre Produit sur Discord
+                      </div>
+                  </div>
+                <button class="add-to-cart-button" type="button">Ajouter au Panier</button>
+              </div>
+            </div>
           </section>
         </main>
       </div>
@@ -153,5 +236,41 @@
        ////////////////////           Notifications           //////////////////
        ///////////////////////////////////////////////////////////////////////// -->
     <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+  const containers = Array.from(document.querySelectorAll('.floating-container'));
+  let currentIndex = 0;
+
+  function updateClasses() {
+    containers.forEach((el, i) => {
+      el.classList.remove('left', 'center', 'right');
+
+      if (i === currentIndex) {
+        el.classList.add('center');
+      } else if (i === currentIndex - 1) {
+        el.classList.add('left');
+      } else if (i === currentIndex + 1) {
+        el.classList.add('right');
+      }
+    });
+  }
+
+  // Initial render
+  updateClasses();
+
+  // Navigation via clic
+  containers.forEach((el, i) => {
+    el.addEventListener('click', () => {
+      if (i === currentIndex + 1 && currentIndex < containers.length - 1) {
+        currentIndex++;
+        updateClasses();
+      } else if (i === currentIndex - 1 && currentIndex > 0) {
+        currentIndex--;
+        updateClasses();
+      }
+    });
+  });
+</script>
+
  </body>
 </html>

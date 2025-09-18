@@ -4,16 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IncognitoMarket - No.1 Shop All Over Discord</title>
+    <title>MythicMarket - No.1 Shop All Over Discord</title>
     <link rel="icon" href="/public/logo.png"/>
+    
+    <!-- Redirection vers le splash screen -->
+    <script>
+        // Vérifier si on vient du splash screen ou si c'est un accès direct
+        const urlParams = new URLSearchParams(window.location.search);
+        const fromSplash = urlParams.get('fromSplash');
+        const isDirectAccess = !fromSplash && !sessionStorage.getItem('splashCompleted');
+        if (isDirectAccess) {
+            // Rediriger vers le service de mise à jour de version
+            window.location.href = './src/maintenance/VersionUpdater.html';
+        } else {
+            // Marquer que le splash a été complété
+            sessionStorage.setItem('splashCompleted', 'true');
+        }
+    </script>
 <!-- /////////////////////////////////////////////////////////////////////////
      ////////////////////       Importation & Files       ////////////////////
      /////////////////////////////////////////////////////////////////////////-->
         <link rel="stylesheet" href="/src/styles/PagesStyles/HomeStyle.css">
-        <link rel="stylesheet" href="./src/styles/GlobalStyle.css">
-        <link rel="stylesheet" href="./src/styles/ResponsiveStyle.css">
-        <link rel="stylesheet" href="./src/styles/NavBar.css">
+         <link rel="stylesheet" href="/src/styles/GlobalStyle.css">
+        <link rel="stylesheet" href="/src/styles/NavBar.css">
+         <link rel="stylesheet" href="/src/styles/tw-breakpoints.css">
         <script src="/Crypted/Product.min.js"></script>
+        <script src="/src/js/url-cleaner.js"></script>
+        <script src="/src/js/navbar-script.js"></script>
 
 <!-- ///////////////////////////////////////////////////////////////////
      ////////////////////       Fonts & Icons       ////////////////////
@@ -26,114 +43,108 @@
 <!-- Open Graph / Facebook / Discord -->
         <meta property="og:type" content="website">
         <meta property="og:url" content="https://mythicmarket.netlify.app/">
-        <meta property="og:title" content="IncognitoMarket - No.1 Shop All Over Discord">
+        <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
         <meta property="og:image" content="https://mythicmarket.netlify.app/public/banner.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
-        <meta property="og:image:alt" content="IncognitoMarket Banner">
+        <meta property="og:image:alt" content="MythicMarket Banner">
         <meta property="og:image:type" content="public/banner.png">
 
 <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:url" content="https://mythicmarket.netlify.app/">
-        <meta property="twitter:title" content="IncognitoMarket - No.1 Shop All Over Discord">
+        <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
         <meta property="twitter:image" content="https://mythicmarket.netlify.app/public/banner.png">
 
 </head>
 
     <body>
-    <div class="page-container">
-
-    
-        <!-- ////////////////////////////////////////////////////////////
-             ////////////////////       NavBar       ////////////////////
-             ////////////////////////////////////////////////////////////-->
-    <nav class="navbar-container">
-      <div class="nav-links">
-        <a href="/index.html" class="nav-link">Mythic-Market</a>
-        <a href="./src/pages/Products.html" class="nav-link">Produits</a>
-        <a href="./src/pages/TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
-        <a href="./src/pages/Contact.html" class="nav-link">Contact</a>
-        <a href="./src/pages/Status.html" class="nav-link">Status</a>
-      </div>
-    
-      <div class="action-buttons">
-          <a href="./src/pages/Cart.html" class="cart-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-            <span class="cart-count">0</span>  <!-- Ajoute cet élément -->
+    <div class="page-container" style="background-image:url('/public/bg.webp')">
+ 
+     
+         <!-- ////////////////////////////////////////////////////////////
+              ////////////////////       NavBar       ////////////////////
+              ////////////////////////////////////////////////////////////-->
+     <nav class="navbar-container">
+       <div class="nav-links">
+         <a href="/index.html" class="nav-link">Mythic-Market</a>
+            <a href="/src/pages/Products.html" class="nav-link">Produits</a>
+            <a href="/src/pages/TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
+            <a href="/src/pages/Contact.html" class="nav-link">Contact</a>
+            <a href="/src/pages/status.html" class="nav-link">Status</a>
+       </div>
+       <div class="action-buttons">
+            <a href="/src/pages/Cart.html" class="cart-icon" style="position: relative">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" ><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+              <span class="cart-count">0</span>
+            </a>
+            <a href="/src/pages/Contact.html" class="contact-button">Contact</a>
+       </div>
+       <div class="navbar-separator"></div>
+     </nav>
+ 
+         <!-- /////////////////////////////////////////////////////////////////
+              ////////////////////      Présentation       ////////////////////
+              /////////////////////////////////////////////////////////////////-->  
+     <section class="hero-section">
+ 
+     <!--CONTENU-->
+     <div class="content-container">
+          <!-- Contenue à Droite -->
+        <div class="left-content">
+        <div class="feature-badge">Service Premium sur Discord</div>
+          <h1 class="main-heading">Mythic Market</h1>
+          <p class="sub-heading">Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.</p>
+ 
+          <!-- Buttons -->
+        <div class="button-container">
+          <a class="cta-button" href="/src/pages/Products.html">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M24 48C10.7 48 0 58.7 0 72C0 85.3 10.7 96 24 96L69.3 96C73.2 96 76.5 98.8 77.2 102.6L129.3 388.9C135.5 423.1 165.3 448 200.1 448L456 448C469.3 448 480 437.3 480 424C480 410.7 469.3 400 456 400L200.1 400C188.5 400 178.6 391.7 176.5 380.3L171.4 352L475 352C505.8 352 532.2 330.1 537.9 299.8L568.9 133.9C572.6 114.2 557.5 96 537.4 96L124.7 96L124.3 94C119.5 67.4 96.3 48 69.2 48L24 48zM208 576C234.5 576 256 554.5 256 528C256 501.5 234.5 480 208 480C181.5 480 160 501.5 160 528C160 554.5 181.5 576 208 576zM432 576C458.5 576 480 554.5 480 528C480 501.5 458.5 480 432 480C405.5 480 384 501.5 384 528C384 554.5 405.5 576 432 576z"/></svg>
+              Acheter Maintenant
           </a>
-          <button class="menu-button" id="menuToggle">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-          </button>
-          <a href="./src/pages/Contact.html" class="contact-button">Contact</a>
-      </div>
-      <div class="navbar-separator"></div>
-    </nav>
-
-        <!-- /////////////////////////////////////////////////////////////////
-             ////////////////////      Présentation       ////////////////////
-             /////////////////////////////////////////////////////////////////-->  
-    <section class="hero-section">
-    
-    <div class="gold-glow"></div>
-
-    <!--CONTENU-->
-    <div class="content-container">
-        <!-- Contenue à Droite -->
-      <div class="left-content">
-      <div class="feature-badge">Service Premium sur Discord</div>
-        <h1 class="main-heading">Incognito Market</h1>
-        <p class="sub-heading">Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.</p>
-
-        <!-- Buttons -->
-      <div class="button-container">
-        <a class="cta-button" href="/src/pages/Products.html">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-            Acheter Maintenant
-        </a>
-      
-        <a class="secondary-button" href="/src/pages/Contact.html">
-          Contact
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-        </a>
-      
-        <a class="secondary-button" href="src/pages/TrustSafetyPage.html">
-          Confiance et Sécurité
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-        </a>
-      </div>
-    
-    
-        <!-- //////////////////////////////////////////////////////////////////////
-             ////////////////////       Paiements Method       ////////////////////
-             //////////////////////////////////////////////////////////////////////-->
-    
-        <!-- Payment Section -->
-        <div class="payment-section">
-            <p> Méthode de Paiements</p>
-            <div class="payment-grid">
-              <div class="payment-method">Virement Bancaire</div>
-              <div class="payment-method">Carte de Crédit</div>
-              <div class="payment-method">Paypal</div>
-            </div>
+        
+          <a class="secondary-button" href="/src/pages/Contact.html">
+            Contact
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </a>
+        
+          <a class="secondary-button" href="src/pages/TrustSafetyPage.html">
+            Confiance et Sécurité
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </a>
         </div>
-    </div>
-
-        <!-- //////////////////////////////////////////////////////////
-             ////////////////////       LOGO       ////////////////////
-             //////////////////////////////////////////////////////////-->
-
-      <div class="right-content">
-        <div class="image-container">
-          <img class="desktop-image" src="/public/homeside.webp" alt="Ultra-Realistic Prop Money">
-          <img class="mobile-image" src="/public/homeside.webp" alt="Ultra-Realistic Prop Money Mobile">
-        </div>
-      </div>
-    
-    </div>
-    </section>
-  </body>
+      
+      
+          <!-- //////////////////////////////////////////////////////////////////////
+               ////////////////////       Paiements Method       ////////////////////
+               //////////////////////////////////////////////////////////////////////-->
+      
+          <!-- Payment Section -->
+         <div class="payment-section">
+             <p>Méthode de Paiements</p>
+             <div class="payment-grid">
+               <div class="payment-method">Virement Bancaire</div>
+               <div class="payment-method">Carte de Crédit</div>
+               <div class="payment-method">Paypal</div>
+             </div>
+         </div>
+     </div>
+ 
+          <!-- //////////////////////////////////////////////////////////
+               ////////////////////       LOGO       ////////////////////
+               //////////////////////////////////////////////////////////-->
+ 
+       <div class="right-content">
+         <div class="image-container">
+           <img class="desktop-image" src="/public/homeside.webp" alt="Ultra-Realistic Prop Money">
+           <img class="mobile-image" src="/public/homeside.webp" alt="Ultra-Realistic Prop Money Mobile">
+         </div>
+       </div>
+     
+     </div>
+     </section>
+ 
+   </body>
 </html>

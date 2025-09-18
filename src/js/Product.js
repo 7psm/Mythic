@@ -96,28 +96,63 @@ document.addEventListener("DOMContentLoaded", () => {
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     `;
 
-    // Structure HTML de la notification
-    toast.innerHTML = `
-      <div style="display: flex; align-items: flex-start; gap: 12px;">
-        <!-- ✅ Check icon à gauche -->
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-          stroke="#d4af37" style="width: 16px; height: 16px; margin-top: 15px; flex-shrink: 0;">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-        </svg>
+    // Structure DOM sans innerHTML (évite injections XSS)
+    const row = document.createElement("div");
+    row.style.display = "flex";
+    row.style.alignItems = "flex-start";
+    row.style.gap = "12px";
 
-        <!-- ✅ Texte + lien décalés vers la droite -->
-        <div style="flex: 1; margin-left: 4px;">
-          <div style="line-height: 1.4; margin-bottom: 8px;">
-            <span style="color: #d4af37; font-weight: 600;">${productName}</span>
-            <span style="color: #d1d1d1;"> Ajouté au Panier</span>
-          </div>
+    const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    icon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    icon.setAttribute("fill", "none");
+    icon.setAttribute("viewBox", "0 0 24 24");
+    icon.setAttribute("stroke", "#d4af37");
+    icon.style.width = "16px";
+    icon.style.height = "16px";
+    icon.style.marginTop = "15px";
+    icon.style.flexShrink = "0";
+    const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathEl.setAttribute("stroke-linecap", "round");
+    pathEl.setAttribute("stroke-linejoin", "round");
+    pathEl.setAttribute("stroke-width", "2");
+    pathEl.setAttribute("d", "M5 13l4 4L19 7");
+    icon.appendChild(pathEl);
 
-          <a href="Cart.html" style="color: #d4af37; font-weight: 600; text-decoration: none; display: inline-block; font-size: 14px;">
-            Voir le Panier &rsaquo;
-          </a>
-        </div>
-      </div>
-    `;
+    const right = document.createElement("div");
+    right.style.flex = "1";
+    right.style.marginLeft = "4px";
+
+    const titleRow = document.createElement("div");
+    titleRow.style.lineHeight = "1.4";
+    titleRow.style.marginBottom = "8px";
+
+    const nameSpan = document.createElement("span");
+    nameSpan.style.color = "#d4af37";
+    nameSpan.style.fontWeight = "600";
+    nameSpan.textContent = productName;
+
+    const addedSpan = document.createElement("span");
+    addedSpan.style.color = "#d1d1d1";
+    addedSpan.textContent = " Ajouté au Panier";
+
+    titleRow.appendChild(nameSpan);
+    titleRow.appendChild(addedSpan);
+
+    const link = document.createElement("a");
+    link.href = "Cart.html";
+    link.style.color = "#d4af37";
+    link.style.fontWeight = "600";
+    link.style.textDecoration = "none";
+    link.style.display = "inline-block";
+    link.style.fontSize = "14px";
+    link.textContent = "Voir le Panier ›";
+
+    right.appendChild(titleRow);
+    right.appendChild(link);
+
+    row.appendChild(icon);
+    row.appendChild(right);
+    toast.appendChild(row);
     
     // Ajout de la notification au conteneur
     toastContainer.appendChild(toast);
@@ -168,11 +203,15 @@ document.addEventListener("DOMContentLoaded", () => {
                           "Produit";
       
       // CORRECTION: Détermine l'image selon le billet sélectionné
-      let productImage = "/public/50euro.png"; // Image par défaut
+      let productImage = "/public/normal/50euro.webp"; // Image par défaut
       if (selectedBill === "50") {
-        productImage = "/public/50euro.png";
+        productImage = "/public/normal/50euro.webp";
       } else if (selectedBill === "20") {
-        productImage = "/public/20euro.png";
+        productImage = "/public/normal/20euro.webp";
+      } else if (selectedBill === "10") {
+        productImage = "/public/normal/10euro.webp";
+      } else if (selectedBill === "5") {
+        productImage = "/public/normal/5euro.webp";
       }
 
       console.log("Ajout au panier:", {
@@ -232,6 +271,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Met à jour les classes "active" pour les conteneurs de billets
       toggleActiveClass(floatingContainers, container, "active");
+      // Réorganise visuellement les billets
+      updateCarouselLayout(selectedBill);
 
       // Affichage conditionnel des sections produits selon billet
       document.querySelectorAll('.product-display').forEach(section => {
@@ -342,6 +383,37 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // Met à jour les positions visuelles des billets dans le carrousel (générique, N billets)
+  const updateCarouselLayout = (bill) => {
+    const containers = Array.from(floatingContainers);
+
+    const applyPos = (el, pos) => {
+      el.classList.remove('center', 'left', 'right', 'hidden');
+      if (pos) el.classList.add(pos);
+    };
+
+    const n = containers.length;
+    if (n === 0) return;
+
+    const selectedIndex = containers.findIndex(c => c.dataset.bill === bill);
+    if (selectedIndex === -1) return;
+
+    const leftIndex = (selectedIndex - 1 + n) % n;   // précédent
+    const rightIndex = (selectedIndex + 1) % n;      // suivant
+
+    containers.forEach((c, idx) => {
+      if (idx === selectedIndex) {
+        applyPos(c, 'center');
+      } else if (idx === leftIndex) {
+        applyPos(c, 'left');
+      } else if (idx === rightIndex) {
+        applyPos(c, 'right');
+      } else {
+        applyPos(c, 'hidden');
+      }
+    });
+  };
+
   // =============================================
   // 10. DÉMARRAGE DE L'APPLICATION
   // =============================================
@@ -351,5 +423,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeProductDisplay();
   initializeProductOptions();
   updateCartCount();
+  updateCarouselLayout(selectedBill);
 
 });

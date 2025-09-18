@@ -2,32 +2,27 @@
 
 ## V1 : Version complète pour PC 
 
-## [1.0.0] - 2025-08-31
+## [1.1.0] - 2025-09-18
 
-### 🔧 Modifié
-- **Architecture du projet** réorganisée pour la production
-- **Système de mail optimisé** avec configuration avancée
-- **Gestion des erreurs** améliorée côté serveur et client
-- **Sécurité renforcée** avec validation et chiffrement
+### 🚀 Fonctionnalités et améliorations 
+- 2 nouveaux produits disponibles sur le site
+- Système de **Vérification** de **Version **
+- Ajout responsive autres écrans PC
 
-### 🐛 Corrigé
-- **Problème de déploiement Netlify** avec configuration corrigée
-- **Erreurs CORS** avec configuration appropriée
-- **Problèmes de routage** avec redirections SPA
+### 🔧 Modifications
+- Le nom "IncognitoMarket" a été modifié par "MythicMarket"
 
-### 🚀 Déployé
-- **Frontend** déployé sur Netlify
-- **Backend** déployé sur Render.com
-- **Système d'emails** fonctionnel en production
-
+### 🐛 Fixes
+- N/A
 ---
 
 ## 📝 Notes de Version
 
-### Version 1.0.0
-- **Première version stable** du projet
-- **Déploiement complet** sur Netlify et Render.com
-- **Système d'emails** entièrement fonctionnel
+### Version 1.1.0
+- 2 nouveaux produits disponibles sur le site
+- Système de **Vérification** de **Version **
+- Ajout responsive autres écrans PC
+- Le nom "IncognitoMarket" a été modifié par "MythicMarket"
 
 ---
 

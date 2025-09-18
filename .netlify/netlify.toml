@@ -1,144 +1,94 @@
-# ========================================
-# CONFIGURATION NETLIFY - MYTHICMARKET
-# ========================================
-# Configuration pour le déploiement du frontend sur Netlify
-
 [build]
-  # Dossier à publier (racine du projet)
   publish = "."
-  
-  # Pas de commande de build nécessaire pour un site statique
-  # command = "npm run build"  # Supprimé car non défini dans package.json
 
 [build.environment]
-  # Version de Node.js pour Netlify
   NODE_VERSION = "18"
+  REACT_APP_BUILD_ID = "netlify-build-{timestamp}"
 
-# ========================================
-# REDIRECTIONS ET ROUTAGE
-# ========================================
-# Redirection pour le routage côté client (SPA)
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-# ========================================
-# EN-TÊTES DE SÉCURITÉ
-# ========================================
-[[headers]]
-  for = "/*"
-  [headers.values]
-    # Sécurité
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    
-    # Cache pour les fichiers statiques
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# ========================================
-# EN-TÊTES SPÉCIFIQUES PAR TYPE DE FICHIER
-# ========================================
-[[headers]]
-  for = "*.css"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Content-Type = "text/css"
-
-[[headers]]
-  for = "*.js"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Content-Type = "application/javascript"
-
-[[headers]]
-  for = "*.webp"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Content-Type = "image/webp"
-
-[[headers]]
-  for = "*.png"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Content-Type = "image/png"
-
-# ========================================
-# CONFIGURATION AVANCÉE
-# ========================================
-[build.processing]
-  # Optimisation des images
-  images = true
-  
-  # Minification du CSS et JS
-  css = true
-  js = true
-  
-  # Compression des fichiers
-  html = true
-
-# ========================================
-# VARIABLES D'ENVIRONNEMENT
-# ========================================
-[context.production.environment]
-  NODE_ENV = "production"
-  CORS_ORIGIN = "https://votre-site.netlify.app"
-
-[context.deploy-preview.environment]
-  NODE_ENV = "preview"
-  CORS_ORIGIN = "https://deploy-preview-*.netlify.app"
-
-# ========================================
-# NOTES IMPORTANTES
-# ========================================
-# 1. Ce fichier doit être dans le dossier .netlify/
-# 2. Netlify détectera automatiquement cette configuration
-# 3. Le frontend sera déployé sur Netlify
-# 4. Le backend doit être déployé séparément sur Render.com
-
-[build]
-  publish = "."
-  command = "echo 'No build command needed'"
-
+# ------------------------------------------
+# REDIRECTIONS
+# ------------------------------------------
 [[redirects]]
   from = "/"
-  to = "/index.html"
+  to = "/Maintenance/VersionUpdater.html"
   status = 200
 
 [[redirects]]
-  from = "/products.html"
+  from = "/products"
   to = "/src/pages/Products.html"
   status = 200
 
 [[redirects]]
-  from = "/contact.html"
+  from = "/contact"
   to = "/src/pages/Contact.html"
   status = 200
 
 [[redirects]]
-  from = "/trust-safety.html"
+  from = "/trust"
   to = "/src/pages/TrustSafetyPage.html"
   status = 200
 
 [[redirects]]
-  from = "/cart.html"
+  from = "/cart"
   to = "/src/pages/Cart.html"
   status = 200
 
 [[redirects]]
-  from = "/checkout.html"
+  from = "/checkout"
   to = "/src/pages/Checkout.html"
   status = 200
 
 [[redirects]]
-  from = "/confirmation.html"
+  from = "/confirmation"
   to = "/src/pages/Confirmation.html"
   status = 200
 
-# Catch all redirect
+# ------------------------------------------
+# HEADERS
+# ------------------------------------------
+[[headers]]
+  for = "/public/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/Crypted/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/src/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/src/styles/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=60, must-revalidate"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "same-origin"
+    X-Download-Options = "noopen"
+    X-Permitted-Cross-Domain-Policies = "none"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https://images.unsplash.com https://*.netlify.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'"
+
+# ------------------------------------------
+# CUSTOM 404
+# ------------------------------------------
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  from = "/404"
+  to = "/src/pages/404.html"
+  status = 404

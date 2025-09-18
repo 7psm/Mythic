@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IncognitoMarket - No.1 Shop All Over Discord</title>
+    <title>MythicMarket - No.1 Shop All Over Discord</title>
     <link rel="icon" href="/public/logo.png">
     <!-- /////////////////////////////////////////////////////////////////////////
          ////////////////////       Importation & Files       ////////////////////
          /////////////////////////////////////////////////////////////////////////-->
     <link rel="stylesheet" href="../styles/GlobalStyle.css">
     <link rel="stylesheet" href="../styles/NavBar.css">
+    <link rel="stylesheet" href="../styles/tw-breakpoints.css">
+    
     <script src="/Crypted/Product.min.js" defer></script>
     <script src="../js/navbar-script.js"></script>
 
@@ -24,18 +26,18 @@
     <!-- Open Graph / Facebook / Discord -->
         <meta property="og:type" content="website">
         <meta property="og:url" content="https://mythicmarket.netlify.app/">
-        <meta property="og:title" content="IncognitoMarket - No.1 Shop All Over Discord">
+        <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
         <meta property="og:image" content="https://mythicmarket.netlify.app/public/banner.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
-        <meta property="og:image:alt" content="IncognitoMarket Banner">
+        <meta property="og:image:alt" content="MythicMarket Banner">
         <meta property="og:image:type" content="public/banner.png">
 
 <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:url" content="https://mythicmarket.netlify.app/">
-        <meta property="twitter:title" content="IncognitoMarket - No.1 Shop All Over Discord">
+        <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
         <meta property="twitter:image" content="https://mythicmarket.netlify.app/public/banner.png">
   <style>
@@ -257,16 +259,7 @@
   </style>
 </head>
 <body>
-  <script>
-    (function(){
-      try{
-        var url=new URL(window.location.href);
-        if(url.search||url.hash){
-          history.replaceState({},document.title,url.origin+url.pathname);
-        }
-      }catch(e){}
-    })();
-  </script>
+  <script src="../js/url-cleaner.js"></script>
 
     <nav class="navbar-container">
             <div class="nav-links">
@@ -380,17 +373,23 @@
       
       // Afficher un message de confirmation temporaire
       const statusBox = document.getElementById("statusBox");
-      const currentContent = statusBox.innerHTML;
-      
-      // Ajouter un message de confirmation en haut
-      const confirmationMessage = `
-        <div style="background: rgba(67, 184, 97, 0.2); border: 1px solid #43b861; color: #43b861; padding: 12px; border-radius: 8px; margin-bottom: 16px; text-align: center;">
-          ✅ Panel admin fermé - Statut mis à jour
-        </div>
-        ${currentContent}
-      `;
-      
-      statusBox.innerHTML = confirmationMessage;
+      if (!statusBox) return;
+      // Construire le fragment DOM sans innerHTML
+      const banner = document.createElement('div');
+      banner.style.background = 'rgba(67, 184, 97, 0.2)';
+      banner.style.border = '1px solid #43b861';
+      banner.style.color = '#43b861';
+      banner.style.padding = '12px';
+      banner.style.borderRadius = '8px';
+      banner.style.marginBottom = '16px';
+      banner.style.textAlign = 'center';
+      banner.textContent = '✅ Panel admin fermé - Statut mis à jour';
+      // Sauvegarder la section actuelle
+      const current = statusBox.cloneNode(true);
+      // Remplacer le contenu par (banner + ancien contenu visuel de status)
+      statusBox.textContent = '';
+      statusBox.appendChild(banner);
+      Array.from(current.childNodes).forEach(n => statusBox.appendChild(n));
       
       // Faire disparaître le message après 3 secondes
       setTimeout(() => {
@@ -401,7 +400,7 @@
     // Charger le status depuis l'API
     async function loadStatus() {
       try {
-        const response = await fetch('http://localhost:3001/api/maintenance/status');
+        const response = await fetch('http://localhost:3001/api/src/maintenance/status');
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
@@ -424,21 +423,50 @@
       const box = document.getElementById("statusBox");
       const timeStr = timestamp ? new Date(timestamp).toLocaleString('fr-FR') : new Date().toLocaleString('fr-FR');
 
-      box.innerHTML = `
-        <div class="status-tag ${status.tagClass}">${status.tag}</div>
-        <h1>${status.title}</h1>
-        <p class="time-range">Dernière mise à jour : ${timeStr}</p>
-        <div class="details">
-          ${status.details.map(d => `<p>${d}</p>`).join("")}
-        </div>
-        <div id="updatesView" class="updates-box" style="display:none;">
-          <h3>📝 Nouveautés</h3>
-          <div id="updatesContent">Chargement des mises à jour...</div>
-        </div>
-        <div class="status-footer">
-          Propulsé par Mythic Status • Evann
-        </div>
-      `;
+      // Nettoyer
+      box.textContent = '';
+
+      const tag = document.createElement('div');
+      tag.className = `status-tag ${status.tagClass}`;
+      tag.textContent = status.tag;
+      box.appendChild(tag);
+
+      const h = document.createElement('h1');
+      h.textContent = status.title;
+      box.appendChild(h);
+
+      const timeP = document.createElement('p');
+      timeP.className = 'time-range';
+      timeP.textContent = `Dernière mise à jour : ${timeStr}`;
+      box.appendChild(timeP);
+
+      const detailsDiv = document.createElement('div');
+      detailsDiv.className = 'details';
+      status.details.forEach(d => {
+        const p = document.createElement('p');
+        // d peut contenir strong; on assainit en enlevant les balises connues
+        p.textContent = d.replace(/<[^>]*>/g, '');
+        detailsDiv.appendChild(p);
+      });
+      box.appendChild(detailsDiv);
+
+      const updatesView = document.createElement('div');
+      updatesView.id = 'updatesView';
+      updatesView.className = 'updates-box';
+      updatesView.style.display = 'none';
+      const h3 = document.createElement('h3');
+      h3.textContent = '📝 Nouveautés';
+      const contentDiv = document.createElement('div');
+      contentDiv.id = 'updatesContent';
+      contentDiv.textContent = 'Chargement des mises à jour...';
+      updatesView.appendChild(h3);
+      updatesView.appendChild(contentDiv);
+      box.appendChild(updatesView);
+
+      const footer = document.createElement('div');
+      footer.className = 'status-footer';
+      footer.textContent = 'Propulsé par Mythic Status • Evann';
+      box.appendChild(footer);
       // Précharger le texte des mises à jour pour affichage rapide lors du clic
       preloadUpdatesView();
     }
@@ -446,12 +474,15 @@
     // Afficher une erreur
     function displayError(message) {
       const box = document.getElementById("statusBox");
-      box.innerHTML = `
-        <div class="error">${message}</div>
-        <div class="status-footer">
-          Propulsé par Mythic Status • Evann
-        </div>
-      `;
+      box.textContent = '';
+      const err = document.createElement('div');
+      err.className = 'error';
+      err.textContent = message;
+      const footer = document.createElement('div');
+      footer.className = 'status-footer';
+      footer.textContent = 'Propulsé par Mythic Status • Evann';
+      box.appendChild(err);
+      box.appendChild(footer);
     }
 
     // Mettre à jour le status (admin seulement) - Via API
@@ -459,7 +490,7 @@
       if (!isAdmin) return;
 
       try {
-        const response = await fetch('http://localhost:3001/api/maintenance/update', {
+        const response = await fetch('http://localhost:3001/api/src/maintenance/update', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -504,7 +535,7 @@
     async function loadUpdates() {
       if (!isAdmin) return;
       try {
-        const res = await fetch('http://localhost:3001/api/maintenance/updates');
+        const res = await fetch('http://localhost:3001/api/src/maintenance/updates');
         const data = await res.json();
         document.getElementById('updatesText').value = data?.updates?.text || '';
         document.getElementById('adminMessage').textContent = 'Notes chargées';
@@ -515,14 +546,31 @@
 
     async function loadUpdatesView() {
       try {
-        const res = await fetch('http://localhost:3001/api/maintenance/updates');
+        const res = await fetch('http://localhost:3001/api/src/maintenance/updates');
         const data = await res.json();
         const view = document.getElementById('updatesView');
         const content = document.getElementById('updatesContent');
         if (!view || !content) return;
         if (data?.updates?.enabled) {
           const formatted = formatUpdatesText(data.updates.text || '');
-          content.innerHTML = formatted.html;
+          // Remplir en DOM sécurisé
+          content.textContent = '';
+          if (formatted.subtitle) {
+            const sub = document.createElement('div');
+            sub.className = 'updates-subtitle';
+            sub.textContent = formatted.subtitle;
+            content.appendChild(sub);
+          }
+          if (formatted.items && formatted.items.length) {
+            const ul = document.createElement('ul');
+            ul.className = 'updates-list';
+            formatted.items.forEach(txt => {
+              const li = document.createElement('li');
+              li.textContent = txt;
+              ul.appendChild(li);
+            });
+            content.appendChild(ul);
+          }
           // Responsive margin-top selon longueur du contenu
           const lines = formatted.count;
           const base = 12; // px
@@ -564,7 +612,7 @@
       if (!isAdmin) return;
       const text = document.getElementById('updatesText').value;
       try {
-        const res = await fetch('http://localhost:3001/api/maintenance/updates', {
+        const res = await fetch('http://localhost:3001/api/src/maintenance/updates', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text })
@@ -586,18 +634,10 @@
     // Mise en forme moderne du texte des nouveautés
     function formatUpdatesText(text) {
       const lines = (text || '').split(/\r?\n/).filter(l => l.trim().length > 0);
-      if (lines.length === 0) return { html: '<div class="updates-subtitle">Aucune mise à jour.</div>', count: 1 };
-
-      let html = '';
-      // Première ligne conservée comme titre s'il commence par un emoji ou un mot clé
+      if (lines.length === 0) return { subtitle: 'Aucune mise à jour.', items: [], count: 1 };
       const first = lines[0];
-      html += `<div class="updates-subtitle">${escapeHtml(first)}</div>`;
-
-      const items = lines.slice(1).map(l => l.replace(/^[-•\s]+/, '').trim());
-      if (items.length) {
-        html += '<ul class="updates-list">' + items.map(i => `<li>${escapeHtml(i)}</li>`).join('') + '</ul>';
-      }
-      return { html, count: Math.max(1, items.length) };
+      const items = lines.slice(1).map(l => l.replace(/^[−•\s]+/, '').trim());
+      return { subtitle: first, items, count: Math.max(1, items.length) };
     }
 
     function escapeHtml(s) {
@@ -607,7 +647,7 @@
     async function toggleUpdatesEnabled(enabled) {
       if (!isAdmin) return;
       try {
-        const res = await fetch('http://localhost:3001/api/maintenance/updates/toggle', {
+        const res = await fetch('http://localhost:3001/api/src/maintenance/updates/toggle', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ enabled })

@@ -1,0 +1,248 @@
+/* =============================================
+   RESPONSIVE STYLES - MYTHIC MARKET (OPTIMIZED)
+   ============================================= */
+/* Variables de base - Pour écrans par défaut (plus petits) */
+:root {
+  --container-max-width: 900px;
+  --container-padding: 30px;
+  --section-gap: 25px;
+  --card-padding: 18px;
+  --border-radius: 8px;
+  --font-size-title: 1.8rem;
+  --font-size-subtitle: 0.95rem;
+  --font-size-body: 0.85rem;
+  --gold-blur: 50px;
+  --bg-attachment: fixed;
+}
+
+/* Breakpoints optimisés avec calculs */
+/* 8K Ultra HD (7680x4320) */
+@media (min-width: 7680px) { :root { --container-max-width: 3000px; --container-padding: 200px; --section-gap: 120px; --card-padding: 100px; --border-radius: 40px; --font-size-title: 6rem; --font-size-subtitle: 2.5rem; --font-size-body: 1.8rem; --gold-blur: 250px; --bg-attachment: scroll; } }
+
+/* 5K (5120x2880) */
+@media (min-width: 5120px) and (max-width: 7679px) { :root { --container-max-width: 2500px; --container-padding: 160px; --section-gap: 100px; --card-padding: 80px; --border-radius: 35px; --font-size-title: 5rem; --font-size-subtitle: 2.2rem; --font-size-body: 1.5rem; --gold-blur: 200px; --bg-attachment: scroll; } }
+
+/* 4K UHD (3840x2160) */
+@media (min-width: 3840px) and (max-width: 5119px) { :root { --container-max-width: 2000px; --container-padding: 120px; --section-gap: 80px; --card-padding: 60px; --border-radius: 25px; --font-size-title: 4rem; --font-size-subtitle: 1.8rem; --font-size-body: 1.2rem; --gold-blur: 150px; --bg-attachment: scroll; } }
+
+/* UltraWide QHD (3440x1440) */
+@media (min-width: 3440px) and (max-width: 3839px) { :root { --container-max-width: 1800px; --container-padding: 100px; --section-gap: 70px; --card-padding: 50px; --border-radius: 22px; --font-size-title: 3.5rem; --font-size-subtitle: 1.6rem; --font-size-body: 1.1rem; --gold-blur: 120px; --bg-attachment: scroll; } }
+
+/* Quad HD (2560x1440) */
+@media (min-width: 2560px) and (max-width: 3199px) { :root { --container-max-width: 1600px; --container-padding: 80px; --section-gap: 60px; --card-padding: 40px; --border-radius: 20px; --font-size-title: 3rem; --font-size-subtitle: 1.4rem; --font-size-body: 1.05rem; --gold-blur: 100px; --bg-attachment: scroll; } }
+
+/* QHD+ (3200x1800) */
+@media (min-width: 3200px) and (max-width: 3439px) { :root { --container-max-width: 1700px; --container-padding: 90px; --section-gap: 65px; --card-padding: 45px; --border-radius: 21px; --font-size-title: 3.2rem; --font-size-subtitle: 1.5rem; --font-size-body: 1.08rem; --gold-blur: 110px; --bg-attachment: scroll; } }
+
+/* Full HD (1920x1080) */
+@media (min-width: 1920px) and (max-width: 2559px) { :root { --container-max-width: 1400px; --container-padding: 60px; --section-gap: 40px; --card-padding: 30px; --border-radius: 15px; --font-size-title: 2.5rem; --font-size-subtitle: 1.2rem; --font-size-body: 1rem; --gold-blur: 100px; --bg-attachment: fixed; } }
+
+/* Résolutions intermédiaires */
+@media (min-width: 1600px) and (max-width: 1919px) { :root { --container-max-width: 1200px; --container-padding: 50px; --section-gap: 35px; --card-padding: 25px; --border-radius: 12px; --font-size-title: 2.2rem; --font-size-subtitle: 1.1rem; --font-size-body: 0.95rem; --gold-blur: 80px; --bg-attachment: fixed; } }
+@media (min-width: 1440px) and (max-width: 1599px) { :root { --container-max-width: 1000px; --container-padding: 40px; --section-gap: 30px; --card-padding: 20px; --border-radius: 10px; --font-size-title: 2rem; --font-size-subtitle: 1rem; --font-size-body: 0.9rem; --gold-blur: 60px; --bg-attachment: fixed; } }
+
+/* =============================================
+   STYLES RESPONSIVE OPTIMISÉS
+   ============================================= */
+
+/* Layouts de base */
+.page-container, .main-content { 
+  padding: var(--container-padding); 
+  max-width: var(--container-max-width); 
+  margin: 0 auto; 
+}
+
+.page-section { 
+  margin-bottom: var(--section-gap); 
+}
+
+/* Cards communes */
+.info-card, .stat-card, .review-section, .cart-items-section, .cart-summary-section, 
+.checkout-form, .confirmation-card, .contact-card { 
+  padding: var(--card-padding); 
+  border-radius: var(--border-radius); 
+}
+
+/* Typographie */
+.page-title, .main-heading, .product-title { 
+  font-size: var(--font-size-title); 
+}
+
+.page-subtitle, .sub-heading { 
+  font-size: var(--font-size-subtitle); 
+}
+
+p, .feature-text, .item-name, .shipping-details { 
+  font-size: var(--font-size-body); 
+}
+
+/* Home Page */
+.hero-section { 
+  padding: var(--container-padding); 
+  max-width: var(--container-max-width); 
+  margin: 0 auto; 
+}
+
+.content-container { 
+  gap: calc(var(--section-gap) * 1.5); 
+}
+
+.image-container { 
+  max-width: calc(var(--container-max-width) * 0.4); 
+}
+
+.gold-glow { 
+  width: calc(var(--container-max-width) * 0.6); 
+  height: calc(var(--container-max-width) * 0.6); 
+  filter: blur(var(--gold-blur)); 
+}
+
+.cta-button, .secondary-button { 
+  padding: calc(var(--font-size-body) * 1.2) calc(var(--font-size-body) * 2); 
+  font-size: var(--font-size-body); 
+}
+
+/* Products Page */
+.product-section { 
+  padding: var(--container-padding); 
+}
+
+.product-carousel { 
+  gap: calc(var(--section-gap) * 0.4); 
+}
+
+.floating-container { 
+  min-width: calc(var(--container-max-width) * 0.15); 
+}
+
+.floating-bill img.bill { 
+  max-width: calc(var(--container-max-width) * 0.4); 
+}
+
+.floating-bill.active img.bill { 
+  max-width: calc(var(--container-max-width) * 0.5); 
+}
+
+.product-display { 
+  max-width: calc(var(--container-max-width) * 0.4); 
+}
+
+/* Cart Page */
+.cart-container { 
+  gap: calc(var(--section-gap) * 0.75); 
+}
+
+.cart-item { 
+  gap: calc(var(--section-gap) * 0.5); 
+  padding-bottom: calc(var(--section-gap) * 0.5); 
+}
+
+.item-image { 
+  width: calc(var(--font-size-body) * 5); 
+  height: calc(var(--font-size-body) * 3.125); 
+}
+
+/* Checkout Page */
+.field-group { 
+  gap: calc(var(--section-gap) * 0.375); 
+  margin-bottom: calc(var(--section-gap) * 0.375); 
+}
+
+.shipping-options, .payment-options { 
+  gap: calc(var(--section-gap) * 0.3); 
+}
+
+/* Confirmation Page */
+.confirmation-header h1 { 
+  font-size: var(--font-size-title); 
+}
+
+.two-columns { 
+  gap: calc(var(--section-gap) * 0.5); 
+}
+
+.order-item { 
+  padding: calc(var(--font-size-body) * 0.75) 0; 
+}
+
+/* Contact Page */
+.contact-card { 
+  max-width: calc(var(--container-max-width) * 0.3); 
+}
+
+.service-name { 
+  font-size: calc(var(--font-size-title) * 0.88); 
+}
+
+.name-text { 
+  font-size: calc(var(--font-size-title) * 1.12); 
+}
+
+/* Trust & Safety Page */
+.content-grid { 
+  gap: calc(var(--section-gap) * 0.75); 
+  padding: calc(var(--section-gap) * 0.75) 0 calc(var(--section-gap) * 0.625); 
+}
+
+/* Backgrounds adaptatifs */
+.page-container { 
+  background-attachment: var(--bg-attachment); 
+}
+
+/* Performance - Désactiver animations sur très grands écrans */
+@media (min-width: 2560px) {
+  .cta-button, .floating-bill, .gold-glow { 
+    animation: none; 
+  }
+  .cta-button:hover, .floating-bill:hover { 
+    transform: none; 
+  }
+}
+
+/* Performance - Optimisations pour 8K et 5K */
+@media (min-width: 5120px) {
+  .gold-glow { 
+    filter: blur(150px); 
+  }
+  .floating-bill img.shadow { 
+    opacity: 0.3; 
+  }
+}
+
+@media (min-width: 7680px) {
+  .gold-glow { 
+    filter: blur(200px); 
+  }
+  .floating-bill img.shadow { 
+    opacity: 0.2; 
+  }
+  .cta-button, .secondary-button { 
+    transition: none; 
+  }
+}
+
+/* Accessibilité - Améliorer lisibilité */
+@media (min-width: 1920px) {
+  .feature-text, .item-name, .shipping-details { 
+    line-height: 1.6; 
+  }
+  .page-subtitle, .sub-heading { 
+    line-height: 1.5; 
+  }
+}
+
+/* Print styles */
+@media print {
+  .page-container { 
+    background: white !important; 
+    color: black !important; 
+  }
+  .gold-glow, .floating-bill img.shadow { 
+    display: none !important; 
+  }
+  .cta-button, .secondary-button { 
+    background: #f0f0f0 !important; 
+    color: black !important; 
+    border: 1px solid #ccc !important; 
+  }
+}

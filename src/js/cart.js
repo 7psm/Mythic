@@ -86,26 +86,53 @@ document.addEventListener("DOMContentLoaded", () => {
     li.dataset.id = item.id;           // Stockage de l'ID pour la suppression
     li.dataset.price = item.price;     // Stockage du prix pour les calculs
 
-    // Structure HTML de l'article du panier
-    li.innerHTML = `
-      <img class="item-image" src="${item.image || '/public/50euro.png'}" alt="${item.name}" />
-      <div class="item-details">
-        <div class="item-name">${item.name}</div>
-        <div class="item-price">€${item.price.toFixed(2)}</div>
-        <div class="quantity-control">
-          <span class="quantity-label">Quantité :</span>
-          <div class="quantity-buttons">
-            <button class="quantity-button quantity-decrease" ${item.quantity <= 1 ? "disabled" : ""}>-</button>
-            <span class="quantity-display">${item.quantity}</span>
-            <button class="quantity-button quantity-increase">+</button>
-          </div>
-        </div>
-      </div>
-      <div class="item-actions">
-        <div class="item-total">€${(item.price * item.quantity).toFixed(2)}</div>
-        <button class="remove-button">Supprimer</button>
-      </div>
-    `;
+    // Construction DOM sécurisée (sans innerHTML)
+    const img = document.createElement('img');
+    img.className = 'item-image';
+    img.src = item.image || '/public/50euro.png';
+    img.alt = item.name;
+    li.appendChild(img);
+
+    const details = document.createElement('div');
+    details.className = 'item-details';
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'item-name';
+    nameDiv.textContent = item.name;
+    const priceDiv = document.createElement('div');
+    priceDiv.className = 'item-price';
+    priceDiv.textContent = `€${item.price.toFixed(2)}`;
+    const qtyCtrl = document.createElement('div');
+    qtyCtrl.className = 'quantity-control';
+    const qtyLabel = document.createElement('span');
+    qtyLabel.className = 'quantity-label';
+    qtyLabel.textContent = 'Quantité :';
+    const qtyBtns = document.createElement('div');
+    qtyBtns.className = 'quantity-buttons';
+    const btnDec = document.createElement('button');
+    btnDec.className = 'quantity-button quantity-decrease';
+    if (item.quantity <= 1) btnDec.disabled = true;
+    btnDec.textContent = '-';
+    const qtyDisplay = document.createElement('span');
+    qtyDisplay.className = 'quantity-display';
+    qtyDisplay.textContent = String(item.quantity);
+    const btnInc = document.createElement('button');
+    btnInc.className = 'quantity-button quantity-increase';
+    btnInc.textContent = '+';
+    qtyBtns.appendChild(btnDec); qtyBtns.appendChild(qtyDisplay); qtyBtns.appendChild(btnInc);
+    qtyCtrl.appendChild(qtyLabel); qtyCtrl.appendChild(qtyBtns);
+    details.appendChild(nameDiv); details.appendChild(priceDiv); details.appendChild(qtyCtrl);
+    li.appendChild(details);
+
+    const actions = document.createElement('div');
+    actions.className = 'item-actions';
+    const totalDiv = document.createElement('div');
+    totalDiv.className = 'item-total';
+    totalDiv.textContent = `€${(item.price * item.quantity).toFixed(2)}`;
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-button';
+    removeBtn.textContent = 'Supprimer';
+    actions.appendChild(totalDiv); actions.appendChild(removeBtn);
+    li.appendChild(actions);
     return li;
   }
 
@@ -186,7 +213,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     const cart = readCart();
-    cartItemsList.innerHTML = ""; // Vider la liste
+    // Vider la liste en supprimant chaque enfant (évite innerHTML)
+    while (cartItemsList.firstChild) cartItemsList.removeChild(cartItemsList.firstChild);
     
     if (cart.length === 0) {
       console.log("Panier vide, affichage du message");

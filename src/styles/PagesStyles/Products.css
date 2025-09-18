@@ -84,6 +84,9 @@
   justify-content: center;
   margin-bottom: 24px;
   padding: 10px 0;           /* ajouté : un peu d’espace vertical */
+  position: relative;
+  z-index: 10;               /* Assure que les billets passent au-dessus des prix */
+  height: 540px;             /* Réserve l'espace pour le positionnement absolu des billets */
 }
 @media (max-width: 1200px) {
   .product-carousel {
@@ -95,23 +98,6 @@
     display: none;
   }
 }
-
-/* === MOBILE PRODUCT VIEW === */
-.mobile-product-view {
-  display: none;
-}
-@media (max-width: 768px) {
-  .mobile-product-view {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-    padding: 0 20px;
-    min-height: calc(100vh - 90px);
-    justify-content: space-between;
-  }
-}
-
 /* === BRAND TEXT === */
 .brand-text {
   font-size: 1rem;
@@ -168,23 +154,6 @@
   }
 }
 
-/* === MOBILE PRODUCT IMAGE === */
-.mobile-product-image {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 10px 30px rgba(212, 175, 55, 0.3));
-  transform: rotate(0deg);
-  position: relative;
-  z-index: 1;
-}
-@media (max-width: 768px) {
-  .mobile-product-image {
-    max-width: 100%;
-    filter: drop-shadow(0 8px 24px rgba(212, 175, 55, 0.4));
-  }
-}
-
 /* === FEATURE LIST === */
 .feature-list {
   position: absolute;
@@ -238,134 +207,47 @@
   }
 }
 
-/* === MOBILE CONTROLS CONTAINER === */
-.mobile-controls-container {
-  width: 100%;
-  max-width: 350px;
-  margin-top: 20px;
-  padding: 20px 0 30px;
-}
-
-/* === MOBILE PRICE ROW === */
-.mobile-price-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.price-label {
-  font-size: 0.9rem;
-  color: var(--text-gray);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.mobile-price {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--gold-primary);
-}
-
-/* === MOBILE QUANTITY CONTROL === */
-.mobile-quantity-control {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  margin-bottom: 15px;
-  padding: 8px 15px;
-}
-@media (max-width: 768px) {
-  .mobile-quantity-control {
-    padding: 5px 10px;
-  }
-}
-
-/* === MOBILE QUANTITY BUTTON === */
-.mobile-quantity-button {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 50%;
-  color: var(--text-white);
-  font-size: 1.2rem;
-  font-weight: 700;
-}
-@media (max-width: 768px) {
-  .mobile-quantity-button {
-    width: 40px;
-    height: 40px;
-    background: rgba(0, 0, 0, 0.4);
-  }
-  .mobile-quantity-button:active {
-    background: var(--gold-dark);
-  }
-  .mobile-quantity-button:disabled {
-    opacity: 0.5;
-  }
-}
-
-/* === MOBILE QUANTITY DISPLAY === */
-.mobile-quantity-display {
-  font-size: 1.2rem;
-  color: var(--text-white);
-  min-width: 40px;
-  text-align: center;
-  font-weight: 600;
-}
-
-/* === MOBILE ADD TO CART BUTTON === */
-.mobile-add-to-cart-button {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(45deg, var(--gold-dark), var(--gold-primary), var(--gold-light));
-  background-size: 200% 200%;
-  animation: gradient-animation 3s ease infinite;
-  border-radius: 8px;
-  color: #000;
-  font-weight: 700;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-@keyframes gradient-animation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-.mobile-add-to-cart-button svg {
-  margin-right: 8px;
-  width: 18px;
-  height: 18px;
-}
-
 /* === FLOATING CONTAINER === */
 .floating-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  opacity: 0.5;              /* modifié : un peu plus transparent */
-  transform: scale(0.85);    /* modifié : taille réduite */
-  flex-shrink: 0;            /* ajouté : empêche le rétrécissement */
-  scroll-snap-align: center; /* ajouté : alignement snap au centre */
-  transition: transform 0.4s ease, opacity 0.3s ease;
-  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease, filter 0.45s ease;
+  will-change: transform, opacity, filter;
+  opacity: 0.4;
+  z-index: 100;
+  width: 520px;              /* largeur de base pour rendre visible l'image (img {width:100%}) */
 }
 
-.floating-container.active {
+.floating-container.center {
+  transform: translate(-50%, -50%) scale(1.15);
   opacity: 1;
-  transform: scale(1.2);     /* modifié : taille plus grande */
-  z-index: 2;                /* ajouté : au-dessus des autres */
+  z-index: 102;
+}
+
+.floating-container.left {
+  transform: translate(-150%, -50%) scale(0.95);
+  opacity: 0.5;
+  z-index: 101;
+}
+
+.floating-container.right {
+  transform: translate(50%, -50%) scale(0.95);
+    opacity: 0.5;
+  z-index: 101;
+}
+
+/* Au chargement (50€ actif par défaut): pousser légèrement le 5€ plus en arrière */
+.product-carousel:has(.floating-container[data-bill="50"].active) .floating-container[data-bill="5"] {
+  transform: translate(-150%, -50%) scale(0.88);
+  opacity: 0.45;
+}
+
+.floating-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
 }
 @media (max-width: 768px) {
   .floating-container {
@@ -388,6 +270,7 @@
 .floating-bill {
   position: relative;
   animation: float 6s ease-in-out infinite;
+  z-index: 103;
 }
 @keyframes float {
   0%   { transform: translateY(0px); }
@@ -398,7 +281,16 @@
   width: 100%;
   height: auto;
   object-fit: contain;
-  transition: transform 0.5s ease, filter 0.5s ease;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s ease;
+}
+
+/* Mise en avant/retrait dynamiques quel que soit le billet sélectionné */
+.floating-container.center .floating-bill img.bill {
+  filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.45));
+}
+.floating-container.left .floating-bill img.bill,
+.floating-container.right .floating-bill img.bill {
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.25));
 }
 .floating-bill.active img.bill {
   max-width: 800px;
@@ -454,6 +346,8 @@
   align-items: center;
   text-align: center;
   padding: 0 20px;
+  position: relative;
+  z-index: 1;                /* Sous les billets */
 }
 @media (max-width: 1024px) {
   .product-info {
@@ -748,4 +642,3 @@
 .toast-link:hover {
   text-decoration: underline;
 }
-

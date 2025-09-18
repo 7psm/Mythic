@@ -194,17 +194,8 @@
 }
 
 /* Gold Glow Effect */
-.gold-glow {
-  position: fixed;
-  width: 800px;
-  height: 800px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.05), rgba(10, 10, 14, 0) 70%);
-  filter: blur(100px);
-  z-index: -1;
-  top: -300px;
-  right: -300px;
-}
+/* gold-glow base factorisée, placement spécifique page */
+.gold-glow { top: -300px; right: -300px; }
 
 /* Radio Input (Hidden) */
 .radio-input {

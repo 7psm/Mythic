@@ -56,18 +56,10 @@
 }
 
 /* GOLD GLOW */
-.gold-glow {
-  position: absolute;
-  width: 800px;
-  height: 800px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, rgba(10, 10, 14, 0) 70%);
-  filter: blur(100px);
-  z-index: 1;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+/* gold-glow base factorisée, on ne garde que le placement si besoin */
+.gold-glow { top: 50%; left: 50%; transform: translate(-50%, -50%); position: absolute; z-index: 1; }
+
+/* (retiré) particles canvas */
 
 /* CONTENT CONTAINER */
 .content-container {
@@ -206,6 +198,7 @@
   border-color: var(--gold-primary);
 }
 
+/* icône CTA home */
 .cta-button svg {
   width: 20px;
   height: 20px;
@@ -278,21 +271,4 @@
 
 
 /* NOMBRE PRODUIT  CART*/
-.cart-icon {
-  position: relative;
-  display: inline-block;
-}
-
-.cart-count {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background-color: var(--gold-primary);
-  color: white;
-  border-radius: 50%;
-  padding: 5px 10px;
-  font-size: 14px;
-  font-weight: bold;
-  min-width: 20px;
-  text-align: center;
-}
+/* cart icon/navbar: styles centralisés dans NavBar.css */

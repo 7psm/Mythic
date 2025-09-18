@@ -38,6 +38,9 @@
   width: 100%;
 }
 
+/* gold-glow base factorisée, placement spécifique page (si utilisé) */
+.gold-glow { top: -300px; right: -300px; }
+
 /* Confirmation Header */
 .confirmation-header {
   text-align: center;
@@ -358,17 +361,7 @@
   transform: none;
 }
 
-@keyframes gradient-animation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
+/* animation partagée dans GlobalStyle.css */
 
 /* Modal Styles */
 .modal {

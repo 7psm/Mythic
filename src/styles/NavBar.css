@@ -41,12 +41,6 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-@media (max-width: 768px) {
-  .navbar-container {
-    padding: 0 20px;
-    max-width: 100%;
-  }
-}
 
 /* NAV LINKS */
 .nav-links {
@@ -102,11 +96,6 @@
   border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
-@media (max-width: 768px) {
-  .nav-links {
-    display: none;
-  }
-}
 
 /* ACTION BUTTONS (scoped to navbar to avoid conflicts with page sections) */
 .navbar-container .action-buttons {
@@ -117,12 +106,6 @@
   min-width: 200px;
 }
 
-@media (max-width: 768px) {
-  .navbar-container .action-buttons {
-    width: auto;
-    justify-content: flex-end;
-  }
-}
 
 /* CONTACT BUTTON */
 .contact-button {
@@ -144,11 +127,6 @@
   box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
 }
 
-@media (max-width: 768px) {
-  .contact-button {
-    display: none;
-  }
-}
 
 /* CART ICON */
 .cart-icon {
@@ -209,5 +187,73 @@
   height: 0.1rem;
   background: var(--active-bg-dark);
   z-index: 1001;
+}
+
+/* ================================================================
+   RESPONSIVE PC ET PC PORTABLES - OPTIMISÉ
+   ================================================================ */
+
+/* Petits portables (≤1366px) */
+@media (min-width: 769px) and (max-width: 1366px) {
+  .navbar-container { padding: 0 15px; max-width: 100%; }
+  .nav-links { gap: 8px; }
+  .nav-links a:first-child { margin-right: 20px; font-size: 15px; }
+  .nav-links a { font-size: 13px; padding: 6px 10px; }
+  .action-buttons { gap: 12px; min-width: 150px; }
+  .contact-button { padding: 6px 12px; font-size: 13px; }
+  .cart-icon { padding: 6px; }
+  .cart-icon svg { width: 18px; height: 18px; }
+  .navbar-separator { left: 120px; right: 15px; }
+}
+
+/* Portables moyens (1440px) */
+@media (min-width: 1367px) and (max-width: 1440px) {
+  .navbar-container { padding: 0 20px; max-width: 100%; }
+  .nav-links { gap: 10px; }
+  .nav-links a:first-child { margin-right: 30px; font-size: 16px; }
+  .nav-links a { font-size: 14px; padding: 7px 11px; }
+  .action-buttons { gap: 14px; min-width: 180px; }
+  .contact-button { padding: 7px 14px; font-size: 14px; }
+  .cart-icon { padding: 7px; }
+  .navbar-separator { left: 140px; right: 18px; }
+}
+
+/* Full HD et plus (≥1601px) */
+@media (min-width: 1601px) {
+  .navbar-container { padding: 0 40px; max-width: 1200px; }
+  .nav-links { gap: 12px; }
+  .nav-links a:first-child { margin-right: 40px; font-size: 16px; }
+  .nav-links a { font-size: 14px; padding: 8px 12px; }
+  .action-buttons { gap: 16px; min-width: 200px; }
+  .contact-button { padding: 8px 16px; font-size: 14px; }
+  .cart-icon { padding: 8px; }
+  .cart-icon svg { width: 20px; height: 20px; }
+  .navbar-separator { left: 170px; right: 20px; }
+}
+
+/* UltraWide (3440x1440) */
+@media (min-width: 2561px) and (max-width: 3440px) {
+  .navbar-container { max-width: 1600px; padding: 0 60px; }
+  .nav-links { gap: 15px; }
+  .nav-links a:first-child { margin-right: 50px; font-size: 18px; }
+  .nav-links a { font-size: 16px; padding: 10px 15px; }
+  .action-buttons { gap: 20px; min-width: 250px; }
+  .contact-button { padding: 10px 20px; font-size: 16px; }
+  .cart-icon { padding: 10px; }
+  .cart-icon svg { width: 22px; height: 22px; }
+  .navbar-separator { left: 200px; right: 30px; }
+}
+
+/* 4K et plus (≥3841px) */
+@media (min-width: 3841px) {
+  .navbar-container { max-width: 2000px; padding: 0 80px; }
+  .nav-links { gap: 18px; }
+  .nav-links a:first-child { margin-right: 60px; font-size: 20px; }
+  .nav-links a { font-size: 18px; padding: 12px 18px; }
+  .action-buttons { gap: 24px; min-width: 300px; }
+  .contact-button { padding: 12px 24px; font-size: 18px; }
+  .cart-icon { padding: 12px; }
+  .cart-icon svg { width: 24px; height: 24px; }
+  .navbar-separator { left: 250px; right: 40px; }
 }
 
