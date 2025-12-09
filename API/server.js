@@ -6,12 +6,6 @@ console.log("🚀 Démarrage du serveur et du bot...");
 
 import express from "express";
 import cors from "cors";
-
-app.use(cors({
-  origin: "https://getmythic.netlify.app",
-  methods: "GET,POST",
-}));
-
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -27,6 +21,14 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// =============================================
+//           📞 APPEL CORS
+// =============================================
+app.use(cors({
+  origin: "https://getmythic.netlify.app",
+  methods: "GET,POST",
+}));
 
 // =============================================
 // 📧 VALIDATION MAIL
