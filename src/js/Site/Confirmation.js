@@ -2,7 +2,7 @@
 // PAGE DE CONFIRMATION DE COMMANDE - MythicMarket
 // =============================================
 
-const API_URL = "http://localhost:3001";
+const API_URL = "https://mythic-api.onrender.com/api/order";
 
 // =============================================
 // FONCTION CENTRALE - Récupération des codes depuis localStorage

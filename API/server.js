@@ -6,6 +6,12 @@ console.log("🚀 Démarrage du serveur et du bot...");
 
 import express from "express";
 import cors from "cors";
+
+app.use(cors({
+  origin: "https://getmythic.netlify.app",
+  methods: "GET,POST",
+}));
+
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -50,6 +56,7 @@ app.use(
       "http://localhost:5501",
       "http://localhost:5500",
       "https://getmythic.netlify.app",
+      "https://mythic-api.onrender.com/api/order",
       process.env.CORS_ORIGIN,
     ].filter(Boolean),
     credentials: true,
