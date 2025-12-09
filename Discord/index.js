@@ -1,5 +1,5 @@
 // =============================================
-// DISCORD BOT SERVICE 
+// DISCORD BOT SERVICE - POINT D'ENTRÉE
 // =============================================
 
 import dotenv from 'dotenv';
@@ -22,7 +22,8 @@ import {
   handleClearOrdersCommand,
   handleBackupCommand,
   handleCheckAccessCommand
-} from './Handlers/buttonHandlers.js';
+} from './Handlers/commandHandlers.js'; 
+
 import { handleButtonInteraction } from './Handlers/buttonHandlers.js';
 import {
   createDetailedOrderEmbed,
