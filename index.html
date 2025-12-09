@@ -1,36 +1,136 @@
-
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MythicMarket - No.1 Shop All Over Discord</title>
     <link rel="icon" href="/public/logo.png"/>
-    
+
     <!-- Redirection vers le splash screen -->
     <script>
-        // Vérifier si on vient du splash screen ou si c'est un accès direct
+        // VÃ©rifier si on vient du splash screen ou si c'est un accÃ¨s direct
         const urlParams = new URLSearchParams(window.location.search);
         const fromSplash = urlParams.get('fromSplash');
         const isDirectAccess = !fromSplash && !sessionStorage.getItem('splashCompleted');
         if (isDirectAccess) {
-            // Rediriger vers le service de mise à jour de version (respecte la casse)
-            window.location.href = './src/Maintenance/VersionUpdater.html';
+            // Rediriger vers le service de mise Ã  jour de version (respecte la casse)
+            window.location.href = './src/Updater/UpdaterChristmas.html';
         } else {
-            // Marquer que le splash a été complété
+            // Marquer que le splash a Ã©tÃ© complÃ©tÃ©
             sessionStorage.setItem('splashCompleted', 'true');
         }
     </script>
+
 <!-- /////////////////////////////////////////////////////////////////////////
      ////////////////////       Importation & Files       ////////////////////
      /////////////////////////////////////////////////////////////////////////-->
-        <link rel="stylesheet" href="/src/styles/PagesStyles/HomeStyle.css">
-         <link rel="stylesheet" href="/src/styles/GlobalStyle.css">
         <link rel="stylesheet" href="/src/styles/NavBar.css">
-         <link rel="stylesheet" href="/src/styles/tw-breakpoints.css">
-        <script src="/Crypted/Product.min.js"></script>
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="/Crypted/Site/Product.min.js"></script>
+        <script src="/Crypted/Site/Context/OrderContext.min.js"></script>
         <script src="/src/js/url-cleaner.js"></script>
         <script src="/src/js/navbar-script.js"></script>
+ 
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    'background-dark': '#0a0a0e',
+                    'gold-primary': '#d4af37',
+                    'gold-light': '#fceabb',
+                    'gold-dark': '#c29d28',
+                    'text-white': '#ffffff',
+                    'text-gray': '#cccccc',
+                },
+                backgroundImage: {
+                    'gold-gradient': 'linear-gradient(90deg, #fceabb 0%, #d4af37 60%, #c29d28 100%)',
+                    'gold-gradient-animated': 'linear-gradient(45deg, #c29d28, #d4af37, #fceabb)',
+                }
+            }
+        }
+    }
+</script>
+
+<style>
+body {
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); }
+}
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow {
+    animation: glow 3s ease-in-out infinite;
+}
+.gradient-text {
+    background: linear-gradient(120deg, #fceabb 0%, #d4af37 50%, #c29d28 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 3s ease infinite;
+}
+.glass-effect {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.payment-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(212, 175, 55, 0.6);
+}
+/* Particles background */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #d4af37;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: particle-float 15s infinite linear;
+}
+@keyframes particle-float {
+    0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.5;
+    }
+    90% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(-100vh) translateX(100px);
+        opacity: 0;
+    }
+}
+</style>
 
 <!-- ///////////////////////////////////////////////////////////////////
      ////////////////////       Fonts & Icons       ////////////////////
@@ -42,10 +142,10 @@
 
 <!-- Open Graph / Facebook / Discord -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="https://mythicmarket.netlify.app/">
+        <meta property="og:url" content="https://getmythic.netlify.app/">
         <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
-        <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="og:image" content="https://mythicmarket.netlify.app/public/banner.png">
+        <meta property="og:description" content="Nos produits sont lÃ©gaux et fiables pour rÃ©pondre aux plus hauts standards d'authenticitÃ©.">
+        <meta property="og:image" content="https://getmythic.netlify.app/public/banner.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:image:alt" content="MythicMarket Banner">
@@ -53,27 +153,27 @@
 
 <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="https://mythicmarket.netlify.app/">
+        <meta property="twitter:url" content="https://getmythic.netlify.app/">
         <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
-        <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="twitter:image" content="https://mythicmarket.netlify.app/public/banner.png">
+        <meta property="twitter:description" content="Nos produits sont lÃ©gaux et fiables pour rÃ©pondre aux plus hauts standards d'authenticitÃ©.">
+        <meta property="twitter:image" content="https://getmythic.netlify.app/public/banner.png">
 
 </head>
 
-    <body>
-    <div class="page-container" style="background-image:url('/public/bg.webp')">
- 
-     
-         <!-- ////////////////////////////////////////////////////////////
-              ////////////////////       NavBar       ////////////////////
-              ////////////////////////////////////////////////////////////-->
-     <nav class="navbar-container">
+<body class="bg-background-dark text-text-white">
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <link rel="stylesheet" href="/src/styles/NavBar.css">
+    <nav class="navbar-container">
        <div class="nav-links">
          <a href="/index.html" class="nav-link">Mythic-Market</a>
             <a href="/src/pages/Products.html" class="nav-link">Produits</a>
             <a href="/src/pages/TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
+            <a href="/src/pages/Subscriptions.html" class="nav-link">Abonnements</a>
             <a href="/src/pages/Contact.html" class="nav-link">Contact</a>
-            <a href="/src/pages/status.html" class="nav-link">Status</a>
+            <a href="/src/pages/Status.html" class="nav-link">Status</a>
        </div>
        <div class="action-buttons">
             <a href="/src/pages/Cart.html" class="cart-icon" style="position: relative">
@@ -84,67 +184,187 @@
        </div>
        <div class="navbar-separator"></div>
      </nav>
- 
-         <!-- /////////////////////////////////////////////////////////////////
-              ////////////////////      Présentation       ////////////////////
-              /////////////////////////////////////////////////////////////////-->  
-     <section class="hero-section">
- 
-     <!--CONTENU-->
-     <div class="content-container">
-          <!-- Contenue à Droite -->
-        <div class="left-content">
-        <div class="feature-badge">Service Premium sur Discord</div>
-          <h1 class="main-heading">Mythic Market</h1>
-          <p class="sub-heading">Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.</p>
- 
-          <!-- Buttons -->
-        <div class="button-container">
-          <a class="cta-button" href="/src/pages/Products.html">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M24 48C10.7 48 0 58.7 0 72C0 85.3 10.7 96 24 96L69.3 96C73.2 96 76.5 98.8 77.2 102.6L129.3 388.9C135.5 423.1 165.3 448 200.1 448L456 448C469.3 448 480 437.3 480 424C480 410.7 469.3 400 456 400L200.1 400C188.5 400 178.6 391.7 176.5 380.3L171.4 352L475 352C505.8 352 532.2 330.1 537.9 299.8L568.9 133.9C572.6 114.2 557.5 96 537.4 96L124.7 96L124.3 94C119.5 67.4 96.3 48 69.2 48L24 48zM208 576C234.5 576 256 554.5 256 528C256 501.5 234.5 480 208 480C181.5 480 160 501.5 160 528C160 554.5 181.5 576 208 576zM432 576C458.5 576 480 554.5 480 528C480 501.5 458.5 480 432 480C405.5 480 384 501.5 384 528C384 554.5 405.5 576 432 576z"/></svg>
-              Acheter Maintenant
-          </a>
-        
-          <a class="secondary-button" href="/src/pages/Contact.html">
-            Contact
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        
-          <a class="secondary-button" href="src/pages/TrustSafetyPage.html">
-            Confiance et Sécurité
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-          </a>
+
+    <!-- Hero Section -->
+<section class="min-h-screen flex items-center justify-center pt-20 px-6 relative z-10">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <!-- Left Content -->
+            <div class="space-y-8">
+                <!-- Badge -->
+                <div class="inline-flex items-center space-x-2 glass-effect px-4 py-2 rounded-full">
+                    <span class="w-2 h-2 bg-gold-primary rounded-full animate-pulse"></span>
+                    <span class="text-gold-primary text-sm font-semibold">Service Premium sur Discord</span>
+                </div>
+
+                <!-- Heading -->
+                <div>
+                    <h1 class="text-6xl md:text-7xl font-black mb-4 gradient-text leading-tight">
+                        Mythic Market
+                    </h1>
+                    <p class="text-xl text-text-gray leading-relaxed max-w-xl">
+                        Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.
+                    </p>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex flex-wrap gap-4">
+                    <a href="/src/pages/Products.html" class="group px-8 py-4 bg-gradient-to-r from-gold-dark via-gold-primary to-gold-light text-black font-bold rounded-lg hover:scale-105 transition-transform duration-300 shadow-lg shadow-gold-primary/30 animate-glow no-underline">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor">
+                                <path d="M24 48C10.7 48 0 58.7 0 72C0 85.3 10.7 96 24 96L69.3 96C73.2 96 76.5 98.8 77.2 102.6L129.3 388.9C135.5 423.1 165.3 448 200.1 448L456 448C469.3 448 480 437.3 480 424C480 410.7 469.3 400 456 400L200.1 400C188.5 400 178.6 391.7 176.5 380.3L171.4 352L475 352C505.8 352 532.2 330.1 537.9 299.8L568.9 133.9C572.6 114.2 557.5 96 537.4 96L124.7 96L124.3 94C119.5 67.4 96.3 48 69.2 48L24 48zM208 576C234.5 576 256 554.5 256 528C256 501.5 234.5 480 208 480C181.5 480 160 501.5 160 528C160 554.5 181.5 576 208 576zM432 576C458.5 576 480 554.5 480 528C480 501.5 458.5 480 432 480C405.5 480 384 501.5 384 528C384 554.5 405.5 576 432 576z" />
+                            </svg>
+                            <span>ACHETER MAINTENANT</span>
+                        </div>
+                    </a>
+                    
+                    <a href="/src/pages/Contact.html" class="px-8 py-4 glass-effect text-text-white font-semibold rounded-lg hover:bg-gold-primary/10 hover:border-gold-primary transition-all duration-300 no-underline">
+                        <div class="flex items-center space-x-2">
+                            <span>Contact</span>
+                            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </a>
+                    
+                    <a href="/src/pages/TrustSafetyPage.html" class="px-8 py-4 glass-effect text-text-white font-semibold rounded-lg hover:bg-gold-primary/10 hover:border-gold-primary transition-all duration-300 no-underline">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                            <span>Confiance et Sécurité</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="space-y-4">
+                    <p class="text-sm text-text-gray uppercase tracking-wider font-semibold">Méthode de Paiements</p>
+                    <div class="flex flex-wrap gap-3">
+                        <div class="payment-card glass-effect px-5 py-3 rounded-lg font-semibold text-sm text-text-gray hover:text-gold-primary transition-all duration-300 cursor-pointer">
+                            Paypal
+                        </div>
+                        <div class="payment-card glass-effect px-5 py-3 rounded-lg font-semibold text-sm text-text-gray hover:text-gold-primary transition-all duration-300 cursor-pointer">
+                            Revolut
+                        </div>
+                        <div class="payment-card glass-effect px-5 py-3 rounded-lg font-semibold text-sm text-text-gray hover:text-gold-primary transition-all duration-300 cursor-pointer">
+                            Buymeacoffee
+                        </div>
+                        <div class="payment-card glass-effect px-5 py-3 rounded-lg font-semibold text-sm text-text-gray hover:text-gold-primary transition-all duration-300 cursor-pointer">
+                            Crypto
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Content - Image -->
+            <div class="relative flex items-center justify-center">
+                <div class="absolute inset-0 bg-gradient-to-r from-gold-primary/20 to-gold-dark/20 rounded-full blur-3xl"></div>
+                <div class="relative animate-float" style="width: 100%; max-width: 500px;">
+                    <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;">
+                        <!-- Gradients Definition -->
+                        <defs>
+                            <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#fceabb;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#d4af37;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#c29d28;stop-opacity:1" />
+                            </linearGradient>
+                            
+                            <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
+                            </linearGradient>
+                            
+                            <linearGradient id="shine" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#d4af37;stop-opacity:0" />
+                                <stop offset="50%" style="stop-color:#fceabb;stop-opacity:0.5" />
+                                <stop offset="100%" style="stop-color:#d4af37;stop-opacity:0" />
+                            </linearGradient>
+                            
+                            <filter id="cardShadow">
+                                <feDropShadow dx="0" dy="10" stdDeviation="15" flood-color="#d4af37" flood-opacity="0.3"/>
+                            </filter>
+                        </defs>
+                        
+                        <!-- Background Glow Circle -->
+                        <circle cx="250" cy="250" r="230" fill="url(#goldGradient)" opacity="0.08"/>
+                        
+                        <!-- Main Card -->
+                        <g transform="translate(100, 150)">
+                            <!-- Card Shadow & Background -->
+                            <rect x="0" y="0" width="325" height="200" rx="20" fill="url(#cardGradient)" filter="url(#cardShadow)"/>
+                            
+                            <!-- Card Shine Overlay -->
+                            <rect x="0" y="0" width="325" height="200" rx="20" fill="url(#shine)" opacity="0.4"/>
+                            
+                            <!-- Card Border -->
+                            <rect x="0" y="0" width="325" height="200" rx="20" fill="none" stroke="url(#goldGradient)" stroke-width="1" opacity="0.5"/>
+                            
+                            <!-- Chip -->
+                            <g transform="translate(30, 35)">
+                                <rect x="0" y="0" width="50" height="40" rx="6" fill="#d4af37"/>
+                                <rect x="3" y="3" width="44" height="34" rx="4" fill="#1a1a1a"/>
+                                <line x1="10" y1="20" x2="40" y2="20" stroke="#d4af37" stroke-width="1" opacity="0.5"/>
+                            </g>
+                            
+                            <!-- Contactless Icon -->
+                            <g transform="translate(230, 40)">
+                                <path d="M0,5 Q8,-3 16,5" stroke="#d4af37" stroke-width="2.5" fill="none" opacity="0.7" stroke-linecap="round"/>
+                                <path d="M-3,12 Q8,2 19,12" stroke="#d4af37" stroke-width="2.5" fill="none" opacity="0.7" stroke-linecap="round"/>
+                                <path d="M-6,19 Q8,7 22,19" stroke="#d4af37" stroke-width="2.5" fill="none" opacity="0.7" stroke-linecap="round"/>
+                            </g>
+                            
+                            <!-- Card Number -->
+                            <text x="30" y="120" font-family="'Courier New', monospace" font-size="20" fill="#d4af37" letter-spacing="3">•••• •••• •••• 4782</text>
+                            
+                            <!-- Cardholder Info -->
+                            <text x="30" y="155" font-family="Arial, sans-serif" font-size="11" fill="#fceabb" opacity="0.6" letter-spacing="1">PREMIUM MEMBER</text>
+                            <text x="30" y="175" font-family="Arial, sans-serif" font-size="16" fill="#d4af37" font-weight="bold" letter-spacing="1">MYTHIC MARKET</text>
+                            
+                            <!-- Card Network Logo (Mastercard style) -->
+                            <circle cx="250" cy="162" r="18" fill="#d4af37" opacity="0.3"/>
+                            <circle cx="268" cy="162" r="18" fill="#d4af37" opacity="0.3"/>
+                        </g>
+                        
+                        <!-- Floating Currency Symbols -->
+                        <text x="60" y="180" font-family="Arial" font-size="50" fill="#d4af37" opacity="0.2" font-weight="bold" transform="rotate(-15 60 180)">$</text>
+                        <text x="415" y="320" font-family="Arial" font-size="45" fill="#d4af37" opacity="0.2" font-weight="bold" transform="rotate(15 400 300)">€</text>
+                        
+                        <!-- Bitcoin Symbol -->
+                        <g transform="translate(80, 380)">
+                            <circle cx="0" cy="0" r="22" fill="none" stroke="#d4af37" stroke-width="3" opacity="0.2"/>
+                            <text x="0" y="8" font-family="Arial" font-size="24" fill="#d4af37" opacity="0.2" text-anchor="middle" font-weight="bold">₿</text>
+                        </g>
+                        
+                        <!-- Animated Sparkles -->
+                        <circle cx="350" cy="150" r="4" fill="#fceabb">
+                            <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="150" cy="350" r="3" fill="#d4af37">
+                            <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="0.5s"/>
+                        </circle>
+                        <circle cx="400" cy="200" r="3.5" fill="#fceabb">
+                            <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite" begin="1s"/>
+                        </circle>
+                        <circle cx="120" cy="100" r="2.5" fill="#d4af37">
+                            <animate attributeName="opacity" values="0;1;0" dur="3.5s" repeatCount="indefinite" begin="1.5s"/>
+                        </circle>
+                    </svg>
+                </div>
+            </div>
         </div>
-      
-      
-          <!-- //////////////////////////////////////////////////////////////////////
-               ////////////////////       Paiements Method       ////////////////////
-               //////////////////////////////////////////////////////////////////////-->
-      
-          <!-- Payment Section -->
-         <div class="payment-section">
-             <p>Méthode de Paiements</p>
-             <div class="payment-grid">
-               <div class="payment-method">Virement Bancaire</div>
-               <div class="payment-method">Carte de Crédit</div>
-               <div class="payment-method">Paypal</div>
-             </div>
-         </div>
-     </div>
- 
-          <!-- //////////////////////////////////////////////////////////
-               ////////////////////       LOGO       ////////////////////
-               //////////////////////////////////////////////////////////-->
- 
-       <div class="right-content">
-         <div class="image-container">
-           <img class="desktop-image" src="/public/homeside.webp" alt="Ultra-Realistic Prop Money">
-           <img class="mobile-image" src="/public/homeside.webp" alt="Ultra-Realistic Prop Money Mobile">
-         </div>
-       </div>
-     
-     </div>
-     </section>
- 
-   </body>
+    </section>
+
+    <script>
+        // Create particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+    </script>
+</body>
 </html>

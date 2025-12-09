@@ -4,7 +4,9 @@ import path from 'path';
 import { exec } from 'child_process';
 import readline from 'readline';
 
-// Couleurs ANSI et helpers d'affichage
+//////////////////////////////////////////
+// Couleurs ANSI et helpers d'affichage //
+//////////////////////////////////////////
 function enableColors() {
   try { if (!process.env.FORCE_COLOR) process.env.FORCE_COLOR = '1'; } catch {}
   return true;
@@ -28,6 +30,10 @@ function box(lines){
   const body = lines.map(l => `${c.fg.yellow}│${c.r} ${l.padEnd(width, ' ')} ${c.fg.yellow}│${c.r}`).join('\n');
   console.log(`${top}\n${body}\n${bottom}`);
 }
+
+//////////////////////////////////////////////
+// Vérification Installation Babel + Terser //
+//////////////////////////////////////////////
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 const ask = (q) => new Promise(r => rl.question(`${c.b}${c.fg.cyan}?${c.r} ${q} `, a => r((a||'').trim())));
@@ -55,6 +61,10 @@ async function ensureTerserInstalled(){
   await execPromise('npm i -D terser');
 }
 
+//////////////////////////////////////////
+// Fonction Transpilation Fichiers JSX  //
+//////////////////////////////////////////
+
 async function transpileStep(){
   const doTranspile = await askYesNo('Veux-tu transpiler un fichier JSX en JS ?');
   if (!doTranspile) return '';
@@ -69,6 +79,10 @@ async function transpileStep(){
   if (!fs.existsSync(path.resolve(process.cwd(), inJsx))) {
     throw new Error(`Fichier source introuvable: ${inJsx}`);
   }
+
+///////////////////////////////////////////////////////////////////////
+// Créer chemin du fichier Transpilé par défaut si non séléectionner //
+///////////////////////////////////////////////////////////////////////
 
   let outJs = await ask('Chemin du fichier de sortie JS (ex: dist/app.js). Faites "Entrée" pour créer un emplacement par défaut :');
   if (!outJs) {
@@ -93,6 +107,10 @@ async function transpileStep(){
   return outJs;
 }
 
+////////////////////////////////////////////
+// Fonction d'obfuscation des fichiers JS //
+////////////////////////////////////////////
+
 async function obfuscateStep(defaultInput){
   const doObfuscate = await askYesNo('Veux-tu obfusquer un fichier JS ?');
   if (!doObfuscate) return false;
@@ -109,6 +127,10 @@ async function obfuscateStep(defaultInput){
   if (!fs.existsSync(path.resolve(process.cwd(), inFile))) {
     throw new Error(`Fichier introuvable: ${inFile}`);
   }
+
+///////////////////////////////////////////////////////////////////////
+// Créer chemin du fichier Transpilé par défaut si non séléectionner //
+///////////////////////////////////////////////////////////////////////
 
   let outMin = await ask('Chemin du fichier de sortie (ex: dist/app.min.js). Fautes "Entrée" pour créer un emplacement par défaut :');
   if (!outMin) {
@@ -129,7 +151,6 @@ async function obfuscateStep(defaultInput){
     `npx terser "${inFile}"`,
     '--compress',
     '--mangle',
-    '--toplevel',
     '--mangle-props=regex=/^_/',
     `--output "${outMin}"`
   ].join(' ');
@@ -139,6 +160,10 @@ async function obfuscateStep(defaultInput){
   logOk(`Obfuscation terminée → ${outMin}`);
   return true;
 }
+
+/////////////////////////////
+// Remerciements + Boucle  //
+/////////////////////////////
 
 async function main(){
   box([

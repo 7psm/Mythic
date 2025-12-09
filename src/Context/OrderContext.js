@@ -1,10 +1,10 @@
 // =============================================
-// ORDER CONTEXT - MythicMarket (JavaScript Vanilla)
+// CONFIGURATION
 // =============================================
-// Ce fichier gère le contexte des commandes et le panier
-// Version JavaScript vanilla (pas React)
 
-// Méthode de Livraison Disponible
+const CART_STORAGE_KEY = 'cart'; // Clé unifiée pour tout le site
+
+// Méthodes de Livraison
 const shippingMethods = [
   {
     id: 1,
@@ -20,189 +20,304 @@ const shippingMethods = [
   },  
 ];
 
-// Default to Classic shipping
-const defaultShippingMethod = shippingMethods[1];
-
-// Available payment methods
+// Méthodes de Paiement
 const paymentMethods = [
   "Bank Transfer",
   "Card",
   "PayPal"
 ];
 
-// Sample product catalog - this would normally come from your product database
-const productCatalog = [
-  {
-    id: 1,
-    name: "50 Euro Prop Bills",
-    basePrice: 100,
-    image: "/public/50.webp",
-  },
-  {
-    id: 2,
-    name: "20 Euro Prop Bills",
-    basePrice: 100,
-    image: "/public/20.webp",
-  },
-  {
-    id: 3,
-    name: "10 Euro Prop Bills",
-    basePrice: 100,
-    image: "/public/10.webp",
-  },
-  {
-    id: 4,
-    name: "5 Euro Prop Bills",
-    basePrice: 100,
-    image: "/public/5.webp",
-  },
-];
-
-const defaultOrderData = {
-  name: '',
-  phoneNumber: '',
-  email: '',
-  country: '',
-  address: '',
-  shippingTo: '',
-  postalCode: '',
-  city: '',
-  discord: '',
-  paymentMethod: '',
-  orderItems: [],
-  shippingMethod: defaultShippingMethod,
-  orderNumber: '',
-  orderDate: ''
+// Codes de réduction
+const DISCOUNT_CODES = {
+  'PROMO15': { type: 'percentage', value: 15, description: '-15%' },
+  'PROMO25': { type: 'percentage', value: 25, description: '-25%' },
+  'WELCOME5': { type: 'fixed', value: 5, description: '-5€' },
 };
 
-// Global order state
-let orderData = { ...defaultOrderData };
+// =============================================
+// GESTION DU PANIER
+// =============================================
 
-// Initialize order data from localStorage
-const initializeOrderData = () => {
-  const savedCart = localStorage.getItem('propMoneyCart');
-  if (savedCart) {
-    try {
-      const parsed = JSON.parse(savedCart);
-      orderData = {
-        ...defaultOrderData,
-        orderItems: parsed.orderItems || defaultOrderData.orderItems
-      };
-    } catch (error) {
-      console.error('Error loading cart from localStorage:', error);
-      orderData = { ...defaultOrderData };
-    }
+/**
+ * Récupère le panier depuis localStorage
+ * @returns {Array} Le panier sous forme de tableau
+ */
+function getCart() {
+  try {
+    const cartData = localStorage.getItem(CART_STORAGE_KEY);
+    return JSON.parse(cartData || '[]');
+  } catch (error) {
+    console.error('❌ Erreur lecture panier:', error);
+    return [];
   }
-  return orderData;
-};
+}
 
-// Save cart to localStorage
-const saveCartToStorage = () => {
-  localStorage.setItem('propMoneyCart', JSON.stringify({ 
-    orderItems: orderData.orderItems 
-  }));
-};
+/**
+ * Sauvegarde le panier dans localStorage
+ * @param {Array} cart - Le panier à sauvegarder
+ */
+function saveCart(cart) {
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    updateCartCount();
+  } catch (error) {
+    console.error('❌ Erreur sauvegarde panier:', error);
+  }
+}
 
-// Update order data
-const updateOrderData = (data) => {
-  orderData = { ...orderData, ...data };
-  return orderData;
-};
-
-// Generate order number
-const generateOrderNumber = () => {
-  const timestamp = new Date().getTime().toString().slice(-6);
-  const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-  const orderNumber = `PM-${timestamp}-${random}`;
-  updateOrderData({ orderNumber, orderDate: new Date().toISOString() });
-  return orderNumber;
-};
-
-// Reset order data
-const resetOrderData = () => {
-  // Reset everything except cart items
-  orderData = {
-    ...defaultOrderData,
-    orderItems: orderData.orderItems
+/**
+ * Ajoute un produit au panier
+ * @param {Object} product - Le produit à ajouter
+ * @param {Object} option - L'option sélectionnée (optionnel)
+ * @returns {Array} Le panier mis à jour
+ */
+function addToCart(product, option = null) {
+  const cart = getCart();
+  
+  const cartItem = {
+    id: Date.now().toString(),
+    name: option?.name || product.name,
+    price: option?.price || product.price,
+    quantity: 1,
+    image: product.image || defaultImages[product.category] || '/public/logo.png',
+    category: product.category
   };
-  return orderData;
-};
 
-// Calculate total
-const calculateTotal = () => {
-  const subtotal = orderData.orderItems.reduce(
-    (total, item) => total + item.price * item.quantity, 
-    0
+  // Vérifier si le produit existe déjà
+  const existingIndex = cart.findIndex(item => 
+    item.name === cartItem.name && 
+    Math.abs(item.price - cartItem.price) < 0.01
   );
-  return subtotal + orderData.shippingMethod.price;
-};
 
-// Cart management functions
-const addToCart = (item) => {
-  const existingItem = orderData.orderItems.find(i => i.id === item.id);
-  
-  if (existingItem) {
-    // Item already in cart, update quantity
-    orderData.orderItems = orderData.orderItems.map(i => 
-      i.id === item.id 
-        ? { ...i, quantity: i.quantity + item.quantity } 
-        : i
-    );
+  if (existingIndex !== -1) {
+    cart[existingIndex].quantity += 1;
   } else {
-    // Add new item to cart
-    orderData.orderItems = [...orderData.orderItems, item];
+    cart.push(cartItem);
   }
-  
-  saveCartToStorage();
-  return orderData.orderItems;
-};
 
-const removeFromCart = (id) => {
-  orderData.orderItems = orderData.orderItems.filter(item => item.id !== id);
-  saveCartToStorage();
-  return orderData.orderItems;
-};
+  saveCart(cart);
+  console.log('✅ Produit ajouté:', cartItem.name);
+  return cart;
+}
 
-const updateQuantity = (id, quantity) => {
-  if (quantity < 1) return orderData.orderItems;
+/**
+ * Supprime un produit du panier
+ * @param {string} id - L'ID du produit à supprimer
+ * @returns {Array} Le panier mis à jour
+ */
+function removeFromCart(id) {
+  const cart = getCart();
+  const filtered = cart.filter(item => item.id !== id);
+  saveCart(filtered);
+  return filtered;
+}
+
+/**
+ * Met à jour la quantité d'un produit
+ * @param {string} id - L'ID du produit
+ * @param {number} quantity - La nouvelle quantité
+ * @returns {Array} Le panier mis à jour
+ */
+function updateQuantity(id, quantity) {
+  if (quantity < 1) return getCart();
   
-  orderData.orderItems = orderData.orderItems.map(item => 
+  const cart = getCart();
+  const updated = cart.map(item => 
     item.id === id ? { ...item, quantity } : item
   );
   
-  saveCartToStorage();
-  return orderData.orderItems;
-};
+  saveCart(updated);
+  return updated;
+}
 
-// Get current order data
-const getOrderData = () => orderData;
+/**
+ * Vide complètement le panier
+ */
+function clearCart() {
+  localStorage.removeItem(CART_STORAGE_KEY);
+  updateCartCount();
+}
 
-// Get cart items
-const getCartItems = () => orderData.orderItems;
+/**
+ * Compte le nombre total d'articles dans le panier
+ * @returns {number} Le nombre total d'articles
+ */
+function getCartCount() {
+  const cart = getCart();
+  return cart.reduce((acc, item) => acc + (item.quantity || 0), 0);
+}
 
-// Get cart count
-const getCartCount = () => {
-  return orderData.orderItems.reduce((acc, item) => acc + (item.quantity || 0), 0);
-};
+/**
+ * Calcule le sous-total du panier
+ * @returns {number} Le sous-total
+ */
+function calculateSubtotal() {
+  const cart = getCart();
+  return cart.reduce((total, item) => 
+    total + (item.price * item.quantity), 0
+  );
+}
 
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  initializeOrderData();
+/**
+ * Calcule le total avec livraison
+ * @param {Object} shippingMethod - Méthode de livraison choisie
+ * @returns {number} Le total
+ */
+function calculateTotal(shippingMethod = shippingMethods[1]) {
+  const subtotal = calculateSubtotal();
+  return subtotal + shippingMethod.price;
+}
+
+// =============================================
+// GESTION DU COMPTEUR PANIER (NAVBAR)
+// =============================================
+
+/**
+ * Met à jour le compteur du panier dans la navbar
+ */
+function updateCartCount() {
+  const cartCountElements = document.querySelectorAll('.cart-count');
+  const count = getCartCount();
+  
+  cartCountElements.forEach(el => {
+    if (el) {
+      el.textContent = count;
+      el.style.display = count > 0 ? 'flex' : 'none';
+    }
+  });
+}
+
+// =============================================
+// GESTION DES CODES DE RÉDUCTION
+// =============================================
+
+/**
+ * Applique un code de réduction
+ * @param {string} code - Le code à appliquer
+ * @returns {Object|null} Les informations du code ou null si invalide
+ */
+function applyDiscountCode(code) {
+  const upperCode = code.trim().toUpperCase();
+  const discount = DISCOUNT_CODES[upperCode];
+  
+  if (discount) {
+    localStorage.setItem('appliedDiscount', JSON.stringify({
+      code: upperCode,
+      ...discount
+    }));
+    return discount;
+  }
+  
+  return null;
+}
+
+/**
+ * Récupère le code de réduction actuel
+ * @returns {Object|null}
+ */
+function getActiveDiscount() {
+  try {
+    const saved = localStorage.getItem('appliedDiscount');
+    return saved ? JSON.parse(saved) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Supprime le code de réduction
+ */
+function removeDiscount() {
+  localStorage.removeItem('appliedDiscount');
+}
+
+/**
+ * Calcule le total final avec réduction
+ * @param {number} total - Le total avant réduction
+ * @returns {Object} { original, final, discount, saved }
+ */
+function calculateFinalTotal(total) {
+  const discount = getActiveDiscount();
+  
+  if (!discount) {
+    return { original: total, final: total, discount: null, saved: 0 };
+  }
+  
+  const discountAmount = discount.type === 'percentage' 
+    ? total * (discount.value / 100)
+    : discount.value;
+    
+  const final = Math.max(0, total - discountAmount);
+  
+  return {
+    original: total,
+    final: final,
+    discount: discount,
+    saved: discountAmount
+  };
+}
+
+// =============================================
+// GÉNÉRATION DE NUMÉRO DE COMMANDE
+// =============================================
+
+/**
+ * Génère un numéro de commande unique
+ * @returns {string} Le numéro de commande
+ */
+function generateOrderNumber() {
+  const timestamp = new Date().getTime().toString().slice(-6);
+  const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+  return `MM-${timestamp}-${random}`;
+}
+
+// =============================================
+// INITIALISATION
+// =============================================
+
+// Mettre à jour le compteur au chargement
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updateCartCount);
+} else {
+  updateCartCount();
+}
+
+// Écouter les changements de localStorage entre onglets
+window.addEventListener('storage', (e) => {
+  if (e.key === CART_STORAGE_KEY) {
+    updateCartCount();
+  }
 });
 
-// Export functions for use in other files
-window.OrderContext = {
-  shippingMethods,
-  paymentMethods,
-  productCatalog,
-  getOrderData,
-  getCartItems,
-  getCartCount,
-  updateOrderData,
-  generateOrderNumber,
-  resetOrderData,
-  calculateTotal,
+// =============================================
+// EXPORT GLOBAL
+// =============================================
+
+window.MythicMarket = {
+  // Configuration
+  DISCOUNT_CODES,
+  
+  // Gestion du panier
+  getCart,
   addToCart,
   removeFromCart,
-  updateQuantity
+  updateQuantity,
+  clearCart,
+  getCartCount,
+  updateCartCount,
+  
+  // Calculs
+  calculateSubtotal,
+  calculateTotal,
+  calculateFinalTotal,
+  
+  // Réductions
+  applyDiscountCode,
+  getActiveDiscount,
+  removeDiscount,
+  
+  // Utilitaires
+  generateOrderNumber
 };
+
+console.log('✅ MythicMarket OrderContext initialisé');

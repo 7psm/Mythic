@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MythicMarket - Mise à jour</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes floatSoft {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes glassShimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    @keyframes ripple {
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
+
+    @keyframes dotBlink {
+      0%, 20% { opacity: 0.2; }
+      40% { opacity: 1; }
+      60% { opacity: 0.6; }
+      80%, 100% { opacity: 0.2; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; transform: scale(0.95); }
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.2); opacity: 0.6; }
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+
+    .floating-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      animation: breathe 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white font-sans h-screen flex flex-col justify-center items-center overflow-hidden relative">
+
+  <!-- Orbes flottantes en arrière-plan -->
+  <div class="floating-orb w-96 h-96 bg-blue-500/30 top-[-10%] left-[-10%]"></div>
+  <div class="floating-orb w-80 h-80 bg-purple-500/20 bottom-[-10%] right-[-10%]" style="animation-delay: 2s;"></div>
+  <div class="floating-orb w-64 h-64 bg-cyan-500/25 top-[40%] right-[20%]" style="animation-delay: 4s;"></div>
+
+  <div class="text-center max-w-[650px] p-10 relative z-10">
+
+    <!-- LOGO avec effet glassmorphism -->
+    <div class="w-[140px] h-[140px] mx-auto mb-10 rounded-[30px] flex items-center justify-center glass-card relative overflow-hidden animate-[floatSoft_4s_ease-in-out_infinite]">
+      <!-- Ripple effect -->
+      <div class="absolute inset-0 rounded-[30px] border-2 border-cyan-400/50 animate-[ripple_3s_ease-out_infinite]"></div>
+      <div class="absolute inset-0 rounded-[30px] border-2 border-cyan-400/30 animate-[ripple_3s_ease-out_infinite] [animation-delay:1s]"></div>
+      
+      <!-- Letter M -->
+      <span class="text-[64px] font-light text-transparent bg-clip-text bg-gradient-to-br from-cyan-300 via-blue-400 to-purple-500 z-10">M</span>
+      
+      <!-- Shimmer overlay -->
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent bg-[length:200%_100%] animate-[glassShimmer_3s_ease-in-out_infinite]"></div>
+    </div>
+
+    <h1 class="text-[36px] font-extralight mb-3 tracking-[0.3em] text-cyan-100">MYTHICMARKET</h1>
+    <p class="text-[14px] text-cyan-300/70 mb-8 font-light uppercase tracking-widest">Mise à jour système</p>
+
+    <p class="text-[16px] text-slate-300/80 mb-12 font-light">Synchronisation en cours...</p>
+
+    <!-- STATUS -->
+    <div class="my-8 min-h-[60px] glass-card rounded-2xl p-6">
+      <div id="status-1" class="status-text text-[15px] text-cyan-300 my-2 opacity-0 translate-y-5 transition-all duration-500 font-light">
+        <span class="inline-block w-4 h-4 border-2 border-cyan-300/30 border-t-cyan-300 rounded-full animate-spin mr-3"></span>
+        Vérification de la version...
+      </div>
+      <div id="status-2" class="status-text text-[15px] my-2 opacity-0 translate-y-5 transition-all duration-500 font-light"></div>
+      <div id="status-3" class="status-text text-[15px] my-2 opacity-0 translate-y-5 transition-all duration-500 font-light"></div>
+      <div id="status-4" class="status-text text-[15px] my-2 opacity-0 translate-y-5 transition-all duration-500 font-light"></div>
+      <div id="status-5" class="status-text text-[15px] my-2 opacity-0 translate-y-5 transition-all duration-500 font-light"></div>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden my-8 glass-card">
+      <div id="progress-fill" class="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 w-0 transition-[width] duration-500 ease-out rounded-full shadow-[0_0_20px_rgba(34,211,238,0.6)]"></div>
+    </div>
+
+    <p class="text-[13px] text-slate-400 mt-8 font-light">Si aucune action ne se produit,
+      <a href="/index.html" class="text-cyan-300 no-underline border-b border-transparent hover:border-cyan-300 transition-colors ml-1">accédez directement ici</a>.
+    </p>
+  </div>
+
+  <!-- VERSION INFO -->
+  <div class="absolute bottom-6 right-6 text-[11px] text-slate-500 font-light tracking-wider glass-card px-4 py-2 rounded-full">
+    v<span id="current-version">...</span>
+  </div>
+
+  <script>
+    // =============================================
+    // RÉCUPÉRATION VERSION DEPUIS ADMIN PANEL
+    // =============================================
+    function getAdminVersion() {
+      try {
+        // 1. Essayer de récupérer la version actuelle depuis l'admin
+        const currentVersion = localStorage.getItem('currentAppVersion');
+        if (currentVersion) {
+          console.log('✅ Version trouvée dans l\'admin:', currentVersion);
+          return currentVersion;
+        }
+
+        // 2. Si pas de version actuelle, chercher dans l'historique
+        const history = JSON.parse(localStorage.getItem('versionHistory') || '[]');
+        if (history.length > 0) {
+          const latestVersion = history[history.length - 1].version;
+          console.log('✅ Version trouvée dans l\'historique:', latestVersion);
+          // Sauvegarder comme version actuelle
+          localStorage.setItem('currentAppVersion', latestVersion);
+          return latestVersion;
+        }
+
+        // 3. Fallback : version par défaut
+        console.log('⚠️ Aucune version trouvée, utilisation de 1.0.0');
+        return '1.0.0';
+      } catch (error) {
+        console.error('❌ Erreur lecture version admin:', error);
+        return '1.0.0';
+      }
+    }
+
+    function getVersionHistory() {
+      try {
+        return JSON.parse(localStorage.getItem('versionHistory') || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    // =============================================
+    // CONFIGURATION
+    // =============================================
+    const STORAGE_KEY = 'mythic_loaded_version';
+    const CACHE_VERSION_KEY = 'mythic_cache_version';
+    const SPLASH_DELAY = 10000;
+
+    // 🎯 RÉCUPÉRER LA VERSION DEPUIS L'ADMIN
+    const APP_VERSION = getAdminVersion();
+    const BUILD_VERSION = String(Date.now());
+
+    console.log('🚀 Version cible:', APP_VERSION);
+    localStorage.setItem('build_timestamp', BUILD_VERSION);
+
+    // =============================================
+    // SERVICE DE MISE À JOUR
+    // =============================================
+    class VersionUpdaterService {
+      constructor() {
+        this.statusElements = {
+          status1: document.getElementById('status-1'),
+          status2: document.getElementById('status-2'),
+          status3: document.getElementById('status-3'),
+          status4: document.getElementById('status-4'),
+          status5: document.getElementById('status-5')
+        };
+        this.progressFill = document.getElementById('progress-fill');
+        this.versionInfo = document.getElementById('current-version');
+        this.isVersionUpdated = false;
+        this.startTime = Date.now();
+      }
+
+      showStatus(elementId, message, type = 'info', showSpinner = false) {
+        const element = this.statusElements[elementId];
+        if (!element) return;
+
+        const spinnerColor = type === 'success' ? 'border-t-emerald-400' : 
+                            type === 'warning' ? 'border-t-amber-400' : 
+                            type === 'error' ? 'border-t-red-400' : 'border-t-cyan-300';
+
+        element.innerHTML = showSpinner ?
+          `<span class="inline-block w-4 h-4 border-2 border-white/30 ${spinnerColor} rounded-full animate-spin mr-3"></span>${message}` :
+          message;
+
+        const colorMap = { 
+          info: 'text-cyan-300', 
+          success: 'text-emerald-300', 
+          warning: 'text-amber-300', 
+          error: 'text-red-300' 
+        };
+        element.className = `text-[15px] my-2 transition-all duration-500 opacity-0 translate-y-5 font-light ${colorMap[type] ?? 'text-cyan-300'}`;
+
+        setTimeout(() => {
+          element.classList.add('opacity-100', 'translate-y-0');
+        }, 100);
+      }
+
+      updateProgress(percentage) {
+        if (this.progressFill) {
+          this.progressFill.style.width = `${percentage}%`;
+        }
+      }
+
+      delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      async clearAllCache() {
+        console.log('🧹 Nettoyage du cache...');
+        try {
+          const importantKeys = ['cart', 'user_preferences', 'currentAppVersion', 'versionHistory', 'discountCodes', 'appliedDiscount'];
+          const keysToRemove = [];
+
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && !importantKeys.includes(key)) {
+              keysToRemove.push(key);
+            }
+          }
+
+          keysToRemove.forEach(key => localStorage.removeItem(key));
+          sessionStorage.clear();
+
+          if ('caches' in window) {
+            const cacheNames = await caches.keys();
+            await Promise.all(cacheNames.map(name => caches.delete(name)));
+          }
+          console.log('✅ Cache nettoyé');
+        } catch (error) {
+          console.warn('⚠️ Erreur cache:', error);
+        }
+      }
+
+      compareVersions(version1, version2) {
+        const v1Parts = version1.split('.').map(Number);
+        const v2Parts = version2.split('.').map(Number);
+        const maxLength = Math.max(v1Parts.length, v2Parts.length);
+        
+        while (v1Parts.length < maxLength) v1Parts.push(0);
+        while (v2Parts.length < maxLength) v2Parts.push(0);
+
+        for (let i = 0; i < maxLength; i++) {
+          if (v1Parts[i] < v2Parts[i]) return -1;
+          if (v1Parts[i] > v2Parts[i]) return 1;
+        }
+        return 0;
+      }
+
+      async checkVersion() {
+        console.log('🔍 Vérification...');
+        this.showStatus('status1', 'Analyse du système...', 'info', true);
+        this.updateProgress(20);
+        await this.delay(2000);
+
+        const lastLoadedVersion = localStorage.getItem(STORAGE_KEY);
+        console.log('📊 Version chargée précédemment:', lastLoadedVersion || 'Aucune');
+        console.log('📊 Version cible (depuis admin):', APP_VERSION);
+
+        const versionComparison = lastLoadedVersion ? this.compareVersions(lastLoadedVersion, APP_VERSION) : 1;
+        const isNewVersion = versionComparison < 0;
+        const isDowngrade = versionComparison > 0;
+
+        if (isNewVersion) {
+          console.log('🆙 Mise à jour détectée:', lastLoadedVersion, '→', APP_VERSION);
+          this.isVersionUpdated = true;
+
+          this.showStatus('status2', `Détection version ${APP_VERSION}<span class="inline-flex ml-1"><span class="inline-block">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.1s]">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.2s]">.</span></span>`, 'warning', true);
+          this.updateProgress(40);
+          await this.delay(2000);
+
+          this.showStatus('status3', `Téléchargement ${APP_VERSION}<span class="inline-flex ml-1"><span class="inline-block">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.1s]">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.2s]">.</span></span>`, 'warning', true);
+          this.updateProgress(50);
+          await this.delay(2000);
+
+          this.showStatus('status4', `Installation ${APP_VERSION}<span class="inline-flex ml-1"><span class="inline-block">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.1s]">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.2s]">.</span></span>`, 'warning', true);
+          this.updateProgress(70);
+          await this.delay(2000);
+
+          await this.clearAllCache();
+          await this.delay(1500);
+
+          this.showStatus('status5', `Version ${APP_VERSION} installée`, 'success');
+          this.updateProgress(90);
+          await this.delay(2000);
+
+          localStorage.setItem(STORAGE_KEY, APP_VERSION);
+          localStorage.setItem(CACHE_VERSION_KEY, APP_VERSION);
+
+        } else if (isDowngrade) {
+          console.log('⬇️ Rollback détecté:', lastLoadedVersion, '→', APP_VERSION);
+          this.isVersionUpdated = true;
+
+          this.showStatus('status2', `Restauration ${APP_VERSION}<span class="inline-flex ml-1"><span class="inline-block">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.1s]">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.2s]">.</span></span>`, 'warning', true);
+          this.updateProgress(40);
+          await this.delay(2000);
+
+          this.showStatus('status3', `Synchronisation ${APP_VERSION}<span class="inline-flex ml-1"><span class="inline-block">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.1s]">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.2s]">.</span></span>`, 'warning', true);
+          this.updateProgress(60);
+          await this.delay(2000);
+
+          await this.clearAllCache();
+          await this.delay(1500);
+
+          this.showStatus('status4', `Version ${APP_VERSION} restaurée`, 'success');
+          this.updateProgress(80);
+          await this.delay(2000);
+
+          localStorage.setItem(STORAGE_KEY, APP_VERSION);
+          localStorage.setItem(CACHE_VERSION_KEY, APP_VERSION);
+
+        } else {
+          console.log('✅ Version actuelle OK');
+          this.showStatus('status2', `Chargement ${APP_VERSION}<span class="inline-flex ml-1"><span class="inline-block">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.1s]">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.2s]">.</span></span>`, 'success');
+          this.updateProgress(60);
+          await this.delay(2000);
+
+          this.showStatus('status3', `Version ${APP_VERSION} prête`, 'success');
+          this.updateProgress(80);
+          await this.delay(2000);
+        }
+
+        this.showStatus('status4', 'Initialisation<span class="inline-flex ml-1"><span class="inline-block">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.1s]">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.2s]">.</span></span>', 'info');
+        this.updateProgress(95);
+        await this.delay(1500);
+
+        this.showStatus('status5', 'Redirection<span class="inline-flex ml-1"><span class="inline-block">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.1s]">.</span><span class="inline-block animate-[dotBlink_1.2s_linear_infinite] delay-[0.2s]">.</span></span>', 'info');
+        this.updateProgress(100);
+        await this.delay(1000);
+
+        return isNewVersion || isDowngrade;
+      }
+
+      async redirectToMain() {
+        const elapsedTime = Date.now() - this.startTime;
+        const remainingDelay = Math.max(0, SPLASH_DELAY - elapsedTime);
+
+        if (remainingDelay > 0) await this.delay(remainingDelay);
+
+        document.body.classList.add('animate-[fadeOut_0.5s_ease-out_forwards]');
+        await this.delay(500);
+
+        let redirectUrl = '/index.html?fromSplash=true';
+        if (this.isVersionUpdated) {
+          const timestamp = Date.now().toString();
+          redirectUrl += `&v=${APP_VERSION}&_bust=${timestamp}`;
+        }
+
+        console.log('🔄 Redirection vers:', redirectUrl);
+        window.location.href = redirectUrl;
+      }
+
+      async initialize() {
+        if (this.versionInfo) {
+          this.versionInfo.textContent = APP_VERSION;
+        }
+
+        try {
+          await this.checkVersion();
+          await this.redirectToMain();
+        } catch (error) {
+          console.error('❌ Erreur:', error);
+          this.showStatus('status2', 'Erreur, redirection...', 'error');
+          await this.delay(2000);
+          window.location.href = '/index.html';
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const versionUpdater = new VersionUpdaterService();
+      versionUpdater.initialize();
+    });
+  </script>
+</body>
+</html>

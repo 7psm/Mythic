@@ -5,268 +5,656 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MythicMarket - No.1 Shop All Over Discord</title>
     <link rel="icon" href="/public/logo.png"/>
-<!-- /////////////////////////////////////////////////////////////////////////
-     ////////////////////       Importation & Files       ////////////////////
-     /////////////////////////////////////////////////////////////////////////-->
-        <link rel="stylesheet" href="/src/styles/PagesStyles/Confirmation.css">
-        <link rel="stylesheet" href="/src/styles/GlobalStyle.css">
-        <link rel="stylesheet" href="../styles/NavBar.css">
-        <link rel="stylesheet" href="../styles/tw-breakpoints.css">
-        <script src="/Crypted/Product.min.js"></script>
-        <script src="/Crypted/Confirmation.min.js" type="module" defer></script>
-        <script src="../js/navbar-script.js"></script>
 
-<!-- ///////////////////////////////////////////////////////////////////
-     ////////////////////       Fonts & Icons       ////////////////////
-     ///////////////////////////////////////////////////////////////////-->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<!-- //////////////////////////////////////////////////////////////////////
+     ////////////////////       Imports Fichiers       ////////////////////
+     //////////////////////////////////////////////////////////////////////--> 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../styles/NavBar.css">
 
-<!-- Open Graph / Facebook / Discord -->
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="https://mythicmarket.netlify.app/">
-        <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
-        <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="og:image" content="https://mythicmarket.netlify.app/public/banner.png">
-        <meta property="og:image:width" content="1200">
-        <meta property="og:image:height" content="630">
-        <meta property="og:image:alt" content="MythicMarket Banner">
-        <meta property="og:image:type" content="public/banner.png">
+    <script src="/Crypted/Site/Context/OrderContext.min.js"></script>
+    <script src="/Crypted/Site/Products.min.js"></script>
+    <script src="/src/js/Site/Confirmation.js"></script>
 
-<!-- Twitter -->
-        <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="https://mythicmarket.netlify.app/">
-        <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
-        <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="twitter:image" content="https://mythicmarket.netlify.app/public/banner.png">
+
+    <script src="../js/navbar-script.js"></script>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <!-- Open Graph / Facebook / Discord -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://getmythic.netlify.app/">
+    <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
+    <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
+    <meta property="og:image" content="https://getmythic.netlify.app/public/banner.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="MythicMarket Banner">
+    <meta property="og:image:type" content="public/banner.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://getmythic.netlify.app/">
+    <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
+    <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
+    <meta property="twitter:image" content="https://getmythic.netlify.app/public/banner.png">
+
+<!-- //////////////////////////////////////////////////////////////////////
+     ////////////////////       Scripts TL + CSS       ////////////////////
+     //////////////////////////////////////////////////////////////////////--> 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'background-dark': '#0a0a0e',
+                        'gold-primary': '#d4af37',
+                        'gold-light': '#fceabb',
+                        'gold-dark': '#c29d28',
+                        'text-white': '#ffffff',
+                        'text-gray': '#cccccc',
+                    },
+                    keyframes: {
+                        'gradient-animation': {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        }
+                    },
+                    animation: {
+                        'gradient': 'gradient-animation 3s ease infinite',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+/* Keyframes des animations */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes slideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-slow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+}
+
+@keyframes bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+@keyframes slideInFromBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Classes d'animation */
+.animate-fadeInUp {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.8s ease-out forwards;
+    opacity: 0;
+}
+
+.animate-slideInRight {
+    animation: slideInRight 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.animate-slideInLeft {
+    animation: slideInLeft 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.animate-scaleIn {
+    animation: scaleIn 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+    animation: pulse-slow 2s ease-in-out infinite;
+}
+
+.animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+.animate-slideInFromBottom {
+    animation: slideInFromBottom 0.4s ease-out forwards;
+    opacity: 0;
+}
+
+/* État initial supprimé - géré par les classes individuelles */
+
+/* Délais progressifs */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
+
+/* Effet de brillance sur hover */
+.shine-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.shine-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.shine-effect:hover::before {
+    left: 100%;
+}
+
+/* Effet glow sur hover */
+.glow-on-hover {
+    transition: all 0.3s ease;
+}
+
+.glow-on-hover:hover {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.5),
+                0 0 40px rgba(212, 175, 55, 0.3),
+                0 0 60px rgba(212, 175, 55, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Transitions smooth - SANS animation automatique */
+button, a, div, span {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animation spécifique pour les articles commandés */
+.order-item {
+    animation: slideInFromBottom 0.4s ease-out forwards;
+    opacity: 0;
+}
+
+.order-item:hover {
+    background: rgba(212, 175, 55, 0.05);
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    transform: translateX(5px);
+}
+
+/* Délais pour chaque article (jusqu'à 10 articles) */
+.order-item:nth-child(1) { animation-delay: 0ms; }
+.order-item:nth-child(2) { animation-delay: 50ms; }
+.order-item:nth-child(3) { animation-delay: 100ms; }
+.order-item:nth-child(4) { animation-delay: 150ms; }
+.order-item:nth-child(5) { animation-delay: 200ms; }
+.order-item:nth-child(6) { animation-delay: 250ms; }
+.order-item:nth-child(7) { animation-delay: 300ms; }
+.order-item:nth-child(8) { animation-delay: 350ms; }
+.order-item:nth-child(9) { animation-delay: 400ms; }
+.order-item:nth-child(10) { animation-delay: 450ms; }
+
+/* Animation pour les badges de quantité */
+.order-item span {
+    transition: all 0.3s ease;
+}
+
+.order-item:hover span {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.5);
+}
+
+/* Animation pour les prix */
+.order-item .item-price {
+    transition: all 0.3s ease;
+}
+
+.order-item:hover .item-price {
+    transform: scale(1.05);
+    text-shadow: 0 2px 8px rgba(212, 175, 55, 0.5);
+}
+
+/* Animation du header de la carte */
+.card-header.animate {
+    animation: slideInFromBottom 0.5s ease-out forwards;
+}
+
+.card-header.animate > div:first-child {
+    animation: slideInLeft 0.6s ease-out 0.2s forwards;
+    opacity: 0;
+}
+
+.card-header.animate > div:last-child {
+    animation: slideInRight 0.6s ease-out 0.2s forwards;
+    opacity: 0;
+}
+
+/* Hover sur les sections d'info */
+.info-group:hover,
+[class*="hover:bg-"] {
+    transform: scale(1.02);
+    cursor: pointer;
+}
+
+/* Animation du bouton submit - uniquement avec classe */
+#submit-order.animate-btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#submit-order.animate-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+#submit-order.animate-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+#submit-order.animate-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.6),
+                0 0 0 3px rgba(212, 175, 55, 0.2);
+}
+
+#submit-order.animate-btn:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+#submit-order:disabled {
+    transform: none;
+    cursor: not-allowed;
+}
+
+/* Animation de la modal */
+#confirmation-modal.active {
+    animation: fadeIn 0.3s ease-out;
+}
+
+#confirmation-modal .modal-content,
+#confirmation-modal > div {
+    animation: scaleIn 0.4s ease-out;
+}
+
+/* Animation du code promo - uniquement quand visible */
+#promo-section:not(.hidden).animate-promo {
+    animation: slideInFromBottom 0.5s ease-out forwards, bounce-subtle 2s ease-in-out 0.5s infinite;
+}
+
+/* Pulse sur le total - uniquement avec classe */
+#total-cost.animate-pulse {
+    animation: pulse-slow 2s ease-in-out infinite;
+}
+
+/* Animation du prix barré */
+#total-original:not(.hidden) {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+</style>
 </head>
 
-    <body>
-        <script src="../js/url-cleaner.js"></script>
-        <div class="page-container">       
-            <!-- ////////////////////////////////////////////////////////////
-                 ////////////////////       NavBar       ////////////////////
-                 ////////////////////////////////////////////////////////////-->
-            <nav class="navbar-container">
-              <div class="nav-links">
+<body class="font-['Inter'] bg-background-dark text-text-white">
+    <div class="min-h-screen w-full flex flex-col pt-20">      
+
+<!-- ////////////////////////////////////////////////////////////
+     ////////////////////       NavBar       ////////////////////
+     ////////////////////////////////////////////////////////////--> 
+        <nav class="navbar-container">
+            <div class="nav-links">
                 <a href="/index.html" class="nav-link">Mythic-Market</a>
                 <a href="./Products.html" class="nav-link">Produits</a>
                 <a href="./TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
+                <a href="Subscriptions.html" class="nav-link">Abonnements</a>
                 <a href="./Contact.html" class="nav-link">Contact</a>
                 <a href="Status.html" class="nav-link">Status</a>
-              </div>
-              <div class="action-buttons">
+            </div>
+            <div class="action-buttons">
                 <a href="./Cart.html" class="cart-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                  <span class="cart-count">0</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span class="cart-count">0</span>
                 </a>
                 <a href="./Contact.html" class="contact-button">Contact</a>
-              </div>
-              <div class="navbar-separator"></div>
-            </nav>
+            </div>
+            <div class="navbar-separator"></div>
+        </nav>
         
-             <!-- Main Content -->
-            <main class="main-content">
-                <div class="confirmation-header">
-                    <h1>Confirmation de Commande</h1>
-                    <p>Merci pour votre commande ! Voici le récapitulatif de votre achat.</p>
-                </div>
-            
-                <div class="confirmation-card">
-                    <div class="card-header">
-                        <div class="order-info">
-                            <h2 id="customer-name">Nom du Client</h2>
-                            <p id="order-date">Date de la commande</p>
-                        </div>
+<!-- ///////////////////////////////////////////////////////////
+     ////////////////////       Carte       ////////////////////
+     ///////////////////////////////////////////////////////////--> 
+<main class="px-4 py-8 max-w-4xl mx-auto w-full relative z-10">
 
-                        <div class="order-number">
-                            <span>Numéro de Commande</span>
-                            <span id="order-number">CMD-12345678</span>
-                        </div>
+     <!--                       ////////////////////         
+            ////////////////////       Titre       ////////////////////
+                                /////////////////////                   --> 
+
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-extrabold mb-3 bg-gradient-to-br from-gold-light via-gold-primary to-[#b8860b] bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]">
+                    Confirmation de Commande
+                </h1>
+                <p class="text-text-gray text-lg opacity-90">
+                    Merci pour votre commande ! Voici le récapitulatif de votre achat.
+                </p>
+            </div>
+            
+     <!--                       ////////////////////         
+            ////////////////////       Récap       ////////////////////
+                                /////////////////////                   --> 
+            <div class="bg-gradient-to-br from-[rgba(22,22,32,0.9)] to-[rgba(10,10,14,0.95)] rounded-2xl border-2 border-[rgba(212,175,55,0.2)] shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(212,175,55,0.1)]">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-5 border-b-2 border-[rgba(212,175,55,0.2)] bg-gradient-to-r from-[rgba(212,175,55,0.05)] to-[rgba(184,134,11,0.05)]">
+                    <!-- Infos -->
+                    <div>
+                        <h2 class="text-2xl font-bold mb-1 text-gold-primary drop-shadow-[0_1px_3px_rgba(212,175,55,0.3)]" id="contact-name">Client</h2>
+                        <p class="text-[#888] text-xs" id="order-date">22/11/2025</p>
                     </div>
+                    <!-- Numéro de cmd -->
+                    <div class="flex flex-col items-start sm:items-end">
+                        <span class="text-xs text-[#888] mb-1">Numéro de Commande</span>
+                        <span class="text-base text-gold-primary font-bold drop-shadow-[0_1px_3px_rgba(212,175,55,0.3)]" id="order-number">PM-735939-1423</span>
+                    </div>
+                </div>
+
+     <!-- /////////////////////////////////////////////////////////////////
+          ////////////////////       Infos C + L       ////////////////////
+          /////////////////////////////////////////////////////////////////--> 
+<div class="p-5 md:p-8 mx-auto max-w-3xl">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        <!-- Informations Client -->
+        <div class="w-full">
+            <h3 class="text-lg mb-4 text-gold-primary relative pb-2 border-b-2 border-[rgba(212,175,55,0.3)] font-semibold drop-shadow-[0_1px_3px_rgba(212,175,55,0.2)]">Vous contactez</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <h4 class="text-xs text-text-gray mb-1 uppercase font-semibold tracking-wider">Email</h4>
+                    <p id="contact-email" class="text-text-white text-sm font-medium truncate">Non renseigné</p>
+                </div>
+                <div>
+                    <h4 class="text-xs text-text-gray mb-1 uppercase font-semibold tracking-wider">Discord</h4>
+                    <p id="contact-discord" class="text-text-white text-sm font-medium truncate">Non renseigné</p>
+                </div>
+            </div>
+        </div>
+        <!-- Méthode de Livraison -->
+        <div class="w-full">
+            <h3 class="text-lg mb-4 text-gold-primary relative pb-2 border-b-2 border-[rgba(212,175,55,0.3)] font-semibold drop-shadow-[0_1px_3px_rgba(212,175,55,0.2)]">Type de Livraison</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <h4 class="text-xs text-text-gray mb-1 uppercase font-semibold tracking-wider">Livraison</h4>
+                    <p id="shipping-method" class="text-text-white text-sm font-medium">Livraison Classique</p>
+                </div>
+                <div>
+                    <h4 class="text-xs text-text-gray mb-1 uppercase font-semibold tracking-wider">Délai Estimé</h4>
+                    <p id="shipping-delivery" class="text-text-white text-sm font-medium">6-12H</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ////////////////////////////////////////////////////////////////
+         ////////////////////       Infos P + A       ///////////////////
+         ////////////////////////////////////////////////////////////////--> 
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Méthode de Paiement -->
+        <div class="w-full">
+            <h3 class="text-lg mb-4 text-gold-primary relative pb-2 border-b-2 border-[rgba(212,175,55,0.3)] font-semibold drop-shadow-[0_1px_3px_rgba(212,175,55,0.2)]">Moyen de Paiement</h3>
+            <div class="mb-6">
+                <h4 class="text-xs text-text-gray mb-1 uppercase font-semibold tracking-wider">Paiement via</h4>
+                <p id="payment-method" class="text-text-white text-sm font-medium">Carte de Crédit</p>
+            </div>
+        </div>
+        <!-- Articles Commandés -->
+        <div class="w-full">
+            <h3 class="text-lg mb-4 text-gold-primary relative pb-2 border-b-2 border-[rgba(212,175,55,0.3)] font-semibold drop-shadow-[0_1px_3px_rgba(212,175,55,0.2)]">Articles Commandés</h3>
+            <div class="space-y-2" id="order-items">
+                <!-- Items injectés via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- //////////////////////////////////////////////////////////////////////
+         ////////////////////       Montant Articles       ////////////////////
+         //////////////////////////////////////////////////////////////////////--> 
+    <div class="relative pb-2 mt-6 p-4 md:p-2">
+        <!-- Sous-total HT -->
+        <div class="flex justify-between mb-3 text-[#aaa] text-sm md:text-xs">
+            <span>Sous-total HT</span>
+            <span id="subtotal-ht" class="text-text-white font-medium">€0.00</span>
+        </div>
+        <!-- TVA 20% -->
+        <div class="flex justify-between mb-3 text-[#aaa] text-sm md:text-xs">
+            <span>TVA (20%)</span>
+            <span id="tva-amount" class="text-text-white font-medium">€0.00</span>
+        </div>
+        <!-- Livraison -->
+        <div class="flex justify-between mb-3 text-[#aaa] text-sm md:text-xs">
+            <span id="shipping-type">Livraison</span>
+            <span id="shipping-cost" class="text-text-white font-medium">Gratuit</span>
+        </div>
+        <!-- Code Promo -->
+        <div id="promo-section" class="hidden flex justify-between mb-3 text-green-400 text-sm md:text-xs bg-[rgba(34,197,94,0.12)] px-3 py-2 rounded-lg">
+            <span class="flex items-center gap-1">
+                <span>🎉</span>
+                <span id="promo-code-name" class="font-semibold"></span>
+            </span>
+            <span id="promo-discount" class="font-bold">-€0.00</span>
+        </div>
+        <!-- Total -->
+        <div class="font-extrabold text-2xl text-gold-primary flex justify-between py-4 border-t-2 border-[rgba(212,175,55,0.25)] mt-4">
+            <span>Total</span>
+            <div class="flex flex-col items-end">
+                <span id="total-original" class="hidden text-lg text-[#999] line-through font-normal">€0.00</span>
+                <span id="total-cost">€0.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- ////////////////////////////////////////////////////////////////
+         ////////////////////       ScreenShot       ////////////////////
+         ////////////////////////////////////////////////////////////////--> 
+    <div class="max-w-3xl mx-auto px-4 mt-8">
+        <div class="bg-gradient-to-br from-[rgba(22,22,32,0.9)] to-[rgba(10,10,14,0.95)] rounded-2xl p-5 md:p-6 border-2 border-[rgba(212,175,55,0.2)] text-center shadow-[0_6px_24px_rgba(0,0,0,0.3)]">
+            <h3 class="text-gold-primary text-lg md:text-xl mb-3 font-bold drop-shadow-[0_1px_3px_rgba(212,175,55,0.3)]">📱 Capture d'écran des Détails de Commande</h3>
+            <p class="text-text-white text-sm md:text-base leading-relaxed mb-3 opacity-90">
+                Veuillez prendre une capture d'écran de cette page pour vos dossiers. 
+                Cette confirmation contient toutes les informations importantes de votre commande 
+                et servira de preuve d'achat.
+            </p>
+            <p class="text-text-white text-sm md:text-base leading-relaxed opacity-90">
+                Cette dernière vous sera également envoyée par mail et en message privé sur Discord.
+            </p>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-center mt-6 mb-10">
+            <button 
+                class="group relative w-full sm:w-auto max-w-[400px] px-8 py-3.5 
+                bg-gradient-to-br from-gold-dark via-gold-primary to-gold-light 
+                rounded-xl 
+                text-background-dark font-bold text-base 
+                tracking-wide 
+                transition-all duration-300 
+                shadow-[0_6px_20px_rgba(212,175,55,0.4)] 
+                border-none cursor-pointer uppercase overflow-hidden
+                hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(212,175,55,0.6)] 
+                active:translate-y-0 active:shadow-[0_4px_16px_rgba(212,175,55,0.5)]
+                disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+                id="submit-order"
+                type="button">
                 
-                    <div class="card-content">
-                        <div class="two-columns">
-                            <div class="column">
-                                <h3 class="section-title">Informations Client</h3>
-                                <div class="info-grid">
-                                    <div class="info-group">
-                                        <h4>Contact</h4>
-                                        <p id="contact-name">Nom du client</p>
-                                    </div>
+                <!-- Effet de brillance -->
+                <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+                
+                <!-- Texte -->
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Finaliser ma commande
+                </span>
+            </button>
+        </div>
+    </div>
+</main>
 
-                                    <div class="info-group">
-                                        <h4>Email</h4>
-                                        <p id="contact-email">email@exemple.com</p>
-                                    </div>
-
-                                    <div class="info-group">
-                                        <h4>Téléphone</h4>
-                                        <p id="contact-phone">+33 1 23 45 67 89</p>
-                                    </div>
-
-                                    <div class="info-group">
-                                        <h4>Discord</h4>
-                                        <p id="contact-discord">@pseudo</p>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                            <div class="column">
-                                <h3 class="section-title">Informations de Livraison</h3>
-                                <div class="info-grid">
-                                    <div class="info-group">
-                                        <h4>Adresse</h4>
-                                        <p id="shipping-address">Adresse</p>
-                                    </div>
-
-                                    <div class="info-group">
-                                        <h4>Ville</h4>
-                                        <p id="shipping-city">Ville</p>
-                                    </div>
-
-                                    <div class="info-group">
-                                        <h4>Pays</h4>
-                                        <p id="shipping-country">Pays</p>
-                                    </div>
-
-                                    <div class="info-group">
-                                        <h4>Code Postal</h4>
-                                        <p id="shipping-postal">Code Postal</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    
-                        <h3 class="section-title">Méthode de Livraison</h3>
-                        <div class="info-grid">
-                            <div class="info-group">
-                                <h4>Livraison</h4>
-                                <p id="shipping-method">Livraison Standard</p>
-                            </div>
-
-                            <div class="info-group">
-                                <h4>Délai Estimé</h4>
-                                <p id="shipping-delivery">Délai</p>
-                            </div>
-                        </div>
-                    
-                        <h3 class="section-title">Méthode de Paiement</h3>
-                        <div class="info-group" style="margin-bottom: 15px;">
-                            <p id="payment-method">PayPal</p>
-                        </div>
-                    
-                        <h3 class="section-title">Articles Commandés</h3>
-                        <div class="order-items-list" id="order-items">
-                            <!-- Les articles seront injectés ici par JavaScript -->
-                        </div>
-                    
-                        <div class="order-summary">
-                            <div class="summary-row">
-                                <span>Sous-total</span>
-                                <span id="subtotal">€0.00</span>
-                            </div>
-
-                            <div class="summary-row">
-                                <span>Livraison</span>
-                                <span id="shipping-cost">Gratuit</span>
-                            </div>
-
-                            <div class="summary-total">
-                                <span>Total</span>
-                                <span id="total-cost">€0.00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="screenshot-instructions">
-                    <h3>📱 Capture d'écran des Détails de Commande</h3>
-                    <p>Veuillez prendre une capture d'écran de cette page pour vos dossiers. Cette confirmation contient toutes les informations importantes de votre commande et servira de preuve d'achat.</p>
-                    <p>Cette dernière vous sera égallement envoyé par mail et en message privé sur discord.</p>
-                </div>
-            
-                <div class="action-buttons">
-                    <button class="submit-button" id="submit-order" type="buttton" disabled>
-                        Soumettre la Commande
+<!-- /////////////////////////////////////////////////////////////////////////////
+     ////////////////////       ScreenShot Confirmation       ////////////////////
+     /////////////////////////////////////////////////////////////////////////////--> 
+        <div class="hidden fixed inset-0 bg-black/70 justify-center items-center z-[1000] backdrop-blur-sm" id="screenshot-modal">
+            <div class="bg-gradient-to-br from-background-dark to-[rgba(10,10,14,0.98)] border-2 border-[rgba(212,175,55,0.3)] rounded-2xl w-full max-w-md p-6 mx-4 shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(212,175,55,0.1)]">
+                <h2 class="text-2xl text-gold-primary mb-4 text-center font-bold drop-shadow-[0_1px_3px_rgba(212,175,55,0.3)]">
+                    📸 Capture d'écran
+                </h2>
+                <p class="text-[#888] mb-4 text-center text-sm">Avez-vous pris une capture d'écran de cette page ?</p>
+                <p class="text-[#888] mb-6 text-center text-sm">Cette confirmation est importante pour vos dossiers.</p>
+                <div class="flex justify-center gap-4">
+                    <button class="flex-1 px-6 py-3 bg-transparent border border-[rgba(255,255,255,0.2)] text-text-gray rounded-lg font-semibold text-sm cursor-pointer transition-all duration-200 hover:bg-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.3)]" id="not-yet-btn">
+                        Pas encore
                     </button>
-                </div>
-            </main>
-
-            <!-- Screenshot Modal -->
-            <div class="modal" id="screenshot-modal">
-                <div class="modal-content">
-                    <h2 class="modal-title">Avez-vous pris une capture d'écran des détails de votre commande ? Ceci est nécessaire avant de soumettre.</h2>
-                    <div class="modal-buttons">
-                        <button class="secondary-button" id="not-yet-btn">
-                            Pas encore
-                        </button>
-                        <button class="primary-button" id="screenshot-taken-btn">
-                            Oui, j'ai pris une capture d'écran
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vendor Modal -->
-            <div class="modal" id="vendor-modal">
-                <div class="modal-content">
-                    <h2 class="modal-title">Commande Soumise avec Succès</h2>
-                    <p>Veuillez sélectionner un vendeur pour continuer votre achat</p>
-                    
-                    <div class="vendor-options">
-                        <div class="vendor-option selected" data-vendor=".uwg9">
-                            <div class="vendor-name">
-                                <i class="fa-brands fa-discord"></i>
-                                @.uwg9
-                            </div>
-                            <div class="radio-indicator checked"></div>
-                        </div>
-                    </div>
-                    
-                    <button class="primary-button" id="continue-to-vendor">
-                        Continuer vers le Vendeur
+                    <button class="flex-1 px-6 py-3 bg-gradient-to-br from-gold-primary to-gold-light text-background-dark border-none rounded-lg font-bold text-sm cursor-pointer transition-all duration-300 shadow-[0_4px_12px_rgba(212,175,55,0.3)] hover:from-gold-light hover:to-gold-primary hover:-translate-y-0.5 hover:shadow-[0_6px_18px_rgba(212,175,55,0.5)]" id="screenshot-taken-btn">
+                        C'est fait !
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Confirmation Modal -->
-        <div class="modal" id="confirmation-modal">
-          <div class="modal-content">
-            <h2 class="modal-title">✅ Commande finalisée !</h2>
-            <p>🛒 Votre panier a été vidé !</p>
-            <p>👔 Vous allez être redirigé vers Discord pour une mise en contact avec le vendeur.</p>
-            <p>📧 Un mail de confirmation vous a été envoyé !</p>
-            <p>Merci pour votre commande !</p>
-            <div class="modal-buttons">
-              <button class="primary-button" id="confirmation-ok-btn">Retour à l'accueil
-                <a href="/index.html"></a>
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Debug Script -->
-        <script>
-            // Script de debug pour vérifier que les éléments sont trouvés
-            document.addEventListener('DOMContentLoaded', function() {
-                console.log('🔍 DEBUG - Vérification des éléments:');
-                console.log('Submit button:', document.getElementById('submit-order') ? '✅' : '❌');
-                console.log('Screenshot modal:', document.getElementById('screenshot-modal') ? '✅' : '❌');
-                console.log('Vendor modal:', document.getElementById('vendor-modal') ? '✅' : '❌');
-                console.log('Screenshot taken btn:', document.getElementById('screenshot-taken-btn') ? '✅' : '❌');
-                console.log('Continue to vendor btn:', document.getElementById('continue-to-vendor') ? '✅' : '❌');
-            });
-        </script>
-        <script src="../../navbarv2/navbar-script.js"></script>
-        
-    </body>
-</html>        
-    </body>
+<!-- /////////////////////////////////////////////////////////////
+     ////////////////////       Vendeur       ////////////////////
+     /////////////////////////////////////////////////////////////--> 
+        <div class="hidden fixed inset-0 bg-black/70 justify-center items-center z-[1000] backdrop-blur-sm" id="vendor-modal">
+            <div class="bg-gradient-to-br from-background-dark to-[rgba(10,10,14,0.98)] border-2 border-[rgba(212,175,55,0.3)] rounded-2xl w-full max-w-md p-6 mx-4 shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(212,175,55,0.1)]">
+                <h2 class="text-2xl text-gold-primary mb-4 text-center font-bold drop-shadow-[0_1px_3px_rgba(212,175,55,0.3)]">
+                    💬 Sélection du vendeur
+                </h2>
+                <p class="text-[#888] mb-6 text-center text-sm">Votre commande va être transmise à notre équipe.</p>
+                
+                <div class="flex flex-col gap-3 mb-6">
+                    <div class="vendor-option selected p-4 rounded-lg bg-[rgba(212,175,55,0.15)] border-2 border-gold-primary cursor-pointer transition-all duration-300 hover:bg-[rgba(212,175,55,0.2)]" data-vendor=".uwg9">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-user-tie text-gold-primary text-xl"></i>
+                                <span class="text-text-white font-semibold">.7psm</span>
+                            </div>
+                            <div class="radio-indicator checked w-5 h-5 border-2 border-gold-primary rounded-full flex items-center justify-center">
+                                <div class="w-2.5 h-2.5 rounded-full bg-gold-primary"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <button class="w-full px-6 py-3 bg-gradient-to-br from-gold-primary to-gold-light text-background-dark border-none rounded-lg font-bold text-base text-center cursor-pointer transition-all duration-300 shadow-[0_4px_12px_rgba(212,175,55,0.3)] hover:from-gold-light hover:to-gold-primary hover:-translate-y-0.5 hover:shadow-[0_6px_18px_rgba(212,175,55,0.5)]" id="continue-to-vendor">Continuer</button>
+            </div>
+        </div>
+
+<!-- /////////////////////////////////////////////////////////////////
+     ////////////////////       Final Modal       ////////////////////
+     /////////////////////////////////////////////////////////////////--> 
+        <div class="hidden fixed inset-0 bg-black/70 justify-center items-center z-[1000] backdrop-blur-sm" id="confirmation-modal">
+            <div class="bg-gradient-to-br from-background-dark to-[rgba(10,10,14,0.98)] border-2 border-[rgba(212,175,55,0.3)] rounded-2xl w-full max-w-md p-6 mx-4 shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(212,175,55,0.1)]">
+                <h2 class="text-2xl text-gold-primary mb-4 text-center font-bold drop-shadow-[0_1px_3px_rgba(212,175,55,0.3)]">
+                    ✅ Commande finalisée !
+                </h2>
+                <p class="text-[#888] mb-3 text-center text-sm">🛒 Votre panier a été vidé !</p>
+                <p class="text-[#888] mb-3 text-center text-sm">💬 Vous allez être redirigé vers Discord pour une mise en contact avec le vendeur.</p>
+                <p class="text-[#888] mb-3 text-center text-sm">📧 Un mail de confirmation vous a été envoyé !</p>
+                <p class="text-[#888] mb-3 text-center text-sm">Merci pour votre commande !</p>
+                <div class="flex justify-center gap-4 mt-6">
+                    <a href="/index.html" class="flex-1 px-6 py-3 bg-gradient-to-br from-gold-primary to-gold-light text-background-dark border-none rounded-lg font-bold text-base text-center cursor-pointer transition-all duration-300 shadow-[0_4px_12px_rgba(212,175,55,0.3)] hover:from-gold-light hover:to-gold-primary hover:-translate-y-0.5 hover:shadow-[0_6px_18px_rgba(212,175,55,0.5)] no-underline" id="confirmation-ok-btn">
+                        Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
 </html>

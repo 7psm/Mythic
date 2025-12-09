@@ -14,6 +14,7 @@
     
     <script src="/Crypted/Product.min.js" defer></script>
     <script src="../js/navbar-script.js"></script>
+    <script src="../js/api-config.js"></script>
 
     <!-- ///////////////////////////////////////////////////////////////////
          ////////////////////       Fonts & Icons       ////////////////////
@@ -25,10 +26,10 @@
 
     <!-- Open Graph / Facebook / Discord -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="https://mythicmarket.netlify.app/">
+        <meta property="og:url" content="https://getmythic.netlify.app/">
         <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="og:image" content="https://mythicmarket.netlify.app/public/banner.png">
+        <meta property="og:image" content="https://getmythic.netlify.app/public/banner.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:image:alt" content="MythicMarket Banner">
@@ -36,10 +37,10 @@
 
 <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="https://mythicmarket.netlify.app/">
+        <meta property="twitter:url" content="https://getmythic.netlify.app/">
         <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="twitter:image" content="https://mythicmarket.netlify.app/public/banner.png">
+        <meta property="twitter:image" content="https://getmythic.netlify.app/public/banner.png">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -400,7 +401,7 @@
     // Charger le status depuis l'API
     async function loadStatus() {
       try {
-        const response = await fetch('http://localhost:3001/api/src/maintenance/status');
+        const response = await fetch(`${API_URLS.maintenanceStatus}`);
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
@@ -490,7 +491,7 @@
       if (!isAdmin) return;
 
       try {
-        const response = await fetch('http://localhost:3001/api/src/maintenance/update', {
+        const response = await fetch(`${API_URLS.maintenanceUpdate}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -535,7 +536,7 @@
     async function loadUpdates() {
       if (!isAdmin) return;
       try {
-        const res = await fetch('http://localhost:3001/api/src/maintenance/updates');
+        const res = await fetch(`${API_URLS.maintenanceUpdates}`);
         const data = await res.json();
         document.getElementById('updatesText').value = data?.updates?.text || '';
         document.getElementById('adminMessage').textContent = 'Notes chargées';
@@ -546,7 +547,7 @@
 
     async function loadUpdatesView() {
       try {
-        const res = await fetch('http://localhost:3001/api/src/maintenance/updates');
+        const res = await fetch(`${API_URLS.maintenanceUpdates}`);
         const data = await res.json();
         const view = document.getElementById('updatesView');
         const content = document.getElementById('updatesContent');
@@ -612,7 +613,7 @@
       if (!isAdmin) return;
       const text = document.getElementById('updatesText').value;
       try {
-        const res = await fetch('http://localhost:3001/api/src/maintenance/updates', {
+        const res = await fetch(`${API_URLS.maintenanceUpdates}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text })
@@ -647,7 +648,7 @@
     async function toggleUpdatesEnabled(enabled) {
       if (!isAdmin) return;
       try {
-        const res = await fetch('http://localhost:3001/api/src/maintenance/updates/toggle', {
+        const res = await fetch(`${API_URLS.maintenanceUpdatesToggle}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ enabled })

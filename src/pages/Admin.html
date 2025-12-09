@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Non Trouvée</title>
+  <link rel="icon" href="/public/logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+    @keyframes pulse-glow{0%,100%{opacity:.5}50%{opacity:1}}
+    .float{animation:float 3s ease-in-out infinite}
+    .glass{background:rgba(255,255,255,.05);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1)}
+    .glass-input{background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.15)}
+    .glass-input:focus{background:rgba(255,255,255,.12);border-color:rgba(139,92,246,.5)}
+    .gradient-text{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .gradient-bg{background:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%)}
+    .delete-btn:hover{background:rgba(239,68,68,.2)!important;border-color:rgba(239,68,68,.5)!important}
+    body{background:#0f0a1e;overflow-x:hidden}
+    .stars{position:fixed;inset:0;pointer-events:none}
+    .star{position:absolute;background:#fff;border-radius:50%;animation:pulse-glow 2s ease-in-out infinite}
+    #admin-panel{display:none}
+    .tab-btn.active{background:rgba(139,92,246,.3);border-color:rgba(139,92,246,.6)}
+    .success-msg{background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.4);color:#86efac}
+    .error-msg{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.4);color:#fca5a5}
+  </style>
+</head>
+<body class="min-h-screen text-white relative">
+  <div class="stars" id="stars"></div>
+  
+  <!-- PAGE 404 -->
+  <div id="error-page" class="min-h-screen flex items-center justify-center p-4">
+    <div class="text-center">
+      <div class="float mb-8">
+        <svg class="w-32 h-32 mx-auto text-purple-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+      </div>
+      <h1 class="text-8xl font-bold gradient-text mb-4">404</h1>
+      <p class="text-2xl text-gray-300 mb-2">Page non trouvée</p>
+      <p class="text-gray-500">Cette page n'existe pas ou a été déplacée.</p>
+    </div>
+  </div>
+
+  <!-- MODAL MOT DE PASSE -->
+  <div id="password-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="glass rounded-2xl p-8 max-w-md w-full shadow-2xl">
+      <div class="text-center mb-6">
+        <div class="w-16 h-16 gradient-bg rounded-full mx-auto mb-4 flex items-center justify-center">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-white">Accès Sécurisé</h2>
+        <p class="text-gray-400 mt-2">Entrez le mot de passe pour continuer</p>
+      </div>
+      <input type="password" id="password-input" placeholder="Mot de passe" class="glass-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none mb-4">
+      <p id="password-error" class="text-red-400 text-sm mb-4 hidden">Mot de passe incorrect</p>
+      <button onclick="checkPassword()" class="w-full gradient-bg py-3 rounded-lg font-semibold hover:opacity-90 transition">Déverrouiller</button>
+    </div>
+  </div>
+
+  <!-- PANEL ADMIN -->
+  <div id="admin-panel" class="min-h-screen p-6">
+    <div class="max-w-7xl mx-auto">
+      <!-- HEADER -->
+      <div class="glass rounded-2xl p-6 mb-6">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-4">
+            <div>
+              <h1 class="text-3xl font-bold gradient-text">Admin Panel</h1>
+              <p class="text-gray-400 mt-1">MythicMarket - Gestion avancée</p>
+            </div>
+            <div class="glass px-4 py-2 rounded-lg border border-purple-400/30">
+              <span class="text-sm text-gray-400 mr-2">Version actuelle:</span>
+              <span id="current-version-badge" class="text-lg font-bold text-purple-400">v1.0.0</span>
+            </div>
+          </div>
+          <button onclick="logout()" class="glass px-4 py-2 rounded-lg hover:bg-red-500/20 transition flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            Déconnexion
+          </button>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="glass rounded-2xl p-2 mb-6 flex gap-2">
+        <button onclick="switchTab('codes')" class="tab-btn active flex-1 px-6 py-3 rounded-lg transition font-semibold">
+          🎟️ Codes de Réduction
+        </button>
+        <button onclick="switchTab('versions')" class="tab-btn flex-1 px-6 py-3 rounded-lg transition font-semibold">
+          🚀 Versions
+        </button>
+        <button onclick="switchTab('stats')" class="tab-btn flex-1 px-6 py-3 rounded-lg transition font-semibold">
+          📊 Statistiques
+        </button>
+      </div>
+
+      <!-- TAB CODES -->
+      <div id="tab-codes" class="tab-content">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="glass rounded-2xl p-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+              <span class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center text-sm">+</span>
+              Créer un Code
+            </h2>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Code</label>
+                <input type="text" id="code-name" placeholder="PROMO20" class="glass-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none uppercase">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Type</label>
+                <select id="code-type" class="glass-input w-full px-4 py-3 rounded-lg text-white focus:outline-none">
+                  <option value="percentage">Pourcentage (%)</option>
+                  <option value="fixed">Montant Fixe (€)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Valeur</label>
+                <input type="number" id="code-value" placeholder="20" min="0" step="0.01" class="glass-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Description</label>
+                <input type="text" id="code-desc" placeholder="-20%" class="glass-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none">
+              </div>
+              <button onclick="addCode()" class="w-full gradient-bg py-3 rounded-lg font-semibold hover:opacity-90 transition">Créer le Code</button>
+            </div>
+            <div id="code-message" class="mt-4 p-3 rounded-lg hidden"></div>
+          </div>
+          <div class="glass rounded-2xl p-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+              <span class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center text-sm">📋</span>
+              Codes Actifs
+            </h2>
+            <div id="codes-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB VERSIONS -->
+      <div id="tab-versions" class="tab-content hidden">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="glass rounded-2xl p-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+              <span class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center text-sm">🔧</span>
+              Nouvelle Version
+            </h2>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Numéro de Version</label>
+                <input type="text" id="version-number" placeholder="1.2.0" pattern="[0-9a-zA-Z\.]+" maxlength="10" class="glass-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none">
+                <p class="text-xs text-gray-500 mt-1">Max 10 caractères (lettres, chiffres, points)</p>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm text-gray-400 mb-2">Date de sortie</label>
+                  <input type="date" id="version-date" class="glass-input w-full px-4 py-3 rounded-lg text-white focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-sm text-gray-400 mb-2">Heure de sortie</label>
+                  <input type="time" id="version-time" class="glass-input w-full px-4 py-3 rounded-lg text-white focus:outline-none">
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Notes de Version</label>
+                <textarea id="version-notes" placeholder="- Nouvelle fonctionnalité X&#10;- Correction du bug Y&#10;- Amélioration des performances" rows="5" class="glass-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none resize-none"></textarea>
+              </div>
+              <button onclick="prepareVersion()" class="w-full gradient-bg py-3 rounded-lg font-semibold hover:opacity-90 transition">Appliquer la Version</button>
+            </div>
+            <div id="version-message" class="mt-4 p-3 rounded-lg hidden"></div>
+          </div>
+          <div class="glass rounded-2xl p-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+              <span class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center text-sm">📜</span>
+              Historique des Versions
+            </h2>
+            <div id="version-history" class="space-y-3 max-h-96 overflow-y-auto"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB STATISTIQUES -->
+      <div id="tab-stats" class="tab-content hidden">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="glass rounded-2xl p-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+              <span class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center text-sm">💰</span>
+              Revenus
+            </h2>
+            <div class="space-y-4">
+              <div class="glass-input p-4 rounded-lg">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm text-gray-400">Ce mois-ci</span>
+                  <span class="text-xs text-gray-500" id="current-month-label">Décembre 2024</span>
+                </div>
+                <div class="text-3xl font-bold text-green-400" id="revenue-monthly">€0.00</div>
+                <div class="text-xs text-gray-500 mt-1">
+                  <span id="orders-monthly">0</span> commandes
+                </div>
+              </div>
+              <div class="glass-input p-4 rounded-lg">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm text-gray-400">Cette année</span>
+                  <span class="text-xs text-gray-500" id="current-year-label">2024</span>
+                </div>
+                <div class="text-3xl font-bold text-purple-400" id="revenue-yearly">€0.00</div>
+                <div class="text-xs text-gray-500 mt-1">
+                  <span id="orders-yearly">0</span> commandes
+                </div>
+              </div>
+              <div class="glass-input p-4 rounded-lg">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm text-gray-400">Panier moyen</span>
+                  <span class="text-xs text-gray-500">Toutes périodes</span>
+                </div>
+                <div class="text-2xl font-bold text-blue-400" id="average-order">€0.00</div>
+              </div>
+            </div>
+          </div>
+          <div class="glass rounded-2xl p-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+              <span class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center text-sm">➕</span>
+              Ajouter une Commande
+            </h2>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Montant (€)</label>
+                <input type="number" id="order-amount" placeholder="25.50" step="0.01" min="0" class="glass-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Date</label>
+                <input type="date" id="order-date" class="glass-input w-full px-4 py-3 rounded-lg text-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Description (optionnel)</label>
+                <input type="text" id="order-description" placeholder="Ex: Nitro Basic x2" class="glass-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none">
+              </div>
+              <button onclick="addOrder()" class="w-full gradient-bg py-3 rounded-lg font-semibold hover:opacity-90 transition">Ajouter la Commande</button>
+            </div>
+            <div id="order-message" class="mt-4 p-3 rounded-lg hidden"></div>
+          </div>
+        </div>
+        <div class="glass rounded-2xl p-6 mt-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold flex items-center gap-2">
+              <span class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center text-sm">📋</span>
+              Historique des Commandes
+            </h2>
+            <button onclick="clearAllOrders()" class="glass px-4 py-2 rounded-lg text-red-400 hover:bg-red-400/20 transition text-sm">
+              Tout effacer
+            </button>
+          </div>
+          <div id="orders-list" class="space-y-2 max-h-96 overflow-y-auto"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/Site/Admin.js"></script>
+</body>
+</html>

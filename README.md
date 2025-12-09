@@ -2,38 +2,38 @@
 
 ## V1 : Version complète pour PC 
 
-## [1.1.0] - 2025-09-18
+## [1.2.0] - 2025-09-18
 
 ### 🚀 Fonctionnalités et améliorations 
-- 2 nouveaux produits disponibles sur le site
-- Système de **Vérification** de **Version **
-- Ajout responsive autres écrans PC
+💠 Système de Version améliorer
+💠 Nouvelle page Abonnements (paiements via buymeacoffee et +)
+💠 Nouveaux moyens de paiements 
+💠 Ajout d'une FAQ sur la page Confiance & Sécurité
+💠 Ajout d'un  système de code de réduction sur la page Panier + mail
 
-### 🔧 Modifications
-- Le nom "IncognitoMarket" a été modifié par "MythicMarket"
+### 🔧 Changes
+💠 Nouveau style sur la page Contact
+💠 Nouveau style des avis sur la page  Confiance & Sécurité
+💠 Supression scroll bar page Accueil
+💠 Passage COMPLET des fichiers CSS en Tailwind CSS
 
 ### 🐛 Fixes
-- N/A
----
+💠 Patch des images dans la page Cart
+💠 Patch de l'envoie du mail après confirmation de commande
+💠 Patch boutons page Accueil
 
-## 📝 Notes de Version
-
-### Version 1.1.0
-- 2 nouveaux produits disponibles sur le site
-- Système de **Vérification** de **Version **
-- Ajout responsive autres écrans PC
-- Le nom "IncognitoMarket" a été modifié par "MythicMarket"
+### 🔍 En cours
+N/A
 ---
 
 ## 🔮 Versions Futures
 
-### Version 1.1.0 (Planifiée)
+### Version 1.2.0 (Planifiée)
 - **Améliorations de performance**
 - **Responsive d'écrans** pour les pc portables & fixes
-- **Update System** vérifie la version du site entre l'actuelle et la nouvelle.
 - **Sécuriser** le site afin de permettre une protection maximale pour les clients
 
-### Version 1.2.0 (Planifiée)
+### Version 1.3.0 (Planifiée)
 - **PWA** (Progressive Web App)
 - **Offline mode**
 - **Security Update** afin d'améliorer la sécurité du site 

@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MythicMarket - No.1 Shop All Over Discord</title>
     <link rel="icon" href="/public/logo.png">
-    <!-- /////////////////////////////////////////////////////////////////////////
-         ////////////////////       Importation & Files       ////////////////////
-         /////////////////////////////////////////////////////////////////////////-->
-    <link rel="stylesheet" href="../styles/PagesStyles/ContactStyles.css">
-    <link rel="stylesheet" href="../styles/GlobalStyle.css">
+    <!-- //////////////////////////////////////////////////////////////////////////
+         ////////////////////       Importations & Files       ////////////////////
+         //////////////////////////////////////////////////////////////////////////-->
     <link rel="stylesheet" href="../styles/NavBar.css">
-    <link rel="stylesheet" href="../styles/tw-breakpoints.css">
+    <link rel="stylesheet" href="../styles/tailwind.css">
     
-    <script src="/Crypted/Product.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/Crypted/Site/Products.min.js" defer></script>
     <script src="../js/navbar-script.js"></script>
 
     <!-- ///////////////////////////////////////////////////////////////////
@@ -26,10 +25,10 @@
 
     <!-- Open Graph / Facebook / Discord -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="https://mythicmarket.netlify.app/">
+        <meta property="og:url" content="https://getmythic.netlify.app/">
         <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="og:image" content="https://mythicmarket.netlify.app/public/banner.png">
+        <meta property="og:image" content="https://getmythic.netlify.app/public/banner.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:image:alt" content="MythicMarket Banner">
@@ -37,23 +36,146 @@
 
 <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="https://mythicmarket.netlify.app/">
+        <meta property="twitter:url" content="https://getmythic.netlify.app/">
         <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="twitter:image" content="https://mythicmarket.netlify.app/public/banner.png">
+        <meta property="twitter:image" content="https://getmythic.netlify.app/public/banner.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        @keyframes float-particle {
+            0% {
+                transform: translateY(0px) translateX(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(20px);
+                opacity: 0;
+            }
+        }
+        
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, #fceabb 0%, #d4af37 50%, transparent 100%);
+            border-radius: 50%;
+            animation: float-particle linear infinite;
+            pointer-events: none;
+        }
+        
+        .gradient-animate {
+            background-size: 200% 200%;
+            animation: gradient-animation 3s ease infinite;
+        }
+        
+        .shimmer-effect {
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fceabb 0%, #d4af37 50%, #c29d28 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-glow {
+            box-shadow: 
+                0 0 20px rgba(212, 175, 55, 0.1),
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        
+        .logo-glow {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .badge-shine {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .badge-shine::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            animation: shimmer 2s infinite;
+        }
+    </style>
 </head>
 
-  <body>
-    <script src="../js/url-cleaner.js"></script>
-    <div class="page-container">
-        <!-- ////////////////////////////////////////////////////////////
-             ////////////////////       NavBar       ////////////////////
-             ////////////////////////////////////////////////////////////-->
+<body class="bg-[#0a0a0e] min-h-screen w-full overflow-hidden relative">
+    <!-- ////////////////////////////////////////////////////////////
+         ////////////////////       NavBar       ////////////////////
+         ////////////////////////////////////////////////////////////-->
         <nav class="navbar-container">
             <div class="nav-links">
                 <a href="/index.html" class="nav-link">Mythic-Market</a>
                 <a href="Products.html" class="nav-link">Produits</a>
                 <a href="TrustSafetyPage.html" class="nav-link">Confiance & Sécurité </a>
+                <a href="Subscriptions.html" class="nav-link">Abonnements</a>
                 <a href="Contact.html" class="nav-link">Contact</a>
                 <a href="Status.html" class="nav-link">Status</a>
             </div>
@@ -70,35 +192,182 @@
             <div class="navbar-separator"></div>
         </nav>
 
-        <!-- /////////////////////////////////////////////////////////////
-             ////////////////////       Content Section       ////////////////////
-         //////////////////////////////////////////////////////////////-->
-        <main class="main-content">
-            <section class="contact-card">
-                <div class="card-header">
-                    <span class="card-label">En Vedette</span>
-                </div>
+    <!-- /////////////////////////////////////////////////////////////
+         ////////////////////       Content Section       ////////////
+         /////////////////////////////////////////////////////////////-->
+     <canvas id="constellation-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
 
-                <div class="discord-info">
-                    <div class="market-name">
-                        <div class="logo-container">
-                            <img src="/public/logo.png" alt="Mythic Market Logo" />
-                        </div>
-                        <div>
-                            <div class="service-name">Mythic</div>
-                            <div class="name-text">Market</div>
-                        </div>
-                    </div>
-
-                    <div class="join-info">
-                        <div class="join-label">Rejoignez notre communautée</div>
-                        <div class="button-pill">+15 Membres</div>
-                    </div>
-                </div>
+    <div id="particles-container" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+    
+    <script>
+        // === CONSTELLATION (Particules connectées) ===
+        const canvas = document.getElementById('constellation-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Adapter la taille du canvas
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Particules de la constellation
+        const constellationParticles = [];
+        const particleCountConst = 50;
+        const maxDistance = 150;
+        
+        class ConstellationParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
                 
-                <a class="join-button" href="https://discord.gg/beC8cFZaXH" target="_blank" rel="noopener noreferrer">Rejoindre le Discord</a>
-            </section>
-        </main>
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(212, 175, 55, 0.8)';
+                ctx.fill();
+            }
+        }
+        
+        // Créer les particules
+        for (let i = 0; i < particleCountConst; i++) {
+            constellationParticles.push(new ConstellationParticle());
+        }
+        
+        // Dessiner les connexions
+        function drawConnections() {
+            for (let i = 0; i < constellationParticles.length; i++) {
+                for (let j = i + 1; j < constellationParticles.length; j++) {
+                    const dx = constellationParticles[i].x - constellationParticles[j].x;
+                    const dy = constellationParticles[i].y - constellationParticles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < maxDistance) {
+                        const opacity = (1 - distance / maxDistance) * 0.3;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(212, 175, 55, ${opacity})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(constellationParticles[i].x, constellationParticles[i].y);
+                        ctx.lineTo(constellationParticles[j].x, constellationParticles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        // Animation de la constellation
+        function animateConstellation() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            constellationParticles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            
+            drawConnections();
+            requestAnimationFrame(animateConstellation);
+        }
+        animateConstellation();
+        
+        // === PARTICULES FLOTTANTES ===
+        const particlesContainer = document.getElementById('particles-container');
+        const particleCount = 30;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // Position aléatoire
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.bottom = '-10px';
+            
+            // Taille variable
+            const size = Math.random() * 3 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            
+            // Durée d'animation variable
+            const duration = Math.random() * 15 + 15;
+            particle.style.animationDuration = duration + 's';
+            
+            // Délai aléatoire
+            const delay = Math.random() * 10;
+            particle.style.animationDelay = delay + 's';
+            
+            particlesContainer.appendChild(particle);
+        }
+    </script>
+
+
+    <!-- Main Content -->
+<main class="px-4 sm:px-5 py-6 sm:py-10 max-w-[95%] sm:max-w-[450px] lg:max-w-[480px] mx-auto w-full flex flex-col items-center justify-center min-h-screen relative z-10">
+<section class="w-full rounded-3xl overflow-hidden border border-[#d4af37]/30 relative backdrop-blur-xl bg-gradient-to-br from-[rgba(20,20,28,0.8)] via-[rgba(15,15,20,0.85)] to-[rgba(8,8,12,0.9)] card-glow">
+            
+<div class="h-[2px] w-full bg-gradient-to-r from-transparent via-[#d4af37] to-transparent opacity-50"></div>
+            
+    <!-- Card Content -->
+    <div class="p-6 sm:p-8 ">
+                
+        <div class="flex items-center gap-2 mb-6">
+            <svg class="w-3 h-3 text-[#d4af37]" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>
+            <span class="text-xs font-semibold text-[#d4af37]/70 uppercase tracking-wider">En Vedette</span>
+        </div>
+                
+        <div class="flex items-start gap-3 sm:gap-4 mb-6 sm:mb-8">
+            <div class="relative logo-glow">
+                <div class="absolute inset-0 bg-[#d4af37] rounded-full blur-xl opacity-30"></div>
+                <div class="relative w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#d4af37]/20 to-transparent rounded-full flex items-center justify-center border border-[#d4af37]/40 overflow-hidden backdrop-blur-sm">
+                    <img src="/public/logo.png" alt="Mythic Market Logo" class="w-full h-full object-cover" />
+                </div>
+            </div>
+                    
+    <!-- Names with better spacing -->
+        <div class="flex flex-col leading-none pt-0.5 sm:pt-1">
+            <div class="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-1">Mythic</div>
+            <div class="text-3xl sm:text-4xl font-black gold-gradient-text tracking-tight">Market</div>
+        </div>
     </div>
+
+                <!-- Join Info Row with modern design -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 bg-gradient-to-br from-white/[0.03] to-white/[0.01] rounded-2xl p-5 border border-white/10 backdrop-blur-sm">
+                    <div class="text-sm sm:text-base text-white/80 font-medium">
+                        Rejoignez notre communautée
+                    </div>
+                    <div class="relative badge-shine px-4 py-2 bg-gradient-to-br from-[#d4af37]/25 via-[#d4af37]/20 to-[#d4af37]/15 rounded-full border border-[#d4af37]/40 shadow-lg shadow-[#d4af37]/10">
+                        <div class="flex flex-col items-center">
+                            <span class="text-[#fceabb] text-sm font-black leading-none">+15</span>
+                            <span class="text-[#d4af37] text-[10px] font-semibold uppercase tracking-wide">Membres</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+    <!-- Discord Bouton -->
+        <a class="relative w-full py-5 bg-gradient-to-r from-[#c29d28] via-[#d4af37] to-[#e8c547] gradient-animate text-black font-bold text-base transition-all duration-300 flex items-center justify-center group overflow-hidden" href="https://discord.gg/beC8cFZaXH" target="_blank" rel="noopener noreferrer">
+                <span class="relative z-10 flex items-center gap-2">
+                    <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                    Rejoindre le Discord
+                </span>
+            <div class="absolute inset-0 shimmer-effect"></div>
+        </a>
+    </section>
+</main>
   </body>
 </html>

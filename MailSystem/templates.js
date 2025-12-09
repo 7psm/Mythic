@@ -1,5 +1,3 @@
-
-
 function getBaseTemplate(content, title) {
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -130,25 +128,36 @@ export function getOrderConfirmationTemplate(orderData) {
   const {
     customerName,
     orderNumber,
-    totalAmount,
     items = [],
     shippingMethod,
     shippingCost,
-    paymentMethod
+    paymentMethod,
+    appliedDiscount = null, 
+    discountAmount = 0     
+    
   } = orderData;
 
-  // Helper pour formater les montants sur 2 décimales (9 -> 9.00, 2.5 -> 2.50)
+  // Création de la variable simple pour le code
+  const discountCode = appliedDiscount ? appliedDiscount.code : null;
+
   const formatPrice = (value) => {
     const num = Number(value || 0);
     return num.toFixed(2);
   };
 
-  // Calculs alignés sur la boutique (prix unitaires du site × quantités)
+  // CALCULS MIS À JOUR :
+  // Utilisation directe des variables déstructurées
   const subtotal = items.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 1), 0);
+  const tva = subtotal * 0.20;
+  const totalBeforeDiscount = subtotal + tva;
+  
+  // Utilise discountAmount directement (qui est déjà calculé dans le frontend)
+  const totalAfterDiscount = totalBeforeDiscount - discountAmount; 
+  
   const shipping = Number(shippingCost || 0);
-  const total = subtotal + shipping;
-
-  // Génération de la liste des articles (utilise les prix produits du site)
+  const finalTotal = totalAfterDiscount + shipping;
+  
+  // Le reste des itemsHtml reste inchangé...
   const itemsHtml = items.map(item => `
     <tr>
       <td style="padding: 12px 0; border-bottom: 1px solid #333333;">
@@ -167,7 +176,6 @@ export function getOrderConfirmationTemplate(orderData) {
   `).join('');
 
   const content = `
-    <!-- HERO SECTION -->
     <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 25px;">
       <tr>
         <td style="text-align: center;" class="mobile-center">
@@ -178,7 +186,6 @@ export function getOrderConfirmationTemplate(orderData) {
       </tr>
     </table>
     
-    <!-- ORDER DETAILS -->
     <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 25px;">
       <tr>
         <td>
@@ -218,7 +225,6 @@ export function getOrderConfirmationTemplate(orderData) {
       </tr>
     </table>
     
-    <!-- ORDER ITEMS -->
     <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 25px;">
       <tr>
         <td>
@@ -233,7 +239,6 @@ export function getOrderConfirmationTemplate(orderData) {
       </tr>
     </table>
     
-    <!-- ORDER SUMMARY -->
     <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 25px;">
       <tr>
         <td>
@@ -242,22 +247,56 @@ export function getOrderConfirmationTemplate(orderData) {
           <div style="background-color: #222222; border-radius: 8px; padding: 15px;" class="mobile-padding">
             <table width="100%" cellspacing="0" cellpadding="0" border="0">
               <tr>
-                <td style="padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">Sous-total</td>
+                <td style="padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">Sous-total HT</td>
                 <td style="text-align: right; padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">${formatPrice(subtotal)} €</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">TVA (20%)</td>
+                <td style="text-align: right; padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">${formatPrice(tva)} €</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">Livraison</td>
                 <td style="text-align: right; padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">${shipping > 0 ? formatPrice(shipping) + ' €' : 'Gratuit'}</td>
               </tr>
+              
+              ${discountCode && discountAmount > 0 ? `
+              <tr>
+                <td style="padding: 8px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">
+                  Réduction 
+                  <span style="background: linear-gradient(135deg, #43E97B, #38F9D7); color: #0B0B0B; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem; margin-left: 4px;">${discountCode}</span>
+                </td>
+                <td style="text-align: right; padding: 8px 0; color: #43E97B; font-size: 0.9rem; font-weight: 600;" class="mobile-font-small">-${formatPrice(discountAmount)} €</td>
+              </tr>
+              ` : ''}
+
               <tr>
                 <td style="padding: 12px 0 0 0; border-top: 1px solid #333333; font-weight: 800; color: #ffffff; font-size: 1rem;" class="mobile-font-medium">Total</td>
-                <td style="text-align: right; padding: 12px 0 0 0; border-top: 1px solid #333333; font-weight: 800; color: #ffffff; font-size: 1rem;" class="mobile-font-medium">${formatPrice(total)} €</td>
+                <td style="text-align: right; padding: 12px 0 0 0; border-top: 1px solid #333333; font-weight: 800; font-size: 1rem;" class="mobile-font-medium">
+                  ${discountCode && discountAmount > 0 ? `
+                    <span style="color: #888888; text-decoration: line-through; font-size: 0.85rem; display: block; margin-bottom: 4px;">${formatPrice(totalBeforeDiscount + shipping)} €</span>
+                    <span style="color: #43E97B;">${formatPrice(finalTotal)} €</span>
+                  ` : `
+                    <span style="color: #ffffff;">${formatPrice(finalTotal)} €</span>
+                  `}
+                </td>
               </tr>
             </table>
           </div>
         </td>
       </tr>
     </table>
+    
+    ${discountCode && discountAmount > 0 ? `
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 15px;">
+      <tr>
+        <td style="text-align: center;" class="mobile-center">
+          <div style="background: linear-gradient(135deg, #43E97B, #38F9D7); color: #0B0B0B; padding: 10px 20px; border-radius: 8px; display: inline-block; font-weight: 700; font-size: 0.9rem;">
+            🎉 Vous avez économisé ${formatPrice(discountAmount)} € avec le code ${discountCode} !
+          </div>
+        </td>
+      </tr>
+    </table>
+    ` : ''}
   `;
 
   return getBaseTemplate(content, `Confirmation de commande #${orderNumber}`);
@@ -342,18 +381,12 @@ export function getOrderStatusTemplate(orderData) {
 }
 
 /**
- * Template pour les formulaires de contact
- * @param {Object} contactData - Données du contact
- * @returns {string} HTML de l'email de contact
+ * ✅ Template pour le formulaire de contact (pour l'équipe)
+ * @param {Object} data - Données du formulaire
+ * @returns {string} HTML de l'email
  */
-export function getContactFormTemplate(contactData) {
-  const {
-    name,
-    email,
-    subject,
-    message,
-    phone
-  } = contactData;
+export function getContactFormTemplate(data) {
+  const { name, email, subject, message } = data;
 
   const content = `
     <!-- HERO SECTION -->
@@ -361,8 +394,8 @@ export function getContactFormTemplate(contactData) {
       <tr>
         <td style="text-align: center;" class="mobile-center">
           <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #FFD76A, #C9A94D); border-radius: 50%; display: inline-block; line-height: 60px; font-size: 1.5rem; color: #0B0B0B; margin-bottom: 15px;">📧</div>
-          <h1 style="font-size: 1.6rem; font-weight: 700; margin: 0 0 8px 0; color: #FFD76A;" class="mobile-font-large">Nouveau message</h1>
-          <p style="font-size: 1rem; color: #C9A94D; margin: 0;" class="mobile-font-medium">Formulaire de contact</p>
+          <h1 style="font-size: 1.6rem; font-weight: 700; margin: 0 0 8px 0; color: #FFD76A;" class="mobile-font-large">Nouveau Message</h1>
+          <p style="font-size: 1rem; color: #C9A94D; margin: 0;" class="mobile-font-medium">Formulaire de Contact</p>
         </td>
       </tr>
     </table>
@@ -371,109 +404,128 @@ export function getContactFormTemplate(contactData) {
     <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 25px;">
       <tr>
         <td>
-          <h3 style="font-size: 1.2rem; margin: 0 0 15px 0; color: #FFD76A; font-weight: 700;" class="mobile-font-medium">Informations du contact</h3>
+          <h3 style="font-size: 1.2rem; margin: 0 0 15px 0; color: #FFD76A; font-weight: 700;" class="mobile-font-medium">Informations de contact</h3>
           
-          <table width="100%" cellspacing="0" cellpadding="0" border="0" class="mobile-stack">
-            <tr>
-              <td style="width: 50%; padding: 8px 0;">
-                <div style="background-color: #222222; border-radius: 8px; padding: 12px; margin-right: 8px;" class="info-card">
-                  <div style="font-size: 0.75rem; text-transform: uppercase; color: #C9A94D; margin-bottom: 4px; font-weight: 600;" class="mobile-font-small">Nom</div>
-                  <div style="font-size: 0.95rem; font-weight: 600; color: #ffffff;" class="mobile-font-medium">${name}</div>
-                </div>
-              </td>
-              <td style="width: 50%; padding: 8px 0;">
-                <div style="background-color: #222222; border-radius: 8px; padding: 12px; margin-left: 8px;" class="info-card">
-                  <div style="font-size: 0.75rem; text-transform: uppercase; color: #C9A94D; margin-bottom: 4px; font-weight: 600;" class="mobile-font-small">Email</div>
-                  <div style="font-size: 0.95rem; font-weight: 600; color: #ffffff;" class="mobile-font-medium">${email}</div>
-                </div>
-              </td>
-            </tr>
-            ${phone ? `
-            <tr>
-              <td style="width: 50%; padding: 8px 0;">
-                <div style="background-color: #222222; border-radius: 8px; padding: 12px; margin-right: 8px;" class="info-card">
-                  <div style="font-size: 0.75rem; text-transform: uppercase; color: #C9A94D; margin-bottom: 4px; font-weight: 600;" class="mobile-font-small">Téléphone</div>
-                  <div style="font-size: 0.95rem; font-weight: 600; color: #ffffff;" class="mobile-font-medium">${phone}</div>
-                </div>
-              </td>
-              <td style="width: 50%; padding: 8px 0;"></td>
-            </tr>
-            ` : ''}
-            <tr>
-              <td style="width: 100%; padding: 8px 0;">
-                <div style="background-color: #222222; border-radius: 8px; padding: 12px;" class="info-card">
-                  <div style="font-size: 0.75rem; text-transform: uppercase; color: #C9A94D; margin-bottom: 4px; font-weight: 600;" class="mobile-font-small">Sujet</div>
-                  <div style="font-size: 0.95rem; font-weight: 600; color: #ffffff;" class="mobile-font-medium">${subject}</div>
-                </div>
-              </td>
-            </tr>
-          </table>
+          <div style="background-color: #222222; border-radius: 8px; padding: 15px;" class="mobile-padding">
+            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td style="padding: 8px 0; color: #C9A94D; font-size: 0.9rem; width: 120px;" class="mobile-font-small">👤 Nom :</td>
+                <td style="padding: 8px 0; color: #ffffff; font-size: 0.9rem; font-weight: 600;" class="mobile-font-small">${name || 'Non renseigné'}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #C9A94D; font-size: 0.9rem;" class="mobile-font-small">📧 Email :</td>
+                <td style="padding: 8px 0; color: #ffffff; font-size: 0.9rem; font-weight: 600;" class="mobile-font-small">${email}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #C9A94D; font-size: 0.9rem;" class="mobile-font-small">📋 Sujet :</td>
+                <td style="padding: 8px 0; color: #ffffff; font-size: 0.9rem; font-weight: 600;" class="mobile-font-small">${subject || 'Aucun sujet'}</td>
+              </tr>
+            </table>
+          </div>
         </td>
       </tr>
     </table>
     
     <!-- MESSAGE -->
-    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 25px;">
       <tr>
         <td>
-          <h3 style="font-size: 1.2rem; margin: 0 0 15px 0; color: #FFD76A; font-weight: 700;" class="mobile-font-medium">Message</h3>
+          <h3 style="font-size: 1.2rem; margin: 0 0 15px 0; color: #FFD76A; font-weight: 700;" class="mobile-font-medium">💬 Message</h3>
+          
           <div style="background-color: #222222; border-radius: 8px; padding: 15px;" class="mobile-padding">
-            <p style="white-space: pre-wrap; margin: 0; color: #ffffff; line-height: 1.5; font-size: 0.9rem;" class="mobile-font-small">${message}</p>
+            <div style="color: #ffffff; font-size: 0.95rem; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word;" class="mobile-font-small">${message}</div>
           </div>
+        </td>
+      </tr>
+    </table>
+    
+    <!-- TIMESTAMP -->
+    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+      <tr>
+        <td style="text-align: center; color: #888888; font-size: 0.85rem;" class="mobile-center mobile-font-small">
+          📅 Reçu le ${new Date().toLocaleString('fr-FR', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
         </td>
       </tr>
     </table>
   `;
 
-  return getBaseTemplate(content, `Nouveau message: ${subject}`);
+  return getBaseTemplate(content, 'Nouveau message de contact');
 }
 
 /**
- * Template pour les emails de test
- * @param {Object} testData - Données de test
- * @returns {string} HTML de l'email de test
+ * ✅ Template de confirmation pour le client (auto-réponse)
+ * @param {Object} data - Données du formulaire
+ * @returns {string} HTML de l'email
  */
-export function getTestEmailTemplate(testData) {
-  const { message } = testData;
+export function getContactConfirmationTemplate(data) {
+  const { name, email, subject } = data;
 
   const content = `
     <!-- HERO SECTION -->
     <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 25px;">
       <tr>
         <td style="text-align: center;" class="mobile-center">
-          <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #FFD76A, #C9A94D); border-radius: 50%; display: inline-block; line-height: 60px; font-size: 1.5rem; color: #0B0B0B; margin-bottom: 15px;">🧪</div>
-          <h1 style="font-size: 1.6rem; font-weight: 700; margin: 0 0 8px 0; color: #FFD76A;" class="mobile-font-large">Test réussi !</h1>
-          <p style="font-size: 1rem; color: #C9A94D; margin: 0;" class="mobile-font-medium">${message || 'Test du système d\'email'}</p>
+          <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #FFD76A, #C9A94D); border-radius: 50%; display: inline-block; line-height: 60px; font-size: 1.5rem; color: #0B0B0B; margin-bottom: 15px;">✅</div>
+          <h1 style="font-size: 1.6rem; font-weight: 700; margin: 0 0 8px 0; color: #FFD76A;" class="mobile-font-large">Message Bien Reçu !</h1>
+          <p style="font-size: 1rem; color: #C9A94D; margin: 0;" class="mobile-font-medium">Nous vous répondrons rapidement</p>
         </td>
       </tr>
     </table>
     
-    <!-- TEST DETAILS -->
-    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+    <!-- MESSAGE -->
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 25px;">
       <tr>
         <td>
-          <h3 style="font-size: 1.2rem; margin: 0 0 15px 0; color: #FFD76A; font-weight: 700;" class="mobile-font-medium">Détails du test</h3>
-          
-          <table width="100%" cellspacing="0" cellpadding="0" border="0" class="mobile-stack">
-            <tr>
-              <td style="width: 50%; padding: 8px 0;">
-                <div style="background-color: #222222; border-radius: 8px; padding: 12px; margin-right: 8px;" class="info-card">
-                  <div style="font-size: 0.75rem; text-transform: uppercase; color: #C9A94D; margin-bottom: 4px; font-weight: 600;" class="mobile-font-small">Date et heure</div>
-                  <div style="font-size: 0.95rem; font-weight: 600; color: #ffffff;" class="mobile-font-medium">${new Date().toLocaleString('fr-FR')}</div>
-                </div>
-              </td>
-              <td style="width: 50%; padding: 8px 0;">
-                <div style="background-color: #222222; border-radius: 8px; padding: 12px; margin-left: 8px;" class="info-card">
-                  <div style="font-size: 0.75rem; text-transform: uppercase; color: #C9A94D; margin-bottom: 4px; font-weight: 600;" class="mobile-font-small">Statut</div>
-                  <div style="font-size: 0.95rem; font-weight: 600; color: #ffffff;" class="mobile-font-medium">Système opérationnel</div>
-                </div>
-              </td>
-            </tr>
-          </table>
+          <div style="background-color: #222222; border-radius: 8px; padding: 20px;" class="mobile-padding">
+            <p style="font-size: 1.1rem; font-weight: 600; color: #ffffff; margin: 0 0 15px 0;" class="mobile-font-medium">Bonjour ${name || 'cher client'} 👋</p>
+            <p style="font-size: 0.95rem; color: #C9A94D; line-height: 1.6; margin: 0 0 12px 0;" class="mobile-font-small">
+              Merci d'avoir pris le temps de nous contacter !
+            </p>
+            <p style="font-size: 0.95rem; color: #C9A94D; line-height: 1.6; margin: 0;" class="mobile-font-small">
+              Nous avons bien reçu votre message concernant <strong style="color: #FFD76A;">"${subject || 'votre demande'}"</strong> et notre équipe va l'examiner dans les plus brefs délais.
+            </p>
+          </div>
+        </td>
+      </tr>
+    </table>
+    
+    <!-- INFO BOX -->
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 25px;">
+      <tr>
+        <td>
+          <div style="background-color: #222222; border-left: 4px solid #FFD76A; border-radius: 8px; padding: 15px;" class="mobile-padding">
+            <p style="margin: 0 0 10px 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">
+              <strong style="color: #FFD76A;">⏱️ Temps de réponse habituel :</strong> 24-48 heures
+            </p>
+            <p style="margin: 0; color: #ffffff; font-size: 0.9rem;" class="mobile-font-small">
+              <strong style="color: #FFD76A;">📧 Nous vous répondrons à :</strong> ${email}
+            </p>
+          </div>
+        </td>
+      </tr>
+    </table>
+    
+    <!-- CTA -->
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 25px;">
+      <tr>
+        <td style="text-align: center;" class="mobile-center">
+          <p style="font-size: 0.95rem; color: #C9A94D; margin: 0 0 20px 0;" class="mobile-font-small">
+            En attendant notre réponse, découvrez nos dernières offres !
+          </p>
+          <a href="https://getmythic.netlify.app" style="display: inline-block; background: linear-gradient(135deg, #FFD76A, #C9A94D); color: #0B0B0B; text-decoration: none; padding: 14px 35px; border-radius: 8px; font-weight: 700; font-size: 0.95rem;" class="mobile-font-small">
+            🛒 Visiter la Boutique
+          </a>
         </td>
       </tr>
     </table>
   `;
 
-  return getBaseTemplate(content, 'Test du système d\'email - MythicMarket');
+  return getBaseTemplate(content, 'Confirmation de réception de votre message');
 }

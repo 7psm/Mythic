@@ -1,41 +1,54 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MythicMarket - No.1 Shop All Over Discord</title>
-    <link rel="icon" href="/public/logo.png" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MythicMarket - No.1 Shop All Over Discord</title>
+  <link rel="icon" href="/public/logo.png" />
 
-    <!-- /////////////////////////////////////////////////////////////////////////
-       ////////////////////       Dépendances CSS et JS       ////////////////////
-       ///////////////////////////////////////////////////////////////////////// -->
+<!-- /////////////////////////////////////////////////////////////////////////
+     ////////////////////       Importation & Files       ////////////////////
+     /////////////////////////////////////////////////////////////////////////-->
+  <link rel="stylesheet" href="../styles/NavBar.css" />
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="../styles/PagesStyles/Products.css" />
-    <link rel="stylesheet" href="../styles/GlobalStyle.css" />
-    <link rel="stylesheet" href="../styles/NavBar.css" />
-    <link rel="stylesheet" href="../styles/tw-breakpoints.css" />
-    <!-- Responsive Styles - Appliqué en dernier pour surcharger les styles principaux -->
-    
-   
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/Crypted/Site/Context/OrderContext.min.js"></script>
+  <script src="../js/navbar-script.js"></script>
 
-    <!-- Script -->
-    <script src="/src/js/Product.js" defer></script>
-    <script src="/Crypted/Context/OrderContext.min.js"></script>
-    <script src="../js/navbar-script.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'discord-bg': '#36393f',
+            'discord-bg-dark': '#2f3136',
+            'discord-bg-darker': '#202225',
+            'discord-text': '#dcddde',
+            'discord-text-muted': '#72767d',
+            'discord-accent': '#5865f2',
+            'discord-accent-hover': '#4752c4',
+            'gold-primary': '#d4af37',
+          }
+        }
+      }
+    }
+  </script>
 
-    <!-- Fonts & Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
-    <!-- Open Graph / Facebook / Discord -->
+<!-- ///////////////////////////////////////////////////////////////////
+     ////////////////////       Fonts & Icons       ////////////////////
+     ///////////////////////////////////////////////////////////////////-->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+  <!-- Open Graph / Facebook / Discord -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="https://mythicmarket.netlify.app/">
+        <meta property="og:url" content="https://getmythic.netlify.app/">
         <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="og:image" content="https://mythicmarket.netlify.app/public/banner.png">
+        <meta property="og:image" content="https://getmythic.netlify.app/public/banner.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:image:alt" content="MythicMarket Banner">
@@ -43,234 +56,256 @@
 
 <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="https://mythicmarket.netlify.app/">
+        <meta property="twitter:url" content="https://getmythic.netlify.app/">
         <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="twitter:image" content="https://mythicmarket.netlify.app/public/banner.png">
-  </head>
-  <body>
-    <script src="../js/url-cleaner.js"></script>
-    <div class="page-container">
-      <!-- ////////////////////////////////////////////////////////////
-           ////////////////////       Navigation            ///////////
-           ////////////////////////////////////////////////////////////-->
-      <nav class="navbar-container">
-        <div class="nav-links">
-          <a href="/index.html" class="nav-link">Mythic-Market</a>
-          <a href="Products.html" class="nav-link">Produits</a>
-          <a href="TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
-          <a href="Contact.html" class="nav-link">Contact</a>
-          <a href="status.html" class="nav-link">Status</a>
+        <meta property="twitter:image" content="https://getmythic.netlify.app/public/banner.png">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    
+    @keyframes pulse-glow {
+      0%, 100% { transform: scale(1); opacity: 0.4; }
+      50% { transform: scale(1.15); opacity: 0.6; }
+    }
+    @keyframes pulse-glow-reverse {
+      0%, 100% { transform: scale(1); opacity: 0.4; }
+      50% { transform: scale(1.15); opacity: 0.6; }
+    }
+    @keyframes lion-glow {
+      0%, 100% { opacity: 0.9; filter: drop-shadow(0 0 20px rgba(88, 101, 242, 0.5)) drop-shadow(0 0 40px rgba(255, 107, 107, 0.3)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 30px rgba(88, 101, 242, 0.7)) drop-shadow(0 0 60px rgba(255, 107, 107, 0.5)); }
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes gradient-xy {
+      0%, 100% { background-position: 0% 0%; }
+      25% { background-position: 100% 0%; }
+      50% { background-position: 100% 100%; }
+      75% { background-position: 0% 100%; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-20px) scale(1.1); }
+    }
+    @keyframes float-delayed {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(20px) scale(0.9); }
+    }
+    @keyframes toastSlideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes toastSlideOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(20px); }
+    }
+    
+    .animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
+    .animate-pulse-glow-reverse { animation: pulse-glow-reverse 3.5s ease-in-out infinite; }
+    .animate-lion-glow { animation: lion-glow 3s ease-in-out infinite; }
+    .animate-shimmer { animation: shimmer 2s ease-in-out infinite; }
+    .animate-gradient { 
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+    }
+    .animate-gradient-xy {
+      background-size: 200% 200%;
+      animation: gradient-xy 8s ease infinite;
+    }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-float-delayed { animation: float-delayed 8s ease-in-out infinite 2s; }
+    
+    .product-modal.active { display: flex; }
+
+    @keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.animate-shrink {
+  animation: shrink 3.5s linear forwards;
+}
+  </style>
+</head>
+<body class="bg-discord-bg-darker min-h-screen">
+  <div class="pt-20">
+
+    <!-- Navigation -->
+    <nav class="navbar-container">
+      <div class="nav-links">
+        <a href="/index.html" class="nav-link">Mythic-Market</a>
+        <a href="Products.html" class="nav-link">Produits</a>
+        <a href="TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
+        <a href="Contact.html" class="nav-link">Contact</a>
+        <a href="status.html" class="nav-link">Status</a>
+      </div>
+      <div class="action-buttons">
+        <a href="Cart.html" class="cart-icon" style="position: relative">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          <span class="cart-count">0</span>
+        </a>
+        <a href="Contact.html" class="contact-button">Contact</a>
+      </div>
+      <div class="navbar-separator"></div>
+    </nav>
+
+    <!-- Main Content -->
+   <main class="max-w-7xl mx-auto px-5 py-5 text-discord-text">
+      <!-- Shop Header -->
+      <div class="mb-5">
+        <div class="flex justify-end items-center gap-4 mb-5">
+          <div class="flex items-center gap-2">
+            <span class="text-discord-text text-sm font-medium">Sort by:</span>
+            <select class="sort-select bg-discord-bg border border-white/10 rounded px-2.5 py-1.5 text-discord-text text-sm cursor-pointer outline-none min-w-[150px] hover:border-white/20">
+              <option value="recent">Recently Added</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="name">Name (A-Z)</option>
+            </select>
+          </div>
         </div>
-        <div class="action-buttons">
-          <a href="Cart.html" class="cart-icon" style="position: relative">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" ><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-            <span class="cart-count">0</span>
-          </a>
-          <a href="Contact.html" class="contact-button">Contact</a>
-        </div>
-        <div class="navbar-separator"></div>
-      </nav>
-
-  <!-- /////////////////////////////////////////////////////////////////
-       ////////////////////         Contenu Principal         //////////
-       ///////////////////////////////////////////////////////////////// -->
-        <main class="main-content">
-          <section class="product-section">
-    <!-- Carrousel Produits -->
-            <div class="product-carousel">
-              <div class="floating-container active" data-bill="50">
-                <div class="floating-bill active">
-                  <img class="bill" src="/public/flipped/50.webp" alt="Billet 50 euros" />
-                  <img class="shadow" src="/public/shadow.png" alt="Ombre" />
-                </div>
-              </div>
-              <div class="floating-container" data-bill="20">
-                <div class="floating-bill active">
-                  <img class="bill" src="/public/flipped/20.webp" alt="Billet 20 euros" />
-                  <img class="shadow" src="/public/shadow.png" alt="Ombre" />
-                </div>
-              </div>
-              <div class="floating-container" data-bill="10">
-                <div class="floating-bill active">
-                  <img class="bill" src="/public/flipped/10.webp" alt="Billet 10 euros" />
-                  <img class="shadow" src="/public/shadow.png" alt="Ombre" />
-                </div>
-              </div>
-              <div class="floating-container" data-bill="5">
-                <div class="floating-bill active">
-                  <img class="bill" src="/public/flipped/5.webp" alt="Billet 5 euros" />
-                  <img class="shadow" src="/public/shadow.png" alt="Ombre" />
-                </div>
-              </div>
-            </div>
-          
-    <!-- Produit 50€ – Discord Nitro -->
-            <div class="product-display" data-bill="50">
-              <div class="product-info">
-                <h2 class="product-name">DISCORD NITRO</h2>
-                <div class="product-price">LEGAL PAID</div>
-                  <div class="amount-selector">
-                    <label class="amount-label">Choisissez votre abonnement :</label>
-                    <div class="pricing-select">
-                      <div class="pricing-option selected" data-price="7.00" data-name="Nitro Boost 1 mois">
-                        <span class="amount">Nitro Boost 1 mois</span><span class="price">7€</span>
-                      </div>
-                      <div class="pricing-option" data-price="1.40" data-name="Nitro Basic 1 mois">
-                        <span class="amount">Nitro Basic 1 mois</span><span class="price">1.40€</span>
-                      </div>
-                    </div>
-                  <div class="amount-info">Vous Recevrez Votre Produit sur Discord</div>
-                </div>
-                <button class="add-to-cart-button" type="button">Ajouter au Panier</button>
-              </div>
-            </div>
-          
-    <!-- Produit 20€ – Discord Server Boost-->
-            <div class="product-display" data-bill="20" style="display: none">
-              <div class="product-info">
-                <h2 class="product-name">DISCORD SERVER BOOST</h2>
-                <div class="product-price">LEGAL PAID</div>
-                <div class="amount-selector">
-                  <label class="amount-label">Choisissez votre abonnement :</label>
-                    <div class="pricing-select">
-                      <div class="pricing-option selected" data-price="15" data-name="Server Boost 1 mois x14">
-                        <span class="amount">Server Boost 1 mois x14</span><span class="price">15€</span>
-                      </div>
-                      <div class="pricing-option selected" data-price="12" data-name="Server Boost 1 mois x12">
-                        <span class="amount">Server Boost 1 mois x12</span><span class="price">12€</span>
-                      </div>
-                      <div class="pricing-option" data-price="20" data-name="Server Boost 3 mois x14">
-                        <span class="amount">Server Boost 3 mois x14</span><span class="price">20€</span>
-                      </div>
-                      <div class="pricing-option" data-price="18" data-name="Server Boost 3 mois x12">
-                        <span class="amount">Server Boost 3 mois x12</span><span class="price">18€</span>
-                      </div>
-                    </div>
-                      <div class="amount-info">
-                        Vous Recevrez Votre Produit sur Discord
-                      </div>
-                  </div>
-                <button class="add-to-cart-button" type="button">Ajouter au Panier</button>
-              </div>
-            </div>
-
-    <!-- Produit 20€ – Discord Avatar Decoration-->
-            <div class="product-display" data-bill="10" style="display: none">
-              <div class="product-info">
-                <h2 class="product-name">DISCORD AVATAR DÉCORATIONS</h2>
-                <div class="product-price">Prix Discod → Prix Mythic Market</div>
-                <div class="product-price">LEGAL PAID</div>
-                <div class="amount-selector">
-                  <label class="amount-label">Choisissez votre décoration :</label>
-                    <div class="pricing-select">
-                      <div class="pricing-option selected" data-price="2.50" data-name="Avatar Décoration <s>2.99€</s>">
-                        <span class="amount">Décorations à <s>2.99€</s> </span><span class="price">2.50€</span>
-                      </div>
-                      <div class="pricing-option selected" data-price="3.20" data-name="Avatar Décoration <s>3.99€</s>">
-                        <span class="amount">Décorations à <s>3.99€</s> </span><span class="price">3.20€</span>
-                      </div>
-                      <div class="pricing-option" data-price="4.00" data-name="Avatar Décoration <s>4.99€</s>">
-                        <span class="amount">Décorations à <s>4.99€</s> </span><span class="price">4.00€</span>
-                      </div>
-                      <div class="pricing-option" data-price="4.25" data-name="Avatar Décoration <s>5.49€</s>">
-                        <span class="amount">Décorations à <s>5.49€</s> </span><span class="price">4.25€</span>
-                      </div>
-                      <div class="pricing-option" data-price="5.50" data-name="Avatar Décoration <s>6.99€</s>">
-                        <span class="amount">Décorations à <s>6.99€</s> </span><span class="price">5.50€</span>
-                      </div>
-                      <div class="pricing-option" data-price="7.00" data-name="Avatar Décoration <s>8.99€</s>">
-                        <span class="amount">Décorations à <s>8.99€</s> </span><span class="price">7.00€</span>
-                      </div>
-                      <div class="pricing-option" data-price="8.50" data-name="Avatar Décoration <s>9.99€</s>">
-                        <span class="amount">Décorations à <s>9.99€</s> </span><span class="price">8.50€</span>
-                      </div>
-                      <div class="pricing-option" data-price="9.50" data-name="Avatar Décoration <s>11.99€</s>">
-                        <span class="amount">Décorations à <s>11.99€</s> </span><span class="price">9.50€</span>
-                      </div>
-                    </div>
-                      <div class="amount-info">
-                        → 48H Gift Link <br>
-                        → Full warranty, 0% Autoclaim <br>
-                        → No Need Friend Request <br> <br>
-                        Vous Recevrez Votre Produit sur Discord
-                      </div>
-                  </div>
-                <button class="add-to-cart-button" type="button">Ajouter au Panier</button>
-              </div>
-            </div>
-
-            <!-- Produit 10€ – Discord Members-->
-            <div class="product-display" data-bill="5" style="display: none">
-              <div class="product-info">
-                <h2 class="product-name">DISCORD MEMBERS</h2>
-                <div class="product-price">LEGAL PAID</div>
-                <div class="amount-selector">
-                  <label class="amount-label">Choisissez votre abonnement :</label>
-                    <div class="pricing-select">
-
-                      <div class="pricing-option selected" data-price="10" data-name="Offline Members Discord x1000">
-                        <span class="amount">Offline Members x1000</span> <span class="price">10€</span>
-                      </div>
-
-                      <div class="pricing-option selected" data-price="12" data-name="Online Members Discord x1000">
-                        <span class="amount">Online Members x1000</span> <span class="price">12€</span>
-                      </div>
-                      </div>
-
-                      <div class="amount-info">
-                        → Generated <br>
-                        → Realistic Profile, Username, Avatar, HypeSquad, Bio <br>
-                        → 24/24 pour les membres en ligne <br> <br>
-                        Vous Recevrez Votre Produit sur Discord
-                      </div>
-                  </div>
-                <button class="add-to-cart-button" type="button">Ajouter au Panier</button>
-              </div>
-            </div>
-          </section>
-        </main>
       </div>
 
-  <!-- /////////////////////////////////////////////////////////////////////////
-       ////////////////////           Notifications           //////////////////
-       ///////////////////////////////////////////////////////////////////////// -->
-    <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+      <!-- Featured Banner - MODERN VERSION -->
+      <div class="relative bg-gradient-to-br from-[#0f0f23] via-[#1a1a2e] to-[#16213e] rounded-2xl p-8 md:p-16 mb-8 overflow-hidden group">
+        <!-- Animated mesh gradient background -->
+        <div class="absolute inset-0 opacity-30">
+          <div class="absolute inset-0 bg-gradient-to-br from-[#667eea]/30 via-[#764ba2]/20 to-[#f093fb]/30 animate-gradient"></div>
+        </div>
+        
+        <!-- Geometric shapes -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#667eea]/20 to-transparent rounded-full blur-3xl transform translate-x-1/3 -translate-y-1/3 group-hover:scale-110 transition-transform duration-700"></div>
+        <div class="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-[#f093fb]/20 to-transparent rounded-full blur-3xl transform -translate-x-1/3 translate-y-1/3 group-hover:scale-110 transition-transform duration-700"></div>
+        
+        <!-- Grid pattern overlay -->
+        <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 50px 50px;"></div>
+        
+        <!-- Floating particles -->
+        <div class="absolute inset-0">
+          <div class="absolute top-[20%] left-[15%] w-2 h-2 bg-white/40 rounded-full animate-float"></div>
+          <div class="absolute top-[60%] left-[25%] w-1.5 h-1.5 bg-[#667eea]/60 rounded-full animate-float-delayed"></div>
+          <div class="absolute top-[40%] right-[20%] w-2 h-2 bg-[#f093fb]/50 rounded-full animate-float"></div>
+          <div class="absolute bottom-[30%] right-[35%] w-1 h-1 bg-white/50 rounded-full animate-float-delayed"></div>
+        </div>
+        
+        <!-- Content -->
+        <div class="relative z-10">
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <!-- Left side: Text -->
+            <div class="flex-1">
+              <!-- Badge -->
+              <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full mb-4 group-hover:bg-white/10 transition-colors">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span class="text-white/80 text-sm font-semibold">Premium Shop</span>
+              </div>
+              
+              <!-- Title -->
+              <h2 class="text-4xl md:text-6xl font-black text-white mb-3 leading-tight">
+                <span class="bg-gradient-to-r from-white via-[#667eea] to-[#f093fb] bg-clip-text text-transparent">
+                  Mythic Market
+                </span>
+                <br />
+                <span class="text-white/90">Products</span>
+              </h2>
+              
+              <!-- Description -->
+              <p class="text-white/60 text-base md:text-lg max-w-xl">
+                Découvrez notre collection premium de produits Discord authentiques et de qualité supérieure.
+              </p>
+              
+              <!-- Stats -->
+              <div class="flex items-center gap-6 mt-6">
+                <div class="flex items-center gap-2">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                    <i class="fas fa-check text-emerald-400"></i>
+                  </div>
+                  <div>
+                    <div class="text-white font-bold text-lg">100%</div>
+                    <div class="text-white/50 text-xs">Légal</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                    <i class="fas fa-bolt text-blue-400"></i>
+                  </div>
+                  <div>
+                    <div class="text-white font-bold text-lg">2-6h</div>
+                    <div class="text-white/50 text-xs">Livraison</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                    <i class="fas fa-star text-purple-400"></i>
+                  </div>
+                  <div>
+                    <div class="text-white font-bold text-lg">24/7</div>
+                    <div class="text-white/50 text-xs">Support</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Right side: 3D Card effect -->
+            <div class="hidden lg:block relative">
+              <div class="w-64 h-64 relative transform group-hover:rotate-6 transition-transform duration-500">
+                <!-- Card 1 -->
+                <div class="absolute inset-0 bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-2xl shadow-2xl transform rotate-6 group-hover:rotate-12 transition-transform duration-500 opacity-30"></div>
+                <!-- Card 2 -->
+                <div class="absolute inset-0 bg-gradient-to-br from-[#f093fb] to-[#f5576c] rounded-2xl shadow-2xl transform rotate-3 group-hover:rotate-6 transition-transform duration-500 opacity-50"></div>
+                <!-- Card 3 (main) -->
+                <div class="absolute inset-0 bg-gradient-to-br from-[#4facfe] to-[#00f2fe] rounded-2xl shadow-2xl backdrop-blur-xl border border-white/20 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                  <div class="text-center">
+                    <div class="text-6xl mb-2">🛍️</div>
+                    <div class="text-white font-bold text-lg">Premium</div>
+                    <div class="text-white/70 text-sm">Quality</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-<script>
-  const containers = Array.from(document.querySelectorAll('.floating-container'));
-  let currentIndex = 0;
+      <!-- Products Grid -->
+      <div class="mt-5">
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-5" id="products-grid">
+          <!-- Products will be dynamically inserted here -->
+        </div>
+      </div>
+    </main>
+  </div>
 
-  function updateClasses() {
-    containers.forEach((el, i) => {
-      el.classList.remove('left', 'center', 'right');
+  <!-- Toast Notification -->
+  <div id="toast-container" aria-live="polite" aria-atomic="true" class="fixed bottom-5 right-5 z-[10000] w-[300px]"></div>
 
-      if (i === currentIndex) {
-        el.classList.add('center');
-      } else if (i === currentIndex - 1) {
-        el.classList.add('left');
-      } else if (i === currentIndex + 1) {
-        el.classList.add('right');
-      }
-    });
-  }
+  <!-- Product Modal -->
+  <div class="product-modal hidden fixed inset-0 bg-black/90 backdrop-blur-sm z-[10000] items-center justify-center p-5" id="product-modal">
+    <div class="modal-content bg-transparent rounded-2xl max-w-6xl w-full overflow-hidden relative shadow-2xl">
+      <div class="modal-body p-0" id="modal-body"></div>
+    </div>
+  </div>
 
-  // Initial render
-  updateClasses();
-
-  // Navigation via clic
-  containers.forEach((el, i) => {
-    el.addEventListener('click', () => {
-      if (i === currentIndex + 1 && currentIndex < containers.length - 1) {
-        currentIndex++;
-        updateClasses();
-      } else if (i === currentIndex - 1 && currentIndex > 0) {
-        currentIndex--;
-        updateClasses();
-      }
-    });
-  });
-</script>
-
- </body>
+  <script src="/Crypted/Site/Products.min.js"></script>
+</body>
 </html>
+

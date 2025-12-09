@@ -9,12 +9,11 @@
     <!-- /////////////////////////////////////////////////////////////////////////
          ////////////////////       Importation & Files       ////////////////////
          /////////////////////////////////////////////////////////////////////////-->
-    <link rel="stylesheet" href="../styles/GlobalStyle.css" />
-    <link rel="stylesheet" href="../styles/PagesStyles/TrustSafetyPage.css" />
     <link rel="stylesheet" href="../styles/NavBar.css" />
-    <link rel="stylesheet" href="../styles/tw-breakpoints.css" />
     
-    <script src="/Crypted/Product.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/Crypted/Site/Products.min.js"></script>
+    <script src="../js/navbar-script.js"></script>
 
     <!-- ///////////////////////////////////////////////////////////////////
          ////////////////////       Fonts & Icons       ////////////////////
@@ -26,10 +25,10 @@
 
     <!-- Open Graph / Facebook / Discord -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="https://mythicmarket.netlify.app/">
+        <meta property="og:url" content="https://getmythic.netlify.app/">
         <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="og:image" content="https://mythicmarket.netlify.app/public/banner.png">
+        <meta property="og:image" content="https://getmythic.netlify.app/public/banner.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:image:alt" content="MythicMarket Banner">
@@ -37,15 +36,33 @@
 
 <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="https://mythicmarket.netlify.app/">
+        <meta property="twitter:url" content="https://getmythic.netlify.app/">
         <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="twitter:image" content="https://mythicmarket.netlify.app/public/banner.png">
+        <meta property="twitter:image" content="https://getmythic.netlify.app/public/banner.png">
   </head>
 
-  <body>
-    <script src="../js/url-cleaner.js"></script>
-    <div class="page-container">
+<script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'background-dark': '#0a0a0e',
+              'gold-light': '#f3e28f',
+              'gold-primary': '#d4af37',
+              'gold-dark': '#a67c00',
+              'text-gray': '#ccc',
+              'text-white': '#fff',
+              'text-light': '#eee',
+            }
+          }
+        }
+      }
+    </script>
+
+  <body style="font-family: 'Inter', sans-serif;">
+    <div class="min-h-screen w-full flex flex-col relative overflow-hidden bg-background-dark bg-cover bg-center bg-no-repeat bg-fixed pt-20">
+    <div class="absolute top-0 left-0 right-0 bottom-0 bg-[rgba(10,10,14,0.85)] z-0"></div>
       <!-- ////////////////////////////////////////////////////////////
            ////////////////////       NavBar       ////////////////////
          ////////////////////////////////////////////////////////////-->
@@ -54,6 +71,7 @@
           <a href="/index.html" class="nav-link">Mythic-Market</a>
           <a href="Products.html" class="nav-link">Produits</a>
           <a href="TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
+          <a href="Subscriptions.html">Abonnements</a>
           <a href="Contact.html" class="nav-link">Contact</a>
           <a href="Status.html">Status</a>
         </div>
@@ -81,121 +99,174 @@
 
       <!-- //////////////////////////////////////////////////////////////////
            ////////////////////       Présentation       ////////////////////
-         //////////////////////////////////////////////////////////////////-->
-      <main class="main-content">
-        <div class="gold-glow"></div>
+           //////////////////////////////////////////////////////////////////-->
+  <main class="py-10 px-5 pb-20 max-w-7xl mx-auto w-full relative z-10 md:py-5 md:px-4 md:pb-16" style="font-family: 'Inter', sans-serif;">
 
-        <!-- Page Header -->
-        <header class="page-header">
-          <h1 class="page-title">Confiance &amp; Sécurité</h1>
-          <p class="page-subtitle">
-            Votre sécurité et votre satisfaction sont nos priorités absolues.
-          </p>
-        </header>
+    <header class="mb-10 text-center md:mb-6">
+      <h1 class="text-[2.5rem] font-extrabold mb-2.5 bg-gradient-to-r from-gold-light via-gold-primary to-gold-dark bg-clip-text text-transparent md:text-3xl">
+        Confiance &amp; Sécurité
+      </h1>
+      <p class="text-[1.1rem] text-[#ccc] max-w-2xl mx-auto md:text-base">
+        Votre sécurité et votre satisfaction sont nos priorités absolues.
+      </p>
+    </header>
+  <!-- Stat Card -->
+    <section class="bg-[rgba(22,22,32,0.7)] rounded-2xl p-8 backdrop-blur-md border border-gold-primary/10 shadow-[0_10px_30px_rgba(0,0,0,0.2)] mb-8 md:p-5 md:rounded-xl">
+      <div class="text-5xl font-extrabold text-gold-primary mb-2.5 text-center md:text-4xl">5+</div>
+      <div class="text-lg text-text-white font-semibold text-center md:text-base">Produits Livrés en Toute Sécurité sur Discord</div>
+    </section>
 
-        <!-- //////////////////////////////////////////////////////////////
-             ////////////////////       Compteur       ////////////////////
-         //////////////////////////////////////////////////////////////-->
-        <!-- Stat Card -->
-        <section class="stat-card">
-          <div class="stat-number">5+</div>
-          <div class="stat-label">Produits Livrés en Toute Sécurité sur Discord</div>
-        </section>
+  <!-- Content Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4 pt-8 pb-6">
+          
+  <!-- Info Card 1 - Livraison Sécurisée -->
+  <div class="bg-[rgba(22,22,32,0.7)] rounded-2xl p-8 backdrop-blur-md border border-gold-primary/10 shadow-[0_10px_30px_rgba(0,0,0,0.2)] md:p-5 md:rounded-xl">
+    <h2 class="text-2xl mb-5 text-gold-primary relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-12 after:bg-gradient-to-r after:from-gold-primary after:to-gold-light after:rounded md:text-xl md:mb-4">Livraison Sécurisée</h2>
+            
+      <ul class="list-none p-0 m-0">
+        <li class="flex items-start mb-4 text-text-light leading-relaxed before:content-['✓'] before:text-gold-primary before:font-bold before:mr-3 before:text-lg before:flex-shrink-0 before:mt-0.5 md:text-sm md:mb-3">Reçu de Commande</li>
+        <li class="flex items-start mb-4 text-text-light leading-relaxed before:content-['✓'] before:text-gold-primary before:font-bold before:mr-3 before:text-lg before:flex-shrink-0 before:mt-0.5 md:text-sm md:mb-3">Couverture d'Assurance Incluse</li>
+        <li class="flex items-start mb-4 text-text-light leading-relaxed before:content-['✓'] before:text-gold-primary before:font-bold before:mr-3 before:text-lg before:flex-shrink-0 before:mt-0.5 md:text-sm md:mb-3">Numéro de Commande Fournit</li>
+      </ul>
 
-        <!-- ///////////////////////////////////////////////////////////////////
-             ////////////////////       Livraison       ////////////////////
-         ///////////////////////////////////////////////////////////////////-->
-        <!-- Content Grid -->
-        <section class="content-grid">
-          <!-- Info Card 1 -->
-          <div class="info-card">
-            <h2 class="card-title">Livraison Sécurisée</h2>
-            <ul class="feature-list">
-              <li class="feature-item">Reçu de Commande</li>
-              <li class="feature-item">Couverture d'Assurance Incluse</li>
-              <li class="feature-item">Numéro de Commande Fournit</li>
-            </ul>
+  <!-- Shipping Options -->
+  <div class="grid grid-cols-1 gap-5 mt-5 lg:grid-cols-2 md:gap-4">
+    <div class="bg-white/5 rounded-xl p-5 border border-gold-primary/20 md:p-4">
+      <div class="text-gold-primary text-lg mb-2 font-semibold md:text-base">Livraison Express</div>
+        <div class="text-text-light text-sm md:text-xs">
+          Prix: 2.50€<br />
+          Délai de livraison: 2-4h
+        </div>
+      </div>
 
-            <!-- Shipping Options -->
-            <div class="shipping-options">
-              <div class="shipping-option">
-                <div class="shipping-name">Livraison Express</div>
-                <div class="shipping-details">
-                  Prix: 2.50€<br />
-                  Délai de livraison: 2-4h
-                </div>
-              </div>
+  <div class="bg-white/5 rounded-xl p-5 border border-gold-primary/20 md:p-4">
+    <div class="text-gold-primary text-lg mb-2 font-semibold md:text-base">Livraison Classique</div>
+      <div class="text-text-light text-sm md:text-xs">
+        Prix: 0€<br />
+        Délai de livraison: 6-12h
+      </div>
+    </div>
+  </div>
+</div>
 
-              <div class="shipping-option">
-                <div class="shipping-name">Livraison Classique</div>
-                <div class="shipping-details">
-                  Prix: 0€<br />
-                  Délai de livraison: 6-12h
-                </div>
-              </div>
-            </div>
-          </div>
+  <!-- Info Card 2 - Garanties de Sécurité -->
+  <div class="bg-[rgba(22,22,32,0.7)] rounded-2xl p-8 backdrop-blur-md border border-gold-primary/10 shadow-[0_10px_30px_rgba(0,0,0,0.2)] md:p-5 md:rounded-xl">
+    <h2 class="text-2xl mb-5 text-gold-primary relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-12 after:bg-gradient-to-r after:from-gold-primary after:to-gold-light after:rounded md:text-xl md:mb-4">Garanties de Sécurité</h2>
+            
+      <ul class="list-none p-0 m-0">
+        <li class="flex items-start mb-4 text-text-light leading-relaxed before:content-['✓'] before:text-gold-primary before:font-bold before:mr-3 before:text-lg before:flex-shrink-0 before:mt-0.5 md:text-sm md:mb-3">Remboursement intégral en cas de non satisfaction</li>
+        <li class="flex items-start mb-4 text-text-light leading-relaxed before:content-['✓'] before:text-gold-primary before:font-bold before:mr-3 before:text-lg before:flex-shrink-0 before:mt-0.5 md:text-sm md:mb-3">Livraison jusqu'à 12h</li>
+        <li class="flex items-start mb-4 text-text-light leading-relaxed before:content-['✓'] before:text-gold-primary before:font-bold before:mr-3 before:text-lg before:flex-shrink-0 before:mt-0.5 md:text-sm md:mb-3">Service Client Réactif</li>
+        <li class="flex items-start mb-4 text-text-light leading-relaxed before:content-['✓'] before:text-gold-primary before:font-bold before:mr-3 before:text-lg before:flex-shrink-0 before:mt-0.5 md:text-sm md:mb-3">Modes de paiement cryptés</li>
+        <li class="flex items-start mb-4 text-text-light leading-relaxed before:content-['✓'] before:text-gold-primary before:font-bold before:mr-3 before:text-lg before:flex-shrink-0 before:mt-0.5 md:text-sm md:mb-3">Produits Non Générés</li>
+        <li class="flex items-start mb-4 text-text-light leading-relaxed before:content-['✓'] before:text-gold-primary before:font-bold before:mr-3 before:text-lg before:flex-shrink-0 before:mt-0.5 md:text-sm md:mb-3">Produits Testés et Vérifiés</li>
+      </ul>
+  </div>
+</section>
 
-          <!-- ////////////////////////////////////////////////////////////
-               ////////////////////       Points       ////////////////////
-           ////////////////////////////////////////////////////////////-->
-          <!-- Info Card 2 -->
-          <div class="info-card">
-            <h2 class="card-title">Garanties de Sécurité</h2>
-            <ul class="feature-list">
-              <li class="feature-item">Remboursement intégral en cas de non satisfaction</li>
-              <li class="feature-item">Livraison jusqu'à 12h</li>
-              <li class="feature-item">Service Client Réactif</li>
-              <li class="feature-item">Modes de paiement cryptés</li>
-              <li class="feature-item">Produits Non Générés</li>
-              <li class="feature-item">Produits Testés et Vérifiés</li>
-            </ul>
-          </div>
-        </section>
+      <!-- ////////////////////////////////////////////////////////////////
+           ////////////////////       Avis & FAQ       ////////////////////
+           ////////////////////////////////////////////////////////////////-->
+ <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-8 pb-6">
+          
 
-        <!-- Review Section -->
-        <section class="review-section">
-          <h2 class="card-title-1">Avis Clients</h2>
-          <p style="color: var(--text-light); margin-bottom: 15px;">
-            Vous pouvez trouver tous les avis et discuter avec d'autres membres/clients de la communauté sur Discord.
-          </p>
-          <a class="review-link" href="https://discord.gg/beC8cFZaXH" target="_blank" rel="noopener noreferrer">Rejoindre Notre Communauté</a>
-        </section>
+  <div class="bg-[rgba(22,22,32,0.7)] rounded-2xl p-8 backdrop-blur-md border border-gold-primary/10 shadow-[0_10px_30px_rgba(0,0,0,0.2)] md:p-5 md:rounded-xl h-fit">
+    <h2 class="text-2xl mb-20 text-gold-primary relative text-center pb-2.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-12 after:bg-gradient-to-r after:from-gold-primary after:to-gold-light after:rounded md:text-xl md:mb-4">
+      Avis Clients
+    </h2>
+    <p class="text-text-light text-center mt-20 mb-20">
+      Vous pouvez trouver tous les avis et discuter avec d'autres membres/clients de la communauté sur Discord.
+    </p>
+    <a class="mt-20 flex justify-center items-center bg-gradient-to-br from-gold-dark to-gold-primary text-black font-bold text-base py-3 px-6 rounded-lg no-underline mt-4 w-max mx-auto transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(212,175,55,0.3)] md:text-sm md:py-2.5 md:px-5" href="https://discord.gg/beC8cFZaXH" target="_blank" rel="noopener noreferrer">
+      Rejoindre Notre Communauté
+    </a>
+  </div>
 
-        <!-- Back Button -->
-        <a class="back-button" href="/index.html">← Retour à l'Accueil</a>
+<!-- FAQ Section -->
+  <div class="bg-[rgba(22,22,32,0.7)] rounded-2xl p-8 backdrop-blur-md border border-gold-primary/10 shadow-[0_10px_30px_rgba(0,0,0,0.2)] md:p-5 md:rounded-xl">
+    <h2 class="text-2xl mb-5 text-gold-primary relative text-center pb-2.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-12 after:bg-gradient-to-r after:from-gold-primary after:to-gold-light after:rounded md:text-xl md:mb-4">
+      Questions Fréquentes
+    </h2>
+
+    <div class="space-y-3">
+  <!-- FAQ Item 1 -->
+      <details class="group bg-white/5 rounded-lg border border-gold-primary/20 overflow-hidden hover:bg-white/10 transition-colors">
+        <summary class="flex justify-between items-center cursor-pointer p-4 text-text-white font-medium text-sm">
+          Authenticité
+          <svg class="w-4 h-4 text-gold-primary transition-transform group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </summary>
+        <div class="px-4 pb-4 text-text-light text-xs leading-relaxed">
+          Contrairement à d'autres serveurs ou concurents, nos produits sont bel et bien authentiques donc non générés. Ils sont testés et vérifiés avant chaque livraison d'où les prix cher.
+        </div>
+      </details>
+
+  <!-- FAQ Item 2 -->
+      <details class="group bg-white/5 rounded-lg border border-gold-primary/20 overflow-hidden hover:bg-white/10 transition-colors">
+        <summary class="flex justify-between items-center cursor-pointer p-4 text-text-white font-medium text-sm">
+          Puis-je annuler mon abonnement à tout moment ?
+          <svg class="w-4 h-4 text-gold-primary transition-transform group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </summary>
+        <div class="px-4 pb-4 text-text-light text-xs leading-relaxed">
+          Tout à fait. Vous pouvez résilier votre abonnement à tout moment et continuer à bénéficier des avanatges jusqu'à la fin de votre cycle de facturation.
+        </div>
+      </details>
+
+  <!-- FAQ Item 3 -->
+      <details class="group bg-white/5 rounded-lg border border-gold-primary/20 overflow-hidden hover:bg-white/10 transition-colors">
+        <summary class="flex justify-between items-center cursor-pointer p-4 text-text-white font-medium text-sm">
+          Conditions d'utilisations
+          <svg class="w-4 h-4 text-gold-primary transition-transform group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </summary>
+        <div class="px-4 pb-4 text-text-light text-xs leading-relaxed">
+        1.1 Conscentement aux Conditions d'Utilisation
+          <br><br>
+        Les présentes conditions d'utilisation régissent l'accès et l'utilisation de nos services. En utilisant nos services, vous acceptez ces conditions dans leur intégralité.
+          <br><br>
+        1.2 Politique de remboursement
+        <br><br>
+        Nous ne fournissons pas de remboursements à moins qu'ils ne soient viables. Si le remboursement est possible, vous recevrez une compensation dans les plus brefs délais mais pas le prix d'achat.
+        </div>
+      </details>
+
+  <!-- FAQ Item 4 -->
+      <details class="group bg-white/5 rounded-lg border border-gold-primary/20 overflow-hidden hover:bg-white/10 transition-colors">
+        <summary class="flex justify-between items-center cursor-pointer p-4 text-text-white font-medium text-sm">
+          Politique de confidentialité
+          <svg class="w-4 h-4 text-gold-primary transition-transform group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </summary>
+        <div class="px-4 pb-4 text-text-light text-xs leading-relaxed">
+        1.1 Protection des Données
+        <br><br>
+        Nous nous engageons à protéger votre vie privée. Toutes les informations collectées sont utilisées uniquement pour améliorer nos services et ne seront jamais partagées avec des tiers sans votre consentement explicite.
+        <br><br>
+        1.2 Paiements Sécurisés
+        <br><br>
+        Nous utilisons des passerelles de paiement sécurisées pour garantir que vos informations financières sont protégées lors de chaque transaction.
+        <br><br>
+        1.3 Cookies
+        <br><br>
+        Nous utilisons AUCUNS cookies pour améliorer votre expérience utilisateur.
+        <br><br>
+        1.4 Modifications de la Politique de Confidentialité
+        <br><br>
+        Nous nous réservons le droit de modifier cette politique de confidentialité à tout moment
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+  <!-- Back Button -->
+<a class="inline-block text-gold-primary font-semibold no-underline mt-5 transition-colors duration-200 hover:text-gold-light" href="/index.html">← Retour à l'Accueil</a>
       </main>
     </div>
   </body>
-  <script>
-        // Script pour gérer l'état actif de la navbar
-        document.addEventListener('DOMContentLoaded', function() {
-            // Récupérer l'URL actuelle
-            const currentPath = window.location.pathname;
-            const currentPage = currentPath.split('/').pop() || 'index.html';
-            
-            // Mapper les pages aux liens de navigation
-            const pageMapping = {
-                'index.html': '/index.html',
-                'contact.html': './contact.html',
-                'Products.html': '../src/pages/Products.html',
-                'TrustSafetyPage.html': '../src/pages/TrustSafetyPage.html'
-            };
-            
-            // Trouver le lien correspondant à la page actuelle
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                // Supprimer la classe active de tous les liens
-                link.classList.remove('active');
-                
-                // Vérifier si ce lien correspond à la page actuelle
-                const linkHref = link.getAttribute('href');
-                if (linkHref === currentPath || 
-                    linkHref === currentPage || 
-                    linkHref === pageMapping[currentPage]) {
-                    link.classList.add('active');
-                }
-            });
-        });
-    </script>
 </html>

@@ -1,183 +1,169 @@
 [
   {
-    "id": 1757180114479,
-    "timestamp": "2025-09-06T17:35:14.411Z",
-    "customerInfo": {
-      "name": "qsdsq",
-      "email": "contact.imad.t@gmail.com",
-      "phone": "dqs",
-      "discord": "dqsdqsd"
-    },
-    "shippingInfo": {
-      "country": "qsdqs",
-      "address": "qsdqsd",
-      "city": "qsdsqd",
-      "postalCode": "qdqdqs"
-    },
-    "preferences": {
-      "shippingMethod": "Livraison Express",
-      "paymentMethod": "PayPal"
-    },
-    "cart": [
-      {
-        "id": "1757180097376",
-        "name": "Nitro Boost 1 mois",
-        "price": 7,
-        "quantity": 1,
-        "image": "/public/50euro.png"
-      }
-    ],
-    "total": 9.5,
-    "createdAt": "2025-09-06T17:35:14.479Z",
-    "emailSent": true
-  },
-  {
-    "id": 1757180183095,
-    "orderNumber": "PM-806677-7952",
-    "orderDate": "2025-09-06T17:35:15.600Z",
-    "name": "qsdsq",
-    "email": "contact.imad.t@gmail.com",
-    "phoneNumber": "dqs",
-    "discord": "dqsdqsd",
-    "address": "qsdqsd",
-    "city": "qsdsqd",
-    "country": "qsdqs",
-    "postalCode": "qdqdqs",
-    "orderItems": [
-      {
-        "id": "1757180097376",
-        "name": "Nitro Boost 1 mois",
-        "price": 7,
-        "quantity": 1,
-        "image": "/public/50euro.png"
-      }
-    ],
-    "shippingMethod": {
-      "name": "Livraison Express",
-      "price": 2.5,
-      "delivery": "2-4H"
-    },
-    "paymentMethod": "PayPal",
-    "selectedVendor": ".uwg9",
-    "submittedAt": "2025-09-06T17:36:23.087Z",
-    "createdAt": "2025-09-06T17:36:23.095Z",
-    "emailSent": true
-  },
-  {
-    "id": 1757231505587,
-    "orderNumber": "PM-514146-7122",
-    "orderDate": "2025-09-07T07:51:36.175Z",
-    "name": "Evannn",
+    "id": 1765221378981,
+    "orderNumber": "PM-234420-1276",
+    "orderDate": "2025-12-08T19:16:13.515Z",
+    "discordname": ".7psm",
     "email": "boumbaover@gmail.com",
-    "phoneNumber": "qdqsdsq",
-    "discord": "dqsdsqd",
-    "address": "qsdq",
-    "city": "sdqs",
-    "country": "sqd",
-    "postalCode": "dqsdqs",
+    "discord": ".7psm",
     "orderItems": [
       {
-        "id": "1757231279572",
-        "name": "Nitro Boost 1 mois",
-        "price": 7,
-        "quantity": 1,
-        "image": "/public/50euro.png"
-      }
-    ],
-    "shippingMethod": {
-      "name": "Livraison Express",
-      "price": 2.5,
-      "delivery": "2-4H"
-    },
-    "paymentMethod": "PayPal",
-    "selectedVendor": ".uwg9",
-    "submittedAt": "2025-09-07T07:51:45.571Z",
-    "createdAt": "2025-09-07T07:51:45.587Z",
-    "emailSent": true
-  },
-  {
-    "id": 1757231742000,
-    "orderNumber": "PM-821951-7285",
-    "orderDate": "2025-09-07T07:55:31.015Z",
-    "name": "Evannn",
-    "email": "boumbaover@gmail.com",
-    "phoneNumber": "SQDSQ",
-    "discord": "QDqsd",
-    "address": "dqs",
-    "city": "dqs",
-    "country": "qsdqs",
-    "postalCode": "dqsd",
-    "orderItems": [
-      {
-        "id": "1757231708061",
+        "id": "1765221357621",
         "name": "Nitro Basic 1 mois",
-        "price": 1.4,
+        "price": 1.5,
         "quantity": 1,
-        "image": "/public/50euro.png"
+        "image": "/public/products/banners/Nitro.png",
+        "category": "nitro"
       }
     ],
     "shippingMethod": {
-      "name": "Livraison Classique",
+      "name": "Livraison Standard",
       "price": 0,
       "delivery": "6-12H"
     },
-    "paymentMethod": "Carte de Crédit",
+    "paymentMethod": "Revolut",
+    "status": "CONFIRMED",
     "selectedVendor": ".uwg9",
-    "submittedAt": "2025-09-07T07:55:41.978Z",
-    "createdAt": "2025-09-07T07:55:42.000Z",
-    "emailSent": true
+    "submittedAt": "2025-12-08T19:16:18.850Z",
+    "createdAt": "2025-12-08T19:16:18.981Z",
+    "emailSent": true,
+    "discordNotified": false
   },
   {
-    "id": 1757231919902,
-    "timestamp": "2025-09-07T07:58:39.877Z",
-    "customerInfo": {
-      "name": "dqs",
-      "email": "boumbaover@gmail.com",
-      "phone": "dqs",
-      "discord": "dsq"
-    },
-    "shippingInfo": {
-      "country": "qsdqs",
-      "address": "dqs",
-      "city": "dqs",
-      "postalCode": "dqsd"
-    },
-    "preferences": {
-      "shippingMethod": "Livraison Express",
-      "paymentMethod": "PayPal"
-    },
-    "cart": [
-      {
-        "id": "1757231903938",
-        "name": "Nitro Boost 1 mois",
-        "price": 7,
-        "quantity": 1,
-        "image": "/public/50euro.png"
-      }
-    ],
-    "total": 9.5,
-    "createdAt": "2025-09-07T07:58:39.902Z",
-    "emailSent": true
-  },
-  {
-    "id": 1757231928595,
-    "orderNumber": "PM-378222-8430",
-    "orderDate": "2025-09-07T07:58:40.765Z",
-    "name": "dqs",
+    "id": 1765222080695,
+    "orderNumber": "PM-132471-7119",
+    "orderDate": "2025-12-08T19:27:54.807Z",
+    "discordname": ".7psm",
     "email": "boumbaover@gmail.com",
-    "phoneNumber": "dqs",
-    "discord": "dsq",
-    "address": "dqs",
-    "city": "dqs",
-    "country": "qsdqs",
-    "postalCode": "dqsd",
+    "discord": ".7psm",
     "orderItems": [
       {
-        "id": "1757231903938",
-        "name": "Nitro Boost 1 mois",
-        "price": 7,
+        "id": "1765222057208",
+        "name": "Nitro Basic 1 mois",
+        "price": 1.5,
         "quantity": 1,
-        "image": "/public/50euro.png"
+        "image": "/public/products/banners/Nitro.png",
+        "category": "nitro"
+      }
+    ],
+    "shippingMethod": {
+      "name": "Livraison Standard",
+      "price": 0,
+      "delivery": "6-12H"
+    },
+    "paymentMethod": "Revolut",
+    "status": "CONFIRMED",
+    "selectedVendor": ".uwg9",
+    "submittedAt": "2025-12-08T19:28:00.663Z",
+    "createdAt": "2025-12-08T19:28:00.695Z",
+    "emailSent": false,
+    "discordNotified": false
+  },
+  {
+    "id": 1765222080714,
+    "orderNumber": "PM-399183-6996",
+    "orderDate": "2025-12-08T19:27:54.855Z",
+    "discordname": ".7psm",
+    "email": "boumbaover@gmail.com",
+    "discord": ".7psm",
+    "orderItems": [
+      {
+        "id": "1765222057208",
+        "name": "Nitro Basic 1 mois",
+        "price": 1.5,
+        "quantity": 1,
+        "image": "/public/products/banners/Nitro.png",
+        "category": "nitro"
+      }
+    ],
+    "shippingMethod": {
+      "name": "Livraison Standard",
+      "price": 0,
+      "delivery": "6-12H"
+    },
+    "paymentMethod": "Revolut",
+    "status": "CONFIRMED",
+    "selectedVendor": ".uwg9",
+    "submittedAt": "2025-12-08T19:28:00.688Z",
+    "createdAt": "2025-12-08T19:28:00.714Z",
+    "emailSent": true,
+    "discordNotified": false
+  },
+  {
+    "id": 1765222361195,
+    "orderNumber": "PM-933779-4271",
+    "orderDate": "2025-12-08T19:32:36.375Z",
+    "discordname": ".7psm",
+    "email": "boumbaover@gmail.com",
+    "discord": ".7psm",
+    "orderItems": [
+      {
+        "id": "1765222338396",
+        "name": "Nitro Basic 1 mois",
+        "price": 1.5,
+        "quantity": 1,
+        "image": "/public/products/banners/Nitro.png",
+        "category": "nitro"
+      }
+    ],
+    "shippingMethod": {
+      "name": "Livraison Standard",
+      "price": 0,
+      "delivery": "6-12H"
+    },
+    "paymentMethod": "Buy me a coffee",
+    "status": "CONFIRMED",
+    "selectedVendor": ".uwg9",
+    "submittedAt": "2025-12-08T19:32:41.143Z",
+    "createdAt": "2025-12-08T19:32:41.195Z",
+    "emailSent": true,
+    "discordNotified": false
+  },
+  {
+    "id": 1765224243772,
+    "orderNumber": "PM-474979-2476",
+    "orderDate": "2025-12-08T20:03:52.631Z",
+    "discordname": ".7psm",
+    "email": "boumbaover@gmail.com",
+    "discord": ".7psm",
+    "orderItems": [
+      {
+        "id": "1765224187184",
+        "name": "Nitro Basic 1 mois",
+        "price": 1.5,
+        "quantity": 1,
+        "image": "/public/products/banners/Nitro.png",
+        "category": "nitro"
+      }
+    ],
+    "shippingMethod": {
+      "name": "Livraison Standard",
+      "price": 0,
+      "delivery": "6-12H"
+    },
+    "paymentMethod": "Buy me a coffee",
+    "status": "CONFIRMED",
+    "selectedVendor": ".uwg9",
+    "submittedAt": "2025-12-08T20:04:03.728Z",
+    "createdAt": "2025-12-08T20:04:03.772Z",
+    "emailSent": true,
+    "discordNotified": false
+  },
+  {
+    "id": 1765225237199,
+    "orderNumber": "PM-645402-6631",
+    "orderDate": "2025-12-08T20:20:31.325Z",
+    "discordname": ".7psm",
+    "email": "boumbaover@gmail.com",
+    "discord": ".7psm",
+    "orderItems": [
+      {
+        "id": "1765225211241",
+        "name": "Nitro Basic 1 mois",
+        "price": 1.5,
+        "quantity": 1,
+        "image": "/public/products/banners/Nitro.png",
+        "category": "nitro"
       }
     ],
     "shippingMethod": {
@@ -185,91 +171,29 @@
       "price": 2.5,
       "delivery": "2-4H"
     },
-    "paymentMethod": "PayPal",
+    "paymentMethod": "Buy me a coffee",
+    "status": "CONFIRMED",
     "selectedVendor": ".uwg9",
-    "submittedAt": "2025-09-07T07:58:48.590Z",
-    "createdAt": "2025-09-07T07:58:48.595Z",
-    "emailSent": true
+    "submittedAt": "2025-12-08T20:20:37.123Z",
+    "createdAt": "2025-12-08T20:20:37.199Z",
+    "emailSent": true,
+    "discordNotified": false
   },
   {
-    "id": 1757232105863,
-    "timestamp": "2025-09-07T08:01:45.823Z",
-    "customerInfo": {
-      "name": "Evannn",
-      "email": "boumbaover@gmail.com",
-      "phone": "sQD",
-      "discord": "dqsdq"
-    },
-    "shippingInfo": {
-      "country": "qsdq",
-      "address": "sdqs",
-      "city": "dsqdsq",
-      "postalCode": "dqsdsq"
-    },
-    "preferences": {
-      "shippingMethod": "Livraison Express",
-      "paymentMethod": "PayPal"
-    },
-    "cart": [
-      {
-        "id": "1757232082656",
-        "name": "Nitro Boost 1 mois",
-        "price": 7,
-        "quantity": 1,
-        "image": "/public/50euro.png"
-      },
-      {
-        "id": "1757232084380",
-        "name": "Server Boost 1 mois x12",
-        "price": 12,
-        "quantity": 1,
-        "image": "/public/20euro.png"
-      },
-      {
-        "id": "1757232085338",
-        "name": "Server Boost 3 mois x12",
-        "price": 18,
-        "quantity": 1,
-        "image": "/public/20euro.png"
-      }
-    ],
-    "total": 39.5,
-    "createdAt": "2025-09-07T08:01:45.863Z",
-    "emailSent": true
-  },
-  {
-    "id": 1757232113450,
-    "orderNumber": "PM-634333-1541",
-    "orderDate": "2025-09-07T08:01:46.727Z",
-    "name": "Evannn",
+    "id": 1765225875504,
+    "orderNumber": "PM-731342-1292",
+    "orderDate": "2025-12-08T20:31:09.201Z",
+    "discordname": ".7psm",
     "email": "boumbaover@gmail.com",
-    "phoneNumber": "sQD",
-    "discord": "dqsdq",
-    "address": "sdqs",
-    "city": "dsqdsq",
-    "country": "qsdq",
-    "postalCode": "dqsdsq",
+    "discord": ".7psm",
     "orderItems": [
       {
-        "id": "1757232082656",
-        "name": "Nitro Boost 1 mois",
-        "price": 7,
+        "id": "1765225851205",
+        "name": "Nitro Basic 1 mois",
+        "price": 1.5,
         "quantity": 1,
-        "image": "/public/50euro.png"
-      },
-      {
-        "id": "1757232084380",
-        "name": "Server Boost 1 mois x12",
-        "price": 12,
-        "quantity": 1,
-        "image": "/public/20euro.png"
-      },
-      {
-        "id": "1757232085338",
-        "name": "Server Boost 3 mois x12",
-        "price": 18,
-        "quantity": 1,
-        "image": "/public/20euro.png"
+        "image": "/public/products/banners/Nitro.png",
+        "category": "nitro"
       }
     ],
     "shippingMethod": {
@@ -277,56 +201,56 @@
       "price": 2.5,
       "delivery": "2-4H"
     },
-    "paymentMethod": "PayPal",
+    "paymentMethod": "Paypal",
+    "status": "CONFIRMED",
+    "appliedDiscount": {
+      "code": "PROMO15",
+      "type": "percentage",
+      "value": 15,
+      "description": "-15%"
+    },
+    "discountAmount": 0.27,
     "selectedVendor": ".uwg9",
-    "submittedAt": "2025-09-07T08:01:53.445Z",
-    "createdAt": "2025-09-07T08:01:53.450Z",
-    "emailSent": true
+    "submittedAt": "2025-12-08T20:31:15.461Z",
+    "createdAt": "2025-12-08T20:31:15.504Z",
+    "emailSent": true,
+    "discordNotified": false
   },
   {
-    "id": 1757232239869,
-    "orderNumber": "PM-227603-4071",
-    "orderDate": "2025-09-07T08:03:53.524Z",
-    "name": "ARABE",
+    "id": 1765226225745,
+    "orderNumber": "PM-786247-1898",
+    "orderDate": "2025-12-08T20:36:59.617Z",
+    "discordname": ".7psm",
     "email": "boumbaover@gmail.com",
-    "phoneNumber": "qsd",
-    "discord": "sqdsq",
-    "address": "qsd",
-    "city": "qsdqs",
-    "country": "qsd",
-    "postalCode": "qsdqsd",
+    "discord": ".7psm",
     "orderItems": [
       {
-        "id": "1757232208752",
-        "name": "Nitro Boost 1 mois",
-        "price": 7,
+        "id": "1765226197363",
+        "name": "Nitro Basic 1 mois",
+        "price": 1.5,
         "quantity": 1,
-        "image": "/public/50euro.png"
-      },
-      {
-        "id": "1757232210377",
-        "name": "Server Boost 1 mois x14",
-        "price": 15,
-        "quantity": 1,
-        "image": "/public/20euro.png"
-      },
-      {
-        "id": "1757232211941",
-        "name": "Server Boost 3 mois x12",
-        "price": 18,
-        "quantity": 1,
-        "image": "/public/20euro.png"
+        "image": "/public/products/banners/Nitro.png",
+        "category": "nitro"
       }
     ],
     "shippingMethod": {
-      "name": "Livraison Classique",
-      "price": 0,
-      "delivery": "6-12H"
+      "name": "Livraison Express",
+      "price": 2.5,
+      "delivery": "2-4H"
     },
-    "paymentMethod": "Virement Bancaire",
+    "paymentMethod": "Revolut",
+    "status": "CONFIRMED",
+    "appliedDiscount": {
+      "code": "PROMO15",
+      "type": "percentage",
+      "value": 15,
+      "description": "-15%"
+    },
+    "discountAmount": 0.27,
     "selectedVendor": ".uwg9",
-    "submittedAt": "2025-09-07T08:03:59.828Z",
-    "createdAt": "2025-09-07T08:03:59.869Z",
-    "emailSent": true
+    "submittedAt": "2025-12-08T20:37:05.719Z",
+    "createdAt": "2025-12-08T20:37:05.745Z",
+    "emailSent": true,
+    "discordNotified": false
   }
 ]

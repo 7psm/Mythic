@@ -8,14 +8,14 @@
 <!-- /////////////////////////////////////////////////////////////////////////
      ////////////////////       Importation & Files       ////////////////////
      /////////////////////////////////////////////////////////////////////////-->
-        <link rel="stylesheet" href="../styles/PagesStyles/Checkout.css">
-        <link rel="stylesheet" href="../styles/GlobalStyle.css">
         <link rel="stylesheet" href="../styles/NavBar.css">
-        <link rel="stylesheet" href="../styles/tw-breakpoints.css">
-        <script src="/Crypted/Context/OrderContext.min.js"></script>
-        <script src="/Crypted/Product.min.js"></script>
-        <script type="module" src="../js/checkout.js"></script>
-        <script src="../js/navbar-script.js"></script>
+
+        <script src="/Crypted/Site/Context/OrderContext.min.js"></script>
+        <script src="/Crypted/Site/Products.min.js"></script>
+        <script type="module" src="/Crypted/Site/Checkout.min.js"></script>
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="../js/navbar-script.js"></script>>
 
 <!-- ///////////////////////////////////////////////////////////////////
      ////////////////////       Fonts & Icons       ////////////////////
@@ -27,10 +27,10 @@
 
 <!-- Open Graph / Facebook / Discord -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="https://mythicmarket.netlify.app/">
+        <meta property="og:url" content="https://getmythic.netlify.app/">
         <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="og:image" content="https://mythicmarket.netlify.app/public/banner.png">
+        <meta property="og:image" content="https://getmythic.netlify.app/public/banner.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:image:alt" content="MythicMarket Banner">
@@ -38,15 +38,31 @@
 
 <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="https://mythicmarket.netlify.app/">
+        <meta property="twitter:url" content="https://getmythic.netlify.app/">
         <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
         <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-        <meta property="twitter:image" content="https://mythicmarket.netlify.app/public/banner.png">
+        <meta property="twitter:image" content="https://getmythic.netlify.app/public/banner.png">
+
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'background-dark': '#0a0a0e',
+            'gold-primary': '#d4af37',
+            'gold-light': '#fceabb',
+            'gold-dark': '#c29d28',
+            'text-white': '#ffffff',
+            'text-gray': '#cccccc',
+          }
+        }
+      }
+    }
+  </script>
 </head>
 
-    <body>
-    <script src="../js/url-cleaner.js"></script>
-<div class="page-container">
+<body>
+<div class="bg-[#0a0a0e] min-h-screen w-full flex flex-col pt-20">
         <!-- ////////////////////////////////////////////////////////////
              ////////////////////       NavBar       ////////////////////
              ////////////////////////////////////////////////////////////-->
@@ -55,6 +71,7 @@
             <a href="/index.html" class="nav-link">Mythic-Market</a>
             <a href="./Products.html" class="nav-link">Produits</a>
             <a href="./TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
+            <a href="Subcscriptions.html">Abonnements</a>
             <a href="./Contact.html" class="nav-link">Contact</a>
             <a href="Status.html" class="nav-link">Status</a>
           </div>
@@ -71,179 +88,186 @@
           <div class="navbar-separator"></div>
         </nav>
 
-    <main class="main-content">
-        <div class="gold-glow"></div>        
-        <h1 class="page-title">Paiement</h1>
+    <main class="w-full max-w-[1000px] mx-auto px-4 pt-5 pb-10">
 
-        <section class="trust-section">
-          <h3 class="trust-title">Garanties de Confiance & Sécurité</h3>
-            <div class="trust-grid">
-                <div class="trust-badge">
-                  <div class="trust-icon">
-                    <!-- Check icon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-                    </svg>
-
-                  </div>
-                  <div class="trust-text">5+ Produits Livrés</div>
-                </div>
-
-                <div class="trust-badge">
-                  <div class="trust-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                    </svg>
-
-                  </div>
-                  <div class="trust-text">Commandes Sécrurisés</div>
-                </div>
-
-                <div class="trust-badge">
-                  <div class="trust-icon">
-                    <!-- Lock icon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
-                    </svg>
-                  </div>
-                  <div class="trust-text">Données Cryptés</div>
-                </div>
-
-                <div class="trust-badge">
-                  <div class="trust-icon">
-                    <!-- Check circle -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-                    </svg>
-                  </div>
-                  <div class="trust-text">Numéro de Commande</div>
-                </div>
-            </div>
-          <a href="TrustSafetyPage.html" class="trust-link">En savoir plus sur la confiance et la sécurité →</a>
-        </section>
-
-        <form action="Confirmation.html" method="POST" class="checkout-form" novalidate autocomplete="off">
-          <h2 class="section-title">Informations Client</h2>
-        
-          <div class="field-group">
-            <div class="field">
-              <label class="label" for="name">Nom & Prénom</label>
-              <input id="name" name="name" type="text" class="input" required />
-              <p class="form-help">Entrez Votre Nom Complet ou Pseudonyme</p>
-            </div>
-            <div class="field">
-              <label class="label" for="email">Email</label>
-              <input id="email" name="email" type="email" class="input" required />
-            </div>
+      <!-- ///////////////////////////////////////////////////////////
+           ////////////////////       Infos       ////////////////////
+           ///////////////////////////////////////////////////////////-->
+      <h1 class="text-[1.8rem] font-extrabold mb-6 text-center bg-gradient-to-r from-[#f9e79f] via-[#d4af37] to-[#b8860b] bg-clip-text text-transparent">Paiement</h1>
+      <section class="bg-[rgba(22,22,32,0.7)] rounded-xl p-5 border border-[rgba(212,175,55,0.1)] mb-6">
+        <h3 class="text-[1.1rem] text-[#d4af37] mb-4 font-semibold">Garanties de Confiance & Sécurité</h3>
+        <div class="grid gap-3 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+          <div class="flex items-center gap-2 px-3 py-2 bg-[rgba(255,255,255,0.05)] rounded-md border border-[rgba(212,175,55,0.2)]">
+            <div class="w-4 h-4 flex items-center justify-center">📦</div>
+            <div class="text-[0.85rem] text-[#e0e0e0] font-medium">5+ Produits Livrés</div>
           </div>
-        
-          <div class="field-group">
-            <div class="field">
-              <label class="label" for="phone">Numéro de Téléphone</label>
-              <input id="phone" name="phoneNumber" type="tel" class="input" />
-              <p class="form-help">Inclure le Code du Pays (ex : +33)</p>
-            </div>
-            <div class="field">
-              <label class="label" for="discord">Pseudo Discord</label>
-              <input id="discord" name="discord" type="text" class="input"/>
-            </div>
-          </div>
-        
-          <h2 class="section-title">Informations de Livraison</h2>
-        
-          <div class="field-group">
-            <div class="field">
-              <label class="label" for="country">Pays</label>
-              <input id="country" name="country" type="text" class="input"/>
-            </div>
-          </div>
-        
-          <div class="field-group">
-            <div class="field">
-              <label class="label" for="address">Adresse de Livraison (facturation)</label>
-              <input id="address" name="address" type="text" class="input"/>
-            </div>
-          </div>
-        
-          <div class="field-group">
-            <div class="field">
-              <label class="label" for="ville">Ville</label>
-              <input id="city" name="city" type="text" class="input"/>
-            </div>
-            <div class="field">
-              <label class="label" for="postalCode">Code Postal</label>
-              <input id="postalCode" name="postalCode" type="text" class="input"/>
-            </div>
-          </div>
-        
-          <h2 class="section-title">Choisir la Méthode de Livraison</h2>
-          <div class="shipping-options">
-            <div class="shipping-option">
-              <div class="shipping-logo">
     
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
-                </svg>
-
-              </div>
-              <div class="shipping-details">
-                <p class="shipping-name">Livraison Express</p>
-                <p class="shipping-time">2-4H</p>
-              </div>
-              <div class="shipping-price">+ 2.50€</div>
-            </div>
-            <div class="shipping-option selected">
-              <div class="shipping-logo">
-                
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
-                </svg>
-
-              </div>
-              <div class="shipping-details">
-                <p class="shipping-name">Livraison Classique</p>
-                <p class="shipping-time">6-12h</p>
-              </div>
-              <div class="shipping-price free">Gratuit</div>
+          <div class="flex items-center gap-2 px-3 py-2 bg-[rgba(255,255,255,0.05)] rounded-md border border-[rgba(212,175,55,0.2)]">
+            <div class="w-4 h-4 flex items-center justify-center">🔐</div>
+            <div class="text-[0.85rem] text-[#e0e0e0] font-medium">Commandes Sécurisés</div>
+          </div>
+    
+          <div class="flex items-center gap-2 px-3 py-2 bg-[rgba(255,255,255,0.05)] rounded-md border border-[rgba(212,175,55,0.2)]">
+            <div class="w-4 h-4 flex items-center justify-center">🔗</div>
+            <div class="text-[0.85rem] text-[#e0e0e0] font-medium">Donnés Cryptés</div>
+          </div>
+    
+          <div class="flex items-center gap-2 px-3 py-2 bg-[rgba(255,255,255,0.05)] rounded-md border border-[rgba(212,175,55,0.2)]">
+            <div class="w-4 h-4 flex items-center justify-center">📝</div>
+            <div class="text-[0.85rem] text-[#e0e0e0] font-medium">Numéro de Commande</div>
+          </div>
+        </div>
+        <a href="TrustSafetyPage.html" class="text-[#d4af37] text-[0.85rem] font-semibold no-underline mt-3 inline-block transition-colors duration-200 hover:text-[#f9e79f]">En savoir plus sur la confiance et la sécurité →</a>
+      </section>
+    
+      <!-- ////////////////////////////////////////////////////////////////
+           ////////////////////       Formulaire       ////////////////////
+           ////////////////////////////////////////////////////////////////-->   
+      <form action="Confirmation.html" method="POST" novalidate autocomplete="off" class="bg-[rgba(22,22,32,0.7)] rounded-xl p-6 border border-[rgba(212,175,55,0.1)]">
+        <h2 class="text-[1.1rem] my-6 mb-4 text-[#d4af37] pb-2 border-b border-[rgba(212,175,55,0.2)]">Informations Client</h2>
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 mb-4">
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 mb-4">
+  
+          <div class="flex flex-col mb-3">
+              <label class="text-[0.85rem] mb-1.5 text-[#e0e0e0]" for="discord">Pseudo Discord</label>
+              <input id="discord" name="discord" type="text" class="px-3 py-2 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded text-white text-[0.95rem]"  />
             </div>
           </div>
-        
-          <h2 class="section-title">Moyens de Paiements</h2>
-          <div class="payment-options">
-            <div class="payment-option">
-              <span class="payment-method-name">Carte de Crédit</span>
-            </div>
-            <div class="payment-option selected">
-              <span class="payment-method-name">PayPal</span>
-            </div>
-            <div class="payment-option selected">
-              <span class="payment-method-name">Virement Bancaire</span>
-            </div>
+          <div class="flex flex-col mb-3">
+            <label class="text-[0.85rem] mb-1.5 text-[#e0e0e0]" for="email">Email</label>
+            <input id="email" name="email" type="email" class="px-3 py-2 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded text-white text-[0.95rem]"  required />
           </div>
-        
-          <p class="order-note">
-            En cliquant sur « Terminer la commande », vous acceptez les conditions générales.
-          </p>
-        
-          <div class="trust-badge-small">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-            </svg>
+        </div>
+    
+      <!-- ///////////////////////////////////////////////////////////////
+           ////////////////////       Livraison       ////////////////////
+           ///////////////////////////////////////////////////////////////-->  
+<h2 class="text-[1.1rem] mb-4 text-[#d4af37] pb-2 border-b border-[rgba(212,175,55,0.2)]">Moyens de livraisons</h2>
+<div class="shipping-options grid grid-cols-1 md:grid-cols-2 gap-3 mb-6" id="shipping-options">
+  <div class="shipping-option flex items-center p-3 rounded-lg bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.05)] hover:border-[#d4af37] hover:bg-[rgba(212,175,55,0.05)] transition-all duration-200 cursor-pointer" data-price="2.50">
+  <div class="shipping-logo w-12 h-12 flex justify-center items-center mr-3 bg-[#0a0a0e] rounded-full p-2">🚀</div>
+  <div class="shipping-details flex-1">
+    <p class="shipping-name font-semibold text-white">Livraison Express</p>
+    <p class="shipping-time text-[0.85rem] text-[#999999]">2-4H</p>
+  </div>
+  <div class="shipping-price font-bold text-[#d4af37]">+2.50€</div>
+</div>
 
-            <span>100% Sécurisé </span>
-          </div>
-        
-          <div class="trust-badge-small">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-            </svg>
+<div class="shipping-option flex items-center p-3 rounded-lg bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.05)] hover:border-[#d4af37] hover:bg-[rgba(212,175,55,0.05)] transition-all duration-200 cursor-pointer" data-price="0">
+  <div class="shipping-logo w-12 h-12 flex justify-center items-center mr-3 bg-[#0a0a0e] rounded-full p-2">📦</div>
+  <div class="shipping-details flex-1">
+    <p class="shipping-name font-semibold text-white">Livraison Standard</p>
+    <p class="shipping-time text-[0.85rem] text-[#999999]">6-12h</p>
+  </div>
+  <div class="shipping-price font-bold text-[#d4af37]">GRATUIT</div>
+</div>
+</div>
 
-            <span>Couverture d'assurance incluse</span>
-          </div>
-        
-          <button type="submit" class="submit-button">Finaliser la Commande</button>
-        </form>
+    <!-- ///////////////////////////////////////////////////////////////
+         ////////////////////       Paiements       ////////////////////
+         ///////////////////////////////////////////////////////////////-->  
+<h2 class="text-[1.1rem] my-6 mb-4 text-[#d4af37] pb-2 border-b border-[rgba(212,175,55,0.2)]">Moyens de Paiements</h2>
+<div class="payment-options grid grid-cols-2 md:grid-cols-4 gap-3 mb-6" id="payment-options">
+  <div class="payment-option group flex items-center justify-center p-4 rounded-lg bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.05)] hover:border-[#d4af37] hover:bg-[rgba(212,175,55,0.05)] hover:scale-105 transition-all duration-200 cursor-pointer">
+    <span class="payment-method-name text-white font-medium text-[0.9rem] group-hover:text-[#d4af37] transition-colors">Paypal</span>
+  </div>
+  <div class="payment-option group flex items-center justify-center p-4 rounded-lg bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.05)] hover:border-[#d4af37] hover:bg-[rgba(212,175,55,0.05)] hover:scale-105 transition-all duration-200 cursor-pointer">
+    <span class="payment-method-name text-white font-medium text-[0.9rem] group-hover:text-[#d4af37] transition-colors">Revolut</span>
+  </div>
+  <div class="payment-option group flex items-center justify-center p-4 rounded-lg bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.05)] hover:border-[#d4af37] hover:bg-[rgba(212,175,55,0.05)] hover:scale-105 transition-all duration-200 cursor-pointer">
+    <span class="payment-method-name text-white font-medium text-[0.9rem] group-hover:text-[#d4af37] transition-colors text-center">Buy me a coffee</span>
+  </div>
+  <div class="payment-option group flex items-center justify-center p-4 rounded-lg bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.05)] hover:border-[#d4af37] hover:bg-[rgba(212,175,55,0.05)] hover:scale-105 transition-all duration-200 cursor-pointer">
+    <span class="payment-method-name text-white font-medium text-[0.9rem] group-hover:text-[#d4af37] transition-colors">Crypto</span>
+  </div>
+</div>
+
+    <!-- ///////////////////////////////////////////////////////////////////
+         ////////////////////       Conscentement       ////////////////////
+         ///////////////////////////////////////////////////////////////////-->  
+<p class="text-[#cccccc] text-[0.85rem] leading-[1.4] my-4 text-left px-4 py-2.5 rounded-md">
+  En cliquant sur « Terminer la commande », vous acceptez les conditions générales.
+</p>
+
+<!-- Finalize Button -->
+<button type="submit" id="checkout-button" class="lg:hidden block w-full max-w-[320px] mx-auto mt-6 px-5 py-3 rounded-lg font-bold text-[0.95rem] text-black bg-gradient-to-br from-[#b8860b] to-[#d4af37] hover:from-[#d4af37] hover:to-[#f9e79f] transition-all duration-200">
+  <span id="button-text-mobile">Finaliser la Commande</span>
+  <span id="button-price-mobile" class="ml-2 font-extrabold"></span>
+</button>
+
+ <!-- Sidebar récapitulatif (droite) -->
+<aside class="lg:block hidden">
+  <div class="bg-[rgba(22,22,32,0.7)] rounded-xl p-6 border border-[rgba(212,175,55,0.1)] sticky top-24">
+    <h2 class="text-[1.3rem] mb-6 text-[#d4af37] font-bold">Récapitulatif</h2>
+
+    <!-- 💰 DÉTAILS DES PRIX -->
+    <div class="space-y-2 mb-4 pb-4 border-b border-[rgba(212,175,55,0.2)]">
+      <!-- Sous-total HT -->
+      <div class="flex justify-between text-sm">
+        <span class="text-text-gray">Sous-total HT</span>
+        <span id="summary-subtotal-ht" class="text-text-white font-medium">€0.00</span>
+      </div>
+      
+      <!-- TVA 20% -->
+      <div class="flex justify-between text-sm">
+        <span class="text-text-gray">TVA (20%)</span>
+        <span id="summary-tva" class="text-text-white font-medium">€0.00</span>
+      </div>
+
+      <!-- 🚚 LIVRAISON -->
+      <div class="flex justify-between text-sm mb-4">
+        <span class="text-text-gray">Livraison</span>
+        <span id="summary-shipping" class="text-text-white font-medium">Gratuit</span>
+      </div>
+      
+      <!-- Total TTC avant réduction -->
+      <div class="flex justify-between text-sm pt-2 ">
+        <span class="text-text-white font-semibold">Total TTC</span>
+        <span id="summary-total-ttc" class="text-text-white font-semibold">€0.00</span>
+      </div>
+    </div>
+
+    <!-- 🎉 CODE PROMO (si appliqué) -->
+    <div id="discount-section" class="mb-4 hidden">
+      <div class="flex justify-between items-center text-green-400 bg-[rgba(34,197,94,0.1)] px-3 py-2 rounded-lg border border-green-400/20">
+        <span class="text-[0.9rem]">
+          <span class="mr-1">🎉</span>
+          <span id="discount-code-name" class="font-semibold"></span>
+        </span>
+        <span id="discount-amount" class="font-bold">-€0.00</span>
+      </div>
+    </div>
+
+    <!-- 💳 TOTAL À PAYER -->
+    <div class="mb-6">
+      <!-- Prix sans réduction -->
+      <div id="total-without-discount" class="flex justify-between items-center">
+        <span class="text-[1.1rem] font-bold text-white">Total à payer</span>
+        <span id="summary-total-original" class="text-[1.3rem] font-bold text-[#d4af37]">€0.00</span>
+      </div>
+      
+      <!-- Prix avec réduction -->
+      <div id="total-with-discount" class="hidden">
+        <div class="flex justify-between items-center">
+          <span class="text-[1.1rem] font-bold text-white">Total à payer</span>
+          <span id="summary-total-discounted" class="text-[1.4rem] font-bold text-green-400">€0.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bouton Desktop -->
+    <button type="submit" id="checkout-button-desktop" class="block w-full px-5 py-4 rounded-lg font-bold text-[1rem] text-black bg-gradient-to-br from-[#b8860b] to-[#d4af37] hover:from-[#d4af37] hover:to-[#f9e79f] transition-all duration-200 shadow-lg hover:shadow-xl">
+      <span id="button-text">Finaliser la Commande</span>
+      <span id="button-price" class="ml-2 font-extrabold"></span>
+    </button>
+  </div>
+</aside>
+      </form>
     </main>
 </div>
+
+<script>
+
+</script>
     </body>
 </html>
