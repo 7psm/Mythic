@@ -19,11 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Clé de chiffrement
   const ENCRYPTION_KEY = "checkout_secure_key_2024";
 
-  if (form) {
-    // Cela gère l'appui sur ENTER ou le clic sur les boutons de type submit
-    form.addEventListener('submit', finalizeOrder);
-
-}
+  // ✅ CORRECTION : Supprimer la ligne problématique
+  // ❌ ANCIEN CODE (qui causait l'erreur) :
+  // if (form) {
+  //   form.addEventListener('submit', finalizeOrder);
+  // }
 
 // ===================================================================
 //   FONCTION CENTRALE - Récupération des codes depuis localStorage
@@ -359,6 +359,12 @@ function getDiscountCodes() {
       }
     };
     
+    // ✅ CORRECTION : Attacher l'événement submit au formulaire
+    if (form) {
+      form.addEventListener('submit', handleSubmit);
+    }
+    
+    // Aussi attacher aux boutons si nécessaire
     if (submitButtonDesktop) {
       submitButtonDesktop.addEventListener("click", handleSubmit);
     }

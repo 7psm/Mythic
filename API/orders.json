@@ -289,5 +289,50 @@
     "createdAt": "2025-12-10T21:14:43.828Z",
     "emailSent": true,
     "discordNotified": false
+  },
+  {
+    "id": 1765402545333,
+    "orderNumber": "PM-649470-8775",
+    "orderDate": "2025-12-10T21:35:27.077Z",
+    "discordname": ".7psm",
+    "email": "boumbaover@gmail.com",
+    "discord": ".7psm",
+    "orderItems": [
+      {
+        "id": "1765402469587",
+        "name": "Nitro Boost 1 mois",
+        "price": 6,
+        "quantity": 1,
+        "image": "/public/products/banners/Nitro.png",
+        "category": "nitro"
+      },
+      {
+        "id": "1765402471122",
+        "name": "Nitro Basic 1 mois",
+        "price": 1.5,
+        "quantity": 1,
+        "image": "/public/products/banners/Nitro.png",
+        "category": "nitro"
+      }
+    ],
+    "shippingMethod": {
+      "name": "Livraison Express",
+      "price": 2.5,
+      "delivery": "2-4H"
+    },
+    "paymentMethod": "Paypal",
+    "status": "CONFIRMED",
+    "appliedDiscount": {
+      "code": "WOQG13HY",
+      "type": "percentage",
+      "value": 20,
+      "description": "-20%"
+    },
+    "discountAmount": 1.8,
+    "selectedVendor": ".uwg9",
+    "submittedAt": "2025-12-10T21:35:45.284Z",
+    "createdAt": "2025-12-10T21:35:45.333Z",
+    "emailSent": true,
+    "discordNotified": false
   }
 ]
