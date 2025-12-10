@@ -2,25 +2,28 @@
 
 ## V1 : Version complète pour PC 
 
-## [1.2.0] - 2025-09-18
+## [1.2.0] - 2025-12-18
 
-### 🚀 Fonctionnalités et améliorations 
-💠 Système de Version améliorer
-💠 Nouvelle page Abonnements (paiements via buymeacoffee et +)
-💠 Nouveaux moyens de paiements 
-💠 Ajout d'une FAQ sur la page Confiance & Sécurité
-💠 Ajout d'un  système de code de réduction sur la page Panier + mail
+## 🧶 Nouveautés
+💠 Système de version amélioré (vérifie la version actuelle du site et actualise si nécessaire)
+💠 Nouvelle page Abonnements (paiements via BuyMeACoffee & plus)
+💠 Ajout d’une FAQ sur la page Confiance & Sécurité
+💠 Nouveaux moyens de paiement
+💠 Ajout d’un système de codes de réduction sur la page Panier
+💠 Nouveaux produits ajoutés (+ sélecteur pour variantes)
+💠 Ajout du bot pour les commandes (réception du reçu en MP)
 
-### 🔧 Changes
-💠 Nouveau style sur la page Contact
-💠 Nouveau style des avis sur la page  Confiance & Sécurité
-💠 Supression scroll bar page Accueil
-💠 Passage COMPLET des fichiers CSS en Tailwind CSS
+## 🎀 Modifications
+💠 Nouveau design sur la page Contact
+💠 Nouvelle présentation des avis sur la page Confiance & Sécurité
+💠 Ajustements mineurs sur la page Checkout
+💠 Passage du CSS à Tailwind CSS (chargement plus léger → site plus rapide)
+💠 Images produits mises à jour (remplacement des billets par des photos réelles)
+💠 Suppression de la section "Informations de livraison" sur les pages Checkout & Confirmation
 
-### 🐛 Fixes
-💠 Patch des images dans la page Cart
-💠 Patch de l'envoie du mail après confirmation de commande
-💠 Patch boutons page Accueil
+## 🐛 Fixes
+💠 Correction d’un bug d’affichage d’images sur la page Panier
+💠 Correction de l’envoi du mail après la confirmation d’une commande
 
 ### 🔍 En cours
 N/A
@@ -28,17 +31,17 @@ N/A
 
 ## 🔮 Versions Futures
 
-### Version 1.2.0 (Planifiée)
+### Version ?? (Planifiée)
 - **Améliorations de performance**
 - **Responsive d'écrans** pour les pc portables & fixes
 - **Sécuriser** le site afin de permettre une protection maximale pour les clients
 
-### Version 1.3.0 (Planifiée)
+### Version ?? (Planifiée)
 - **PWA** (Progressive Web App)
 - **Offline mode**
 - **Security Update** afin d'améliorer la sécurité du site 
 
-### Version 2.0.0 (Planifiée)
+### Version ?? (Planifiée)
 - **Architecture microservices**
 - **Base de données** PostgreSQL
 - **Error 404** Ajout d'une page erreur 404 

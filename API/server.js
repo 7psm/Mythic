@@ -23,14 +23,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // =============================================
-//           📞 APPEL CORS
-// =============================================
-app.use(cors({
-  origin: "https://getmythic.netlify.app",
-  methods: "GET,POST",
-}));
-
-// =============================================
 // 📧 VALIDATION MAIL
 // =============================================
 console.log("📧 Chargement du système Mail...");
@@ -78,14 +70,14 @@ app.options("*", (req, res) => {
   res.sendStatus(200);
 });
 
-// =============================================
-// 📧 ROUTES EMAIL
-// =============================================
+// ================================
+//       📧 ROUTES EMAIL
+// ================================
 app.use("/api/email", emailRoutes);
 
-// =============================================
-// 🔁 ROUTES COMMANDES
-// =============================================
+// ========================
+//   🔁 ROUTES COMMANDES
+// ========================
 
 // Lire toutes les commandes
 app.get("/api/orders", async (req, res) => {
@@ -230,7 +222,7 @@ res.status(201).json({
 });
 
 // =============================================
-// 🧪 ROUTES STATUS DISCORD
+//        🧪 ROUTES STATUS DISCORD
 // =============================================
 app.get("/api/discord/status", (req, res) => {
   const status = discordBotService.getStatus();
@@ -248,9 +240,9 @@ app.get("/api/discord/status", (req, res) => {
   });
 });
 
-// =============================================
-// 🛠️ MAINTENANCE
-// =============================================
+// ===========================
+//       🛠️ MAINTENANCE
+// ===========================
 const maintenanceDataPath = path.join(__dirname, "maintenance.json");
 let maintenanceStatus = { 
   status: "online", 
@@ -323,9 +315,9 @@ app.post("/api/maintenance/updates", (req, res) => {
   res.json({ success: true, updates: maintenanceUpdates });
 });
 
-// =============================================
-// 🌐 FRONTEND
-// =============================================
+// =============================
+//          🌐 FRONTEND
+// =============================
 app.use(express.static(path.join(__dirname, "../")));
 app.use(express.static("public"));
 
@@ -343,7 +335,7 @@ app.get("*", (req, res) => {
 });
 
 // =============================================
-// 🤖 BOT DISCORD - ATTENTE CONNEXION
+//    🤖 BOT DISCORD - ATTENTE CONNEXION
 // =============================================
 const waitForBot = async () => {
   let attempts = 0;
@@ -390,7 +382,7 @@ const waitForBot = async () => {
 waitForBot().catch((err) => console.error("❌ Erreur démarrage bot:", err));
 
 // =============================================
-// 🛑 GESTION SIGNAUX / ERREURS
+//     🛑 GESTION SIGNAUX / ERREURS
 // =============================================
 const shutdownBot = async () => {
   try {
@@ -427,7 +419,7 @@ process.on("uncaughtException", async (err) => {
 });
 
 // =============================================
-// 🚀 LANCEMENT SERVEUR
+//          🚀 LANCEMENT SERVEUR
 // =============================================
 app.listen(PORT, () => {
   console.log("\n" + "=".repeat(50));

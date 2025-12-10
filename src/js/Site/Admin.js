@@ -1,8 +1,10 @@
 // =============================================
-// PAGE ADMIN - MythicMarket - PARTIE 1/2
+//        PAGE ADMIN - MythicMarket (SÉCURISÉE)
 // =============================================
 
-// GÉNÉRATION D'ÉTOILES
+// =============================================
+//       GENERATION ETOILE - MythicMarket
+// =============================================
 const starsContainer = document.getElementById('stars');
 for(let i=0;i<50;i++){
   const star = document.createElement('div');
@@ -15,43 +17,273 @@ for(let i=0;i<50;i++){
   starsContainer.appendChild(star);
 }
 
-// RACCOURCI CLAVIER CTRL+SHIFT+F
+// =============================================
+//        SÉCURITÉ - SYSTÈME D'AUTHENTIFICATION
+// =============================================
+
+// 🔐 Hash SHA-256 du mot de passe "evannn"
+// Généré avec: await crypto.subtle.digest('SHA-256', new TextEncoder().encode('evannn'))
+const PASSWORD_HASH = 'd3d650c1db24815e0d97bf3219577bd2a67f3561b85ed0677dc11d0a70cc781b';
+
+// ⏱️ Limite de tentatives
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes en millisecondes
+
+// 🔒 Session expiration
+const SESSION_DURATION = 2 * 60 * 60 * 1000; // 2 heures
+
+// Récupérer les données de sécurité
+function getSecurityData() {
+  try {
+    const data = localStorage.getItem('adminSecurity');
+    return data ? JSON.parse(data) : {
+      attempts: 0,
+      lockoutUntil: null,
+      sessionExpiry: null
+    };
+  } catch {
+    return { attempts: 0, lockoutUntil: null, sessionExpiry: null };
+  }
+}
+
+// Sauvegarder les données de sécurité
+function saveSecurityData(data) {
+  localStorage.setItem('adminSecurity', JSON.stringify(data));
+}
+
+// Fonction de hashage SHA-256
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Vérifier si le compte est verrouillé
+function isLockedOut() {
+  const security = getSecurityData();
+  if (security.lockoutUntil) {
+    const now = Date.now();
+    if (now < security.lockoutUntil) {
+      const remainingMinutes = Math.ceil((security.lockoutUntil - now) / 60000);
+      return remainingMinutes;
+    } else {
+      // Le verrouillage est expiré, réinitialiser
+      security.lockoutUntil = null;
+      security.attempts = 0;
+      saveSecurityData(security);
+      return false;
+    }
+  }
+  return false;
+}
+
+// Vérifier si la session est valide
+function isSessionValid() {
+  const security = getSecurityData();
+  if (security.sessionExpiry) {
+    return Date.now() < security.sessionExpiry;
+  }
+  return false;
+}
+
+// Créer une nouvelle session
+function createSession() {
+  const security = getSecurityData();
+  security.sessionExpiry = Date.now() + SESSION_DURATION;
+  security.attempts = 0;
+  security.lockoutUntil = null;
+  saveSecurityData(security);
+}
+
+// Détruire la session
+function destroySession() {
+  const security = getSecurityData();
+  security.sessionExpiry = null;
+  saveSecurityData(security);
+}
+
+// =============================================
+//        RACCOURCI CLAVIER - MythicMarket
+// =============================================
 document.addEventListener('keydown', (e) => {
   if(e.ctrlKey && e.shiftKey && e.key === 'F'){
     e.preventDefault();
-    document.getElementById('password-modal').classList.remove('hidden');
-    document.getElementById('password-input').focus();
+    
+    // Vérifier si déjà connecté
+    if (isSessionValid()) {
+      document.getElementById('error-page').classList.add('hidden');
+      document.getElementById('admin-panel').style.display = 'block';
+      loadCodes();
+      loadVersionHistory();
+      updateStatsDisplay();
+    } else {
+      document.getElementById('password-modal').classList.remove('hidden');
+      document.getElementById('password-input').focus();
+    }
   }
 });
 
-// VALIDATION MOT DE PASSE
+// =============================================
+//     MOT DE PASSE CHECKER - MythicMarket
+// =============================================
 document.getElementById('password-input')?.addEventListener('keypress', (e) => {
   if(e.key === 'Enter') checkPassword();
 });
 
-function checkPassword(){
-  const pwd = document.getElementById('password-input').value;
-  if(pwd === 'evannn'){
+async function checkPassword(){
+  const passwordInput = document.getElementById('password-input');
+  const errorEl = document.getElementById('password-error');
+  const pwd = passwordInput.value;
+  
+  // Vérifier le verrouillage
+  const lockedMinutes = isLockedOut();
+  if (lockedMinutes !== false) {
+    errorEl.textContent = `🔒 Trop de tentatives. Réessayez dans ${lockedMinutes} minute(s).`;
+    errorEl.classList.remove('hidden');
+    passwordInput.value = '';
+    return;
+  }
+  
+  // Hasher le mot de passe entré
+  const hashedInput = await hashPassword(pwd);
+  
+  // Récupérer les données de sécurité
+  const security = getSecurityData();
+  
+  if(hashedInput === PASSWORD_HASH){
+    // ✅ Mot de passe correct
+    console.log('✅ Authentification réussie');
+    
+    // Créer une session
+    createSession();
+    
+    // Cacher le modal et afficher le panel
     document.getElementById('password-modal').classList.add('hidden');
     document.getElementById('error-page').classList.add('hidden');
     document.getElementById('admin-panel').style.display = 'block';
+    
+    // Charger les données
     loadCodes();
     loadVersionHistory();
     updateStatsDisplay();
+    
+    // Réinitialiser le champ
+    passwordInput.value = '';
+    errorEl.classList.add('hidden');
+    
+    // Démarrer le timer de session
+    startSessionTimer();
+    
   } else {
-    document.getElementById('password-error').classList.remove('hidden');
-    document.getElementById('password-input').value = '';
+    // ❌ Mot de passe incorrect
+    console.log('❌ Tentative échouée');
+    
+    security.attempts++;
+    
+    const remainingAttempts = MAX_ATTEMPTS - security.attempts;
+    
+    if (security.attempts >= MAX_ATTEMPTS) {
+      // Verrouiller le compte
+      security.lockoutUntil = Date.now() + LOCKOUT_DURATION;
+      saveSecurityData(security);
+      
+      errorEl.textContent = `🔒 Compte verrouillé pour 15 minutes après ${MAX_ATTEMPTS} tentatives.`;
+      console.warn('🔒 Compte verrouillé pour 15 minutes');
+    } else {
+      saveSecurityData(security);
+      errorEl.textContent = `❌ Mot de passe incorrect (${remainingAttempts} tentative(s) restante(s))`;
+    }
+    
+    errorEl.classList.remove('hidden');
+    passwordInput.value = '';
   }
 }
 
+// Timer de session
+let sessionTimer = null;
+
+function startSessionTimer() {
+  // Clear l'ancien timer si existe
+  if (sessionTimer) {
+    clearTimeout(sessionTimer);
+  }
+  
+  // Afficher l'indicateur de session
+  updateSessionIndicator();
+  
+  sessionTimer = setTimeout(() => {
+    console.warn('⏱️ Session expirée');
+    logout();
+    alert('🔒 Votre session a expiré pour des raisons de sécurité. Veuillez vous reconnecter.');
+  }, SESSION_DURATION);
+}
+
+// Afficher le temps restant de session
+function updateSessionIndicator() {
+  const security = getSecurityData();
+  if (!security.sessionExpiry) return;
+  
+  const remaining = security.sessionExpiry - Date.now();
+  const hours = Math.floor(remaining / (60 * 60 * 1000));
+  const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
+  
+  // Créer ou mettre à jour l'indicateur
+  let indicator = document.getElementById('session-indicator');
+  if (!indicator) {
+    indicator = document.createElement('div');
+    indicator.id = 'session-indicator';
+    indicator.className = 'glass px-3 py-1 rounded-lg text-xs text-gray-400 ml-4';
+    const header = document.querySelector('#admin-panel .flex.items-center.gap-4');
+    if (header) header.appendChild(indicator);
+  }
+  
+  if (remaining > 0) {
+    indicator.textContent = `⏱️ Session: ${hours}h ${minutes}m`;
+    indicator.classList.remove('text-red-400');
+    indicator.classList.add('text-gray-400');
+  }
+  
+  // Mettre à jour toutes les minutes
+  setTimeout(updateSessionIndicator, 60000);
+}
+
 function logout(){
+  console.log('🚪 Déconnexion');
+  
+  // Détruire la session
+  destroySession();
+  
+  // Clear le timer
+  if (sessionTimer) {
+    clearTimeout(sessionTimer);
+    sessionTimer = null;
+  }
+  
+  // Réinitialiser l'interface
   document.getElementById('admin-panel').style.display = 'none';
   document.getElementById('error-page').classList.remove('hidden');
   document.getElementById('password-input').value = '';
   document.getElementById('password-error').classList.add('hidden');
 }
 
-// GESTION DES TABS
+// Vérifier la session au chargement
+window.addEventListener('DOMContentLoaded', () => {
+  if (isSessionValid()) {
+    console.log('✅ Session active détectée');
+    document.getElementById('error-page').classList.add('hidden');
+    document.getElementById('admin-panel').style.display = 'block';
+    loadCodes();
+    loadVersionHistory();
+    updateStatsDisplay();
+    startSessionTimer();
+  }
+});
+
+// =============================================
+//       GESTION DES TABS - MythicMarket
+// =============================================
 function switchTab(tab){
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
@@ -382,9 +614,7 @@ function showVersionMessage(msg, type){
   setTimeout(() => el.classList.add('hidden'), 3000);
 }
 
-// =============================================
-// PAGE ADMIN - MythicMarket - PARTIE 2/2
-// =============================================
+
 // GESTION DES STATISTIQUES (LOCALSTORAGE)
 // =============================================
 

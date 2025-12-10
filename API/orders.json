@@ -252,5 +252,42 @@
     "createdAt": "2025-12-08T20:37:05.745Z",
     "emailSent": true,
     "discordNotified": false
+  },
+  {
+    "id": 1765401283828,
+    "orderNumber": "PM-127697-4526",
+    "orderDate": "2025-12-10T21:14:36.883Z",
+    "discordname": ".7psm",
+    "email": "boumbaover@gmail.com",
+    "discord": ".7psm",
+    "orderItems": [
+      {
+        "id": "1765401104488",
+        "name": "Nitro Basic 1 mois",
+        "price": 1.5,
+        "quantity": 1,
+        "image": "/public/products/banners/Nitro.png",
+        "category": "nitro"
+      }
+    ],
+    "shippingMethod": {
+      "name": "Livraison Express",
+      "price": 2.5,
+      "delivery": "2-4H"
+    },
+    "paymentMethod": "Revolut",
+    "status": "CONFIRMED",
+    "appliedDiscount": {
+      "code": "WOQG13HY",
+      "type": "percentage",
+      "value": 20,
+      "description": "-20%"
+    },
+    "discountAmount": 0.36000000000000004,
+    "selectedVendor": ".uwg9",
+    "submittedAt": "2025-12-10T21:14:43.482Z",
+    "createdAt": "2025-12-10T21:14:43.828Z",
+    "emailSent": true,
+    "discordNotified": false
   }
 ]

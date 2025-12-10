@@ -1,5 +1,5 @@
 // =============================================
-// BUTTON INTERACTION HANDLERS
+//        BUTTON INTERACTION HANDLERS
 // =============================================
 // Gestion des interactions avec les boutons
 

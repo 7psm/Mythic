@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // =============================================
 // SCRIPT DE VÉRIFICATION DE SÉCURITÉ - MythicMarket
 // =============================================

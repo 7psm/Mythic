@@ -1,12 +1,12 @@
 // =============================================
-// PAGE DE CHECKOUT - MythicMarket
+//      PAGE DE CHECKOUT - MythicMarket
 // =============================================
 document.addEventListener("DOMContentLoaded", () => {
   console.log("🚀 Initialisation Checkout");
   
-  // =============================================
-  // SÉLECTION DES ÉLÉMENTS DOM
-  // =============================================
+// =============================================
+//        SÉLECTION DES ÉLÉMENTS DOM
+// =============================================
   const paymentOptions = document.querySelectorAll(".payment-option");
   const shippingOptions = document.querySelectorAll(".shipping-option");
   const cartCountElem = document.querySelector(".cart-count");
@@ -25,9 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 }
 
-// =============================================
-// FONCTION CENTRALE - Récupération des codes depuis localStorage
-// =============================================
+// ===================================================================
+//   FONCTION CENTRALE - Récupération des codes depuis localStorage
+// ===================================================================
 function getDiscountCodes() {
   try {
     const codes = localStorage.getItem('discountCodes');
@@ -38,9 +38,9 @@ function getDiscountCodes() {
   }
 }
 
-  // =============================================
-  // FONCTIONS UTILITAIRES
-  // =============================================
+// =============================================
+//            FONCTIONS UTILITAIRES
+// =============================================
   
   function encryptData(data) {
     try { 
@@ -59,7 +59,7 @@ function getDiscountCodes() {
   }
 
   // =============================================
-  // SAUVEGARDE DES DONNÉES
+  //          SAUVEGARDE DES DONNÉES
   // =============================================
   function saveFormDataSecurely() {
     if (!form) return;
@@ -92,9 +92,9 @@ function getDiscountCodes() {
     return formData;
   }
 
-  // =============================================
-  // CALCULS
-  // =============================================
+// =============================================
+//                  CALCULS
+// =============================================
   function calculateOrderTotal() {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     const subtotal = cart.reduce((t, item) => t + item.price * item.quantity, 0);
@@ -191,9 +191,9 @@ function getDiscountCodes() {
     final: finalTotal.toFixed(2)
   });
 
-  // =============================================
-  // MISE À JOUR DE L'AFFICHAGE
-  // =============================================
+// =============================================
+//         MISE À JOUR DE L'AFFICHAGE
+// =============================================
   
   // Sous-total HT
   const subtotalEl = document.getElementById('summary-subtotal-ht');
@@ -262,9 +262,9 @@ function getDiscountCodes() {
   }
 }
 
-  // =============================================
-  // CONFIGURATION DES OPTIONS
-  // =============================================
+// =============================================
+//         CONFIGURATION DES OPTIONS
+// =============================================
   function setupOptionListeners(options, storageKey) {
     options.forEach(option => {
       option.addEventListener("click", e => {
@@ -286,9 +286,9 @@ function getDiscountCodes() {
     shippingOptions.forEach(opt => opt.classList.remove("selected"));
   }
 
-  // =============================================
-  // VALIDATION DU FORMULAIRE
-  // =============================================
+// =============================================
+//         VALIDATION DU FORMULAIRE
+// =============================================
   function setupFormValidation() {
     if (!form) {
       console.error("Formulaire non trouvé");
@@ -367,9 +367,9 @@ function getDiscountCodes() {
     }
   }
 
-  // =============================================
-  // SÉLECTION SHIPPING & PAYMENT
-  // =============================================
+// =============================================
+//        SÉLECTION SHIPPING & PAYMENT
+// =============================================
   shippingOptions.forEach(option => {
     option.addEventListener('click', () => {
       shippingOptions.forEach(o => {
@@ -388,9 +388,10 @@ function getDiscountCodes() {
       option.classList.add('selected', 'bg-[rgba(212,175,55,0.1)]', 'border-[#d4af37]');
     });
   });
-  // =============================================
-  // INITIALISATION
-  // =============================================
+
+// =============================================
+//              INITIALISATION
+// =============================================
   function initialize() {
     updateCartCount();
     displayCartItems();

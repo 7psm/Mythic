@@ -1,5 +1,5 @@
 // =============================================
-// SLASH COMMANDS DEFINITIONS
+//        SLASH COMMANDS DEFINITIONS
 // =============================================
 // Définitions de toutes les commandes slash
 

@@ -1,4 +1,6 @@
-// Script pour gérer l'état actif de la navbar et le menu mobile
+// =============================================
+//     ACTIVE NAVBAR + MOBILE - MythicMarket
+// =============================================
 document.addEventListener('DOMContentLoaded', function() {
     // Récupérer l'URL actuelle
     const currentPath = window.location.pathname;

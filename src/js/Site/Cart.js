@@ -1,3 +1,6 @@
+// =============================================
+//        PAGE CART - MythicMarket
+// =============================================
 document.addEventListener("DOMContentLoaded", () => {
   console.log("=== INITIALISATION PAGE PANIER ===");
   
@@ -22,42 +25,45 @@ document.addEventListener("DOMContentLoaded", () => {
   // =============================================
   
   function readCart() {
-  try {
-    const cartData = localStorage.getItem("cart");
-    console.log("Données brutes du panier:", cartData);
-    const cart = JSON.parse(cartData || "[]");
-    console.log("Panier parsé:", cart);
-    return cart;
-  } catch (error) {
-    console.error("Erreur lors de la lecture du panier depuis localStorage", error);
-    return [];
+    try {
+      const cartData = localStorage.getItem("cart");
+      console.log("Données brutes du panier:", cartData);
+      const cart = JSON.parse(cartData || "[]");
+      console.log("Panier parsé:", cart);
+      return cart;
+    } catch (error) {
+      console.error("Erreur lors de la lecture du panier depuis localStorage", error);
+      return [];
+    }
   }
-}
 
-// =============================================
-// FONCTION CENTRALE - Récupération des codes depuis localStorage
-// =============================================
-function getDiscountCodes() {
-  try {
-    const codes = localStorage.getItem('discountCodes');
-    return codes ? JSON.parse(codes) : {};
-  } catch (error) {
-    console.error('Erreur lecture codes promo:', error);
-    return {};
+  // ========================================================================
+  //    FONCTION CENTRALE - Récupération des codes depuis localStorage
+  // ========================================================================
+  function getDiscountCodes() {
+    try {
+      const codes = localStorage.getItem('discountCodes');
+      console.log('📦 Codes bruts du localStorage:', codes);
+      const parsed = codes ? JSON.parse(codes) : {};
+      console.log('✅ Codes parsés:', parsed);
+      return parsed;
+    } catch (error) {
+      console.error('❌ Erreur lecture codes promo:', error);
+      return {};
+    }
   }
-}
 
-function writeCart(cart) {
-  try {
-    localStorage.setItem("cart", JSON.stringify(cart));
-    console.log("Panier sauvegardé:", cart);
-  } catch (error) {
-    console.error("Erreur lors de l'écriture du panier dans localStorage", error);
+  function writeCart(cart) {
+    try {
+      localStorage.setItem("cart", JSON.stringify(cart));
+      console.log("Panier sauvegardé:", cart);
+    } catch (error) {
+      console.error("Erreur lors de l'écriture du panier dans localStorage", error);
+    }
   }
-}
 
   // =============================================
-  // MISE À JOUR DU COMPTEUR D'ARTICLES
+  //    MISE À JOUR DU COMPTEUR D'ARTICLES
   // =============================================
   function updateCartCount() {
     const cart = readCart();
@@ -74,9 +80,9 @@ function writeCart(cart) {
     }
   }
 
-  // =============================================
-  // CRÉATION DES ÉLÉMENTS D'ARTICLES DU PANIER AVEC SVG
-  // =============================================
+  // =========================================================
+  //   CRÉATION DES ÉLÉMENTS D'ARTICLES DU PANIER AVEC SVG
+  // =========================================================
   function createCartItemElement(item) {
     console.log("Création de l'élément pour:", item);
     
@@ -94,14 +100,12 @@ function writeCart(cart) {
     const productName = item.name.toLowerCase();
     
     if (productName.includes('nitro')) {
-      // Icône Nitro (éclair)
       svgIcon = `
         <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" fill="#5865F2" stroke="#7289DA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       `;
     } else if (productName.includes('boost')) {
-      // Icône Boost (fusée)
       svgIcon = `
         <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 2C12 2 6 6 6 12C6 15 7 18 7 18L12 22L17 18C17 18 18 15 18 12C18 6 12 2 12 2Z" fill="#F093FB" stroke="#F5576C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -109,14 +113,12 @@ function writeCart(cart) {
         </svg>
       `;
     } else if (productName.includes('avatar') || productName.includes('décoration')) {
-      // Icône Décoration (étoile)
       svgIcon = `
         <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#43E97B" stroke="#38F9D7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       `;
     } else if (productName.includes('member')) {
-      // Icône Members (groupe)
       svgIcon = `
         <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="9" cy="7" r="4" fill="#FA709A" stroke="#FEE140" stroke-width="1.5"/>
@@ -126,7 +128,6 @@ function writeCart(cart) {
         </svg>
       `;
     } else {
-      // Icône par défaut (paquet)
       svgIcon = `
         <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" fill="#5865F2" stroke="#7289DA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -195,7 +196,7 @@ function writeCart(cart) {
   }
 
   // =============================================
-  // CALCUL ET AFFICHAGE DES TOTAUX
+  //      CALCUL ET AFFICHAGE DES TOTAUX
   // =============================================
   function updateCartTotals() {
     let subtotal = 0;
@@ -228,7 +229,7 @@ function writeCart(cart) {
   }
 
   // =============================================
-  // GESTION DE L'AFFICHAGE DU PANIER VIDE
+  //    GESTION DE L'AFFICHAGE DU PANIER VIDE
   // =============================================
   function checkIfCartEmpty() {
     const cart = readCart();
@@ -253,7 +254,7 @@ function writeCart(cart) {
   }
 
   // =============================================
-  // CHARGEMENT ET AFFICHAGE DU PANIER
+  //     CHARGEMENT ET AFFICHAGE DU PANIER
   // =============================================
   function loadCart() {
     console.log("=== CHARGEMENT DU PANIER ===");
@@ -293,7 +294,7 @@ function writeCart(cart) {
   }
 
   // =============================================
-  // SUPPRESSION D'ARTICLES DU PANIER
+  //      SUPPRESSION D'ARTICLES DU PANIER
   // =============================================
   function removeItem(itemElement) {
     console.log("=== SUPPRESSION ARTICLE ===");
@@ -317,9 +318,9 @@ function writeCart(cart) {
     console.log("=== FIN SUPPRESSION ===");
   }
 
-  // =============================================
-  // SYNCHRONISATION DU PANIER AVEC LE STOCKAGE
-  // =============================================
+  // ===============================================
+  //   SYNCHRONISATION DU PANIER AVEC LE STOCKAGE
+  // ===============================================
   function syncCartStorage() {
     const cart = [];
     
@@ -332,7 +333,7 @@ function writeCart(cart) {
           id: item.dataset.id,
           name: nameEl.textContent,
           price: parseFloat(item.dataset.price),
-          image: '/public/logo.png', // Image par défaut
+          image: '/public/logo.png',
           quantity: parseInt(quantityDisplay.textContent) || 1,
         });
       }
@@ -342,7 +343,7 @@ function writeCart(cart) {
   }
 
   // =============================================
-  // GESTION DES ÉVÉNEMENTS SUR LES ARTICLES
+  //   GESTION DES ÉVÉNEMENTS SUR LES ARTICLES
   // =============================================
   if (cartItemsList) {
     cartItemsList.addEventListener("click", (e) => {
@@ -380,7 +381,7 @@ function writeCart(cart) {
   }
 
   // =============================================
-  // FONCTIONS UTILITAIRES
+  //         FONCTIONS UTILITAIRES
   // =============================================
   
   function clearCart() {
@@ -391,7 +392,7 @@ function writeCart(cart) {
   }
 
   // =============================================
-  // INITIALISATION DE LA PAGE
+  //      INITIALISATION DE LA PAGE
   // =============================================
   
   console.log("Initialisation de la page panier...");
@@ -405,20 +406,23 @@ function writeCart(cart) {
 });
 
 // =============================================
-// GESTION DES CODES DE RÉDUCTION
+//       GESTION DES CODES DE RÉDUCTION
 // =============================================
+
+let currentDiscount = null;
 
 function getDiscountCodes() {
   try {
     const codes = localStorage.getItem('discountCodes');
-    return codes ? JSON.parse(codes) : {};
+    console.log('📦 Codes bruts récupérés:', codes);
+    const parsed = codes ? JSON.parse(codes) : {};
+    console.log('✅ Codes parsés:', parsed);
+    return parsed;
   } catch (error) {
-    console.error('Erreur lecture codes promo:', error);
+    console.error('❌ Erreur lecture codes promo:', error);
     return {};
   }
 }
-
-let currentDiscount = null;
 
 function loadAppliedDiscount() {
   try {
@@ -501,14 +505,20 @@ function applyDiscount() {
   const input = document.getElementById('discount-code');
   const code = input.value.trim().toUpperCase();
 
+  console.log('🔍 Tentative d\'application du code:', code);
+
   if (!code) {
     showMessage('⚠️ Veuillez entrer un code', true);
     return;
   }
 
   const DISCOUNT_CODES = getDiscountCodes();
+  console.log('📋 Codes disponibles:', DISCOUNT_CODES);
+  console.log('🔑 Clés des codes:', Object.keys(DISCOUNT_CODES));
 
   if (DISCOUNT_CODES[code]) {
+    console.log('✅ Code trouvé!', DISCOUNT_CODES[code]);
+    
     currentDiscount = {
       code: code,
       ...DISCOUNT_CODES[code]
@@ -532,7 +542,13 @@ function applyDiscount() {
     updatePrices();
     
     console.log('✅ Code promo appliqué:', code);
+    showMessage(`✓ Code "${code}" appliqué avec succès!`, false);
   } else {
+    console.log('❌ Code invalide:', code);
+    console.log('Comparaison:');
+    Object.keys(DISCOUNT_CODES).forEach(key => {
+      console.log(`  - "${key}" === "${code}":`, key === code);
+    });
     showMessage('❌ Code invalide', true);
   }
 }
@@ -568,7 +584,46 @@ function saveDiscountToStorage() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  loadAppliedDiscount(); // 👈 NOUVEAU : charge le code au démarrage
+  console.log('🎬 Initialisation système de codes promo');
+  
+  // Charger les codes au démarrage pour vérifier
+  const codes = getDiscountCodes();
+  console.log('📦 Codes chargés au démarrage:', codes);
+  
+  // 🔄 SYNCHRONISATION ENTRE ONGLETS
+  // Écouter les changements de localStorage faits dans d'autres onglets
+  window.addEventListener('storage', function(e) {
+    console.log('🔔 Changement détecté dans localStorage:', e.key);
+    
+    // Si les codes promo ont été modifiés dans un autre onglet
+    if (e.key === 'discountCodes') {
+      console.log('✨ Codes promo mis à jour depuis un autre onglet!');
+      console.log('Ancienne valeur:', e.oldValue);
+      console.log('Nouvelle valeur:', e.newValue);
+      
+      // Recharger les codes pour la prochaine validation
+      const updatedCodes = getDiscountCodes();
+      console.log('📦 Codes rechargés:', updatedCodes);
+      
+      // Afficher une notification temporaire
+      const oldCodes = e.oldValue ? JSON.parse(e.oldValue) : {};
+      const newCodes = e.newValue ? JSON.parse(e.newValue) : {};
+      const addedCodes = Object.keys(newCodes).filter(k => !oldCodes[k]);
+      
+      if (addedCodes.length > 0) {
+        showMessage(`✨ Nouveau code disponible : ${addedCodes.join(', ')}`, false);
+        setTimeout(hideMessage, 5000);
+      }
+    }
+    
+    // Si un code promo a été appliqué/retiré dans un autre onglet
+    if (e.key === 'appliedDiscount') {
+      console.log('🎟️ Code appliqué mis à jour depuis un autre onglet!');
+      loadAppliedDiscount();
+    }
+  });
+  
+  loadAppliedDiscount();
   
   document.getElementById('apply-discount')?.addEventListener('click', applyDiscount);
   document.getElementById('remove-discount')?.addEventListener('click', removeDiscount);

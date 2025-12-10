@@ -1,15 +1,15 @@
-// =============================================
-// PAGE DE CONFIRMATION DE COMMANDE - MythicMarket
-// =============================================
+// ====================================================
+//       PAGE DE CONFIRMATION - MythicMarket
+// ====================================================
 
 const API_URL = window.location.hostname.includes("localhost")
   ? "http://localhost:3001"
-  : "https://<ton-service>.onrender.com";
+  : "https://mythic-api.onrender.com";
 
 
-// =============================================
-// FONCTION CENTRALE - Récupération des codes depuis localStorage
-// =============================================
+// =====================================================================
+//   FONCTION CENTRALE - Récupération des codes depuis localStorage
+// =====================================================================
 function getDiscountCodes() {
   try {
     const codes = localStorage.getItem('discountCodes');
@@ -37,7 +37,7 @@ let selectedVendor = ".uwg9";
 let orderData = {};
 
 // =============================================
-// FONCTIONS D'ANIMATION
+//          FONCTIONS D'ANIMATION
 // =============================================
 
 function addPageAnimations() {
@@ -130,7 +130,7 @@ function initializeAnimations() {
 }
 
 // =============================================
-// FONCTIONS PRINCIPALES
+//         FONCTIONS PRINCIPALES
 // =============================================
 
 function decryptData(encrypted) {
@@ -282,7 +282,7 @@ function calculateAndDisplayTotals() {
   const finalTotal = totalAfterDiscount + shippingCost;
   
   // ===============================================
-  // Ajout des données de rabais à orderData
+  //    Ajout des données de rabais à orderData
   // ===============================================
   orderData.appliedDiscount = appliedDiscount;
   orderData.discountAmount = discountAmount;
@@ -350,7 +350,7 @@ function calculateAndDisplayTotals() {
 }
 
 // =============================================
-// ✨ NOUVELLE FONCTION - Envoi au serveur avec Discord
+//       Envoi au serveur avec Discord
 // =============================================
 async function submitOrderToServer() {
   if (isSubmitting) return false;
@@ -440,7 +440,7 @@ function closeModal(modal) {
 }
 
 // =============================================
-// INITIALISATION
+//             INITIALISATION
 // =============================================
 document.addEventListener('DOMContentLoaded', function() {
   console.log("🚀 =================================");

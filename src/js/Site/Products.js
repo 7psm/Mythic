@@ -1,13 +1,13 @@
 // =============================================
-// PRODUCTS TEST PAGE - JavaScript (Tailwind Version)
+//        PRODUCTS  - MYTHIC MARKET
 // =============================================
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('🚀 Initialisation de la page Products Test');
 
-  // =============================================
-  // PRODUCTS DATA
-  // =============================================
+// =============================
+//        PRODUCTS DATA
+// =============================
   const products = [
     {
       id: 1,
@@ -252,24 +252,24 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   ];
 
-  // =============================================
-  // STATE MANAGEMENT
-  // =============================================
+// =============================================
+// STATE MANAGEMENT
+// =============================================
   let currentCategory = 'all';
   let currentSort = 'recent';
   let filteredProducts = [...products];
 
-  // =============================================
-  // DOM ELEMENTS
-  // =============================================
+// =============================================
+//              DOM ELEMENTS
+// =============================================
   const productsGrid = document.getElementById('products-grid');
   const sortSelect = document.querySelector('.sort-select');
   const productModal = document.getElementById('product-modal');
   const modalBody = document.getElementById('modal-body');
 
-  // =============================================
-  // RENDER PRODUCTS
-  // =============================================
+// =============================================
+//             RENDER PRODUCTS
+// =============================================
   function renderProducts() {
     productsGrid.innerHTML = '';
 
@@ -340,9 +340,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // =============================================
-  // CREATE PRODUCT CARD
-  // =============================================
+// =============================================
+//           CREATE PRODUCT CARD
+// =============================================
   function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'bg-discord-bg rounded-lg overflow-hidden cursor-pointer transition-all duration-200 border border-white/10 hover:-translate-y-1 hover:shadow-2xl hover:border-white/20 relative';
@@ -401,9 +401,9 @@ document.addEventListener('DOMContentLoaded', () => {
     return card;
   }
 
-  // =============================================
-  // FILTER PRODUCTS
-  // =============================================
+// =============================================
+//            FILTER PRODUCTS
+// =============================================
   function filterProducts() {
     let filtered = [...products];
 
@@ -431,9 +431,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
   }
 
-  // =============================================
-  // SORT SELECT
-  // =============================================
+// =============================================
+//               SORT SELECT
+// =============================================
   if (sortSelect) {
     sortSelect.addEventListener('change', (e) => {
       currentSort = e.target.value;
@@ -441,9 +441,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // =============================================
-  // PRODUCT MODAL - Discord Shop Style
-  // =============================================
+// =============================================
+// PRODUCT MODAL - Discord Shop Style
+// =============================================
   function openProductModal(product) {
   // Calculate Nitro price (20% discount) - based on first option or base price
   const basePrice = product.options && product.options.length > 0 ? product.options[0].price : product.price;
@@ -644,9 +644,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // =============================================
-  // ADD TO CART
-  // =============================================
+// =============================================
+//               ADD TO CART
+// =============================================
   function addToCart(product, option) {
   try {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -692,9 +692,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 }
 
-  // =============================================
-  // SHOW TOAST
-  // =============================================
+// =============================================
+//          SHOW TOAST
+// =============================================
   function showToast(name, quantity, price) {
   const container = document.getElementById('toast-container');
   const toast = document.createElement('div');
@@ -738,9 +738,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 3500);
 }
 
-  // =============================================
-  // UPDATE CART COUNT
-  // =============================================
+// =============================================
+//            UPDATE CART COUNT
+// =============================================
   function updateCartCount() {
     try {
       const cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -759,9 +759,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // =============================================
-  // INITIALIZE
-  // =============================================
+// =====================
+//      INITIALIZE
+// =====================
   updateCartCount();
   filterProducts();
   renderProducts();
