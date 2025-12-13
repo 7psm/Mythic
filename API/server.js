@@ -10,8 +10,7 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 
-import emailService from "../MailSystem/emailService-simple.js";
-import { validateConfig } from "../MailSystem/config.js";
+import emailService from "../MailSystem/resendEmailService.js";
 import emailRoutes from "../MailSystem/routes.js";
 import discordBotService from "../Discord/index.js";
 
@@ -23,19 +22,20 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // =============================================
-// 📧 VALIDATION MAIL
+// 📧 INITIALISATION RESEND
 // =============================================
-console.log("📧 Chargement du système Mail...");
+console.log("📧 Initialisation du service Resend...");
 
-const configValidation = validateConfig();
-
-if (configValidation.isValid) {
-  emailService.initializeTransporter().catch((error) => {
-    console.error("❌ Erreur initialisation email:", error);
-  });
-} else {
-  console.log("❌ Configuration email manquante – emails désactivés");
-}
+emailService.initialize().then(() => {
+  const status = emailService.getStatus();
+  if (status.isInitialized) {
+    console.log("✅ Service Resend opérationnel");
+  } else {
+    console.warn("⚠️ Service Resend non configuré - Vérifiez RESEND_API_KEY");
+  }
+}).catch(error => {
+  console.error("❌ Erreur initialisation Resend:", error);
+});
 
 // =============================================
 // 🔥 MIDDLEWARES
@@ -109,7 +109,9 @@ app.get("/api/order/:id", async (req, res) => {
   }
 });
 
-// Créer une nouvelle commande
+// ===================================
+//    🎀 CREATION NOUVELLE COMMANDE
+// ===================================
 app.post("/api/order", async (req, res) => {
   try {
     const ordersPath = path.join(__dirname, "orders.json");
@@ -135,107 +137,106 @@ app.post("/api/order", async (req, res) => {
     await fs.promises.writeFile(ordersPath, JSON.stringify(orders, null, 2));
     console.log("✅ Commande ajoutée:", newOrder.orderNumber);
 
-// 🎉 Notification Discord (un seul envoi)
-try {
-  const discordResult = await discordBotService.sendOrderNotifications(newOrder);
+// =============================
+//    🎉 DISCORD NOTIFICATION
+// =============================
+    try {
+      const discordResult = await discordBotService.sendOrderNotifications(newOrder);
 
-  const vendorSuccess = discordResult?.vendor?.channel?.success || false;
-  const clientSuccess = discordResult?.client?.success || false;
+      const vendorSuccess = discordResult?.vendor?.channel?.success || false;
+      const clientSuccess = discordResult?.client?.success || false;
 
-  if (vendorSuccess || clientSuccess) {
-    const updatedOrders = orders.map((order) =>
-      order.id === newOrder.id ? { ...order, discordNotified: true } : order
-    );
+      if (vendorSuccess || clientSuccess) {
+        const updatedOrders = orders.map((order) =>
+          order.id === newOrder.id ? { ...order, discordNotified: true } : order
+        );
 
-    await fs.promises.writeFile(ordersPath, JSON.stringify(updatedOrders, null, 2));
-    console.log(`✅ Notifications Discord envoyées pour ${newOrder.orderNumber}`);
+        await fs.promises.writeFile(ordersPath, JSON.stringify(updatedOrders, null, 2));
+        console.log(`✅ Notifications Discord envoyées pour ${newOrder.orderNumber}`);
 
-  } else {
-    console.warn(`⚠️ Échec notifications Discord pour ${newOrder.orderNumber}`);
-  }
+      } else {
+        console.warn(`⚠️ Échec notifications Discord pour ${newOrder.orderNumber}`);
+      }
 
-} catch (discordError) {
-  console.error("❌ Erreur notifications Discord:", discordError);
-}
-
-// 📧 Email de confirmation
-const customerEmail = newOrder.email || newOrder.customerInfo?.email || null;
-
-if (customerEmail && customerEmail !== "Non renseigné") {
-  try {
-    console.log(`📧 Envoi email confirmation commande: ${newOrder.orderNumber}`);
-
-    // 🔧 CORRECTION: Extraction correcte des données
-    const items = newOrder.orderItems || newOrder.cart || newOrder.items || [];
-    const shippingCost = newOrder.shippingMethod?.price || newOrder.shippingCost || 0;
-    
-    // Calcul du sous-total
-    const subtotal = items.reduce((sum, item) => {
-      const price = parseFloat(item.price) || 0;
-      const quantity = parseInt(item.quantity) || 1;
-      return sum + (price * quantity);
-    }, 0);
-    
-    const totalAmount = subtotal + shippingCost;
-
-    // 🎯 CORRECTION: Récupération correcte du code promo
-    const appliedDiscount = newOrder.appliedDiscount || null;
-    const discountAmount = parseFloat(newOrder.discountAmount) || 0;
-
-    console.log("📊 Données email:", {
-      customerEmail,
-      orderNumber: newOrder.orderNumber,
-      items: items.length,
-      subtotal: subtotal.toFixed(2),
-      shippingCost: shippingCost.toFixed(2),
-      totalAmount: totalAmount.toFixed(2),
-      appliedDiscount,
-      discountAmount: discountAmount.toFixed(2)
-    });
-
-    const emailResult = await emailService.sendOrderConfirmation({
-      customerEmail,
-      customerName: newOrder.discordname || newOrder.discord || newOrder.name || newOrder.customerInfo?.name || "Client",
-      orderNumber: newOrder.orderNumber || newOrder.id,
-      totalAmount: newOrder.total || newOrder.totalAmount || totalAmount,
-      items,
-      shippingMethod: newOrder.shippingMethod?.name || "Livraison Standard",
-      shippingCost,
-      paymentMethod: newOrder.paymentMethod || "Non spécifié",
-      appliedDiscount,      // ✅ Passe l'objet complet du code promo
-      discountAmount        // ✅ Passe le montant de la réduction
-    });
-
-    if (emailResult.success) {
-      // Mise à jour du statut d'envoi
-      const updatedOrders = orders.map((order) =>
-        order.id === newOrder.id ? { ...order, emailSent: true } : order
-      );
-
-      await fs.promises.writeFile(ordersPath, JSON.stringify(updatedOrders, null, 2));
-      console.log(`✅ Email envoyé pour ${newOrder.orderNumber}`);
-
-    } else {
-      console.warn(`⚠️ Échec envoi email pour ${newOrder.orderNumber}:`, emailResult.error);
+    } catch (discordError) {
+      console.error("❌ Erreur notifications Discord:", discordError);
     }
 
-  } catch (emailError) {
-    console.error("❌ Erreur envoi email:", emailError);
-    console.error("Stack trace:", emailError.stack);
-  }
+// =====================================
+//     📧 CONFIRMATION MAIL (RESEND)
+// =====================================
+    const customerEmail = newOrder.email || newOrder.customerInfo?.email || null;
 
-} else {
-  console.log(`ℹ️ Pas d'email pour ${newOrder.orderNumber} (email manquant ou invalide)`);
-}
+    if (customerEmail && customerEmail !== "Non renseigné") {
+      try {
+        console.log(`📧 Envoi email via Resend: ${newOrder.orderNumber}`);
 
-// 📤 Réponse API
-res.status(201).json({
-  message: "Commande ajoutée avec succès",
-  order: newOrder,
-  success: true,
-  emailStatus: customerEmail ? (newOrder.emailSent ? "envoyé" : "en cours") : "pas d'email",
-  discordStatus: newOrder.discordNotified ? "envoyé" : "en cours",
-});
+        const items = newOrder.orderItems || newOrder.cart || newOrder.items || [];
+        const shippingCost = newOrder.shippingMethod?.price || newOrder.shippingCost || 0;
+        
+        const subtotal = items.reduce((sum, item) => {
+          const price = parseFloat(item.price) || 0;
+          const quantity = parseInt(item.quantity) || 1;
+          return sum + (price * quantity);
+        }, 0);
+        
+        const totalAmount = subtotal + shippingCost;
+
+        const appliedDiscount = newOrder.appliedDiscount || null;
+        const discountAmount = parseFloat(newOrder.discountAmount) || 0;
+
+        console.log("📊 Données email:", {
+          customerEmail,
+          orderNumber: newOrder.orderNumber,
+          items: items.length,
+          subtotal: subtotal.toFixed(2),
+          totalAmount: totalAmount.toFixed(2),
+        });
+
+        const emailResult = await emailService.sendOrderConfirmation({
+          customerEmail,
+          customerName: newOrder.discordname || newOrder.discord || newOrder.name || "Client",
+          orderNumber: newOrder.orderNumber || newOrder.id,
+          totalAmount: newOrder.total || newOrder.totalAmount || totalAmount,
+          items,
+          shippingMethod: newOrder.shippingMethod?.name || "Livraison Standard",
+          shippingCost,
+          paymentMethod: newOrder.paymentMethod || "Non spécifié",
+          appliedDiscount,
+          discountAmount
+        });
+
+        if (emailResult.success) {
+          const updatedOrders = orders.map((order) =>
+            order.id === newOrder.id ? { ...order, emailSent: true } : order
+          );
+
+          await fs.promises.writeFile(ordersPath, JSON.stringify(updatedOrders, null, 2));
+          console.log(`✅ Email Resend envoyé pour ${newOrder.orderNumber}`);
+
+        } else {
+          console.warn(`⚠️ Échec envoi email pour ${newOrder.orderNumber}:`, emailResult.error);
+        }
+
+      } catch (emailError) {
+        console.error("❌ Erreur envoi email:", emailError);
+        console.error("Stack trace:", emailError.stack);
+      }
+
+    } else {
+      console.log(`ℹ️ Pas d'email pour ${newOrder.orderNumber}`);
+    }
+
+// =============================
+//      📥 REPONSE API
+// =============================
+    res.status(201).json({
+      message: "Commande ajoutée avec succès",
+      order: newOrder,
+      success: true,
+      emailStatus: customerEmail ? (newOrder.emailSent ? "envoyé" : "en cours") : "pas d'email",
+      discordStatus: newOrder.discordNotified ? "envoyé" : "en cours",
+    });
 
   } catch (error) {
     console.error("❌ Erreur traitement commande:", error);
@@ -375,7 +376,6 @@ const waitForBot = async () => {
       console.log("========================================\n");
       console.log("🎉 Le bot Discord est opérationnel !");
       
-      // ✅ AJOUT: Rafraîchir les commandes après connexion
       try {
         console.log("🔄 Rafraîchissement des commandes slash...");
         await discordBotService.refreshCommands();
@@ -395,11 +395,6 @@ const waitForBot = async () => {
   console.log("\n⚠️ Bot Discord NON CONNECTÉ !");
   console.log("Bot activé :", status.bot ? "✅" : "❌");
   console.log("Webhook activé :", status.webhook ? "✅" : "❌");
-  console.log("\n💡 Vérifie ton .env :");
-  console.log("   - DISCORD_BOT_TOKEN");
-  console.log("   - DISCORD_GUILD_ID");
-  console.log("   - DISCORD_ORDERS_CHANNEL_ID");
-  console.log("   - DISCORD_VENDOR_ROLE\n");
 };
 
 waitForBot().catch((err) => console.error("❌ Erreur démarrage bot:", err));
@@ -445,10 +440,12 @@ process.on("uncaughtException", async (err) => {
 //          🚀 LANCEMENT SERVEUR
 // =============================================
 app.listen(PORT, () => {
+  const emailStatus = emailService.getStatus();
+  
   console.log("\n" + "=".repeat(50));
   console.log(`🚀 Serveur API lancé sur le port ${PORT}`);
   console.log(`📂 Racine : ${path.join(__dirname, "../")}`);
   console.log(`🤖 Discord Bot : ${discordBotService.botEnabled ? "✅ Actif" : "❌ Inactif"}`);
-  console.log(`📧 Email Service : ${configValidation.isValid ? "✅ Actif" : "❌ Inactif"}`);
+  console.log(`📧 Email Service : ${emailStatus.isInitialized ? "✅ Actif (Resend)" : "❌ Inactif"}`);
   console.log("=".repeat(50) + "\n");
 });

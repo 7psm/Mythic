@@ -5,7 +5,7 @@
 // Il inclut la validation, la limitation de débit et la gestion d'erreurs
 
 import express from 'express';
-import emailService from './emailService-simple.js';
+import emailService from './resendEmailService.js';
 import { 
   emailMiddleware, 
   validateOrderData, 
