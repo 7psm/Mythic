@@ -532,7 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
                       <path d="M12 7L13.5 10.5L17 12L13.5 13.5L12 17L10.5 13.5L7 12L10.5 10.5L12 7Z" fill="white" opacity="0.9"/>
                     </svg>
                   </div>
-                  <span class="text-gray-400 font-medium">€<span id="modal-nitro-price">${nitroPrice}</span> <span class="text-[#5865F2] font-semibold">with ClientCare+</span></span>
+                  <span class="text-gray-400 font-medium">€<span id="modal-nitro-price">${nitroPrice}</span> <span class="text-[#5865F2] font-semibold">Avec ClientCare+</span></span>
                 </div>
                 
                 <div class="absolute bottom-full left-0 mb-3 hidden group-hover:block w-56 z-50">
@@ -551,7 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
               </svg>
-              <span id="modal-buy-text">Purchase for €${basePrice.toFixed(2)}</span>
+              <span id="modal-buy-text">Acheter pour €${basePrice.toFixed(2)}</span>
             </span>
             
             <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity">

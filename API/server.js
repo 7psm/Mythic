@@ -34,7 +34,7 @@ if (configValidation.isValid) {
     console.error("❌ Erreur initialisation email:", error);
   });
 } else {
-  console.log("❌ Configuration email manquante — emails désactivés");
+  console.log("❌ Configuration email manquante – emails désactivés");
 }
 
 // =============================================
@@ -76,7 +76,7 @@ app.options("*", (req, res) => {
 app.use("/api/email", emailRoutes);
 
 // ========================
-//   🔁 ROUTES COMMANDES
+//   📝 ROUTES COMMANDES
 // ========================
 
 // Lire toutes les commandes
@@ -158,7 +158,6 @@ try {
   console.error("❌ Erreur notifications Discord:", discordError);
 }
 
-
 // 📧 Email de confirmation
 const customerEmail = newOrder.email || newOrder.customerInfo?.email || null;
 
@@ -166,27 +165,49 @@ if (customerEmail && customerEmail !== "Non renseigné") {
   try {
     console.log(`📧 Envoi email confirmation commande: ${newOrder.orderNumber}`);
 
+    // 🔧 CORRECTION: Extraction correcte des données
     const items = newOrder.orderItems || newOrder.cart || newOrder.items || [];
     const shippingCost = newOrder.shippingMethod?.price || newOrder.shippingCost || 0;
-    const subtotal = items.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+    
+    // Calcul du sous-total
+    const subtotal = items.reduce((sum, item) => {
+      const price = parseFloat(item.price) || 0;
+      const quantity = parseInt(item.quantity) || 1;
+      return sum + (price * quantity);
+    }, 0);
+    
     const totalAmount = subtotal + shippingCost;
+
+    // 🎯 CORRECTION: Récupération correcte du code promo
+    const appliedDiscount = newOrder.appliedDiscount || null;
+    const discountAmount = parseFloat(newOrder.discountAmount) || 0;
+
+    console.log("📊 Données email:", {
+      customerEmail,
+      orderNumber: newOrder.orderNumber,
+      items: items.length,
+      subtotal: subtotal.toFixed(2),
+      shippingCost: shippingCost.toFixed(2),
+      totalAmount: totalAmount.toFixed(2),
+      appliedDiscount,
+      discountAmount: discountAmount.toFixed(2)
+    });
 
     const emailResult = await emailService.sendOrderConfirmation({
       customerEmail,
-      customerName: newOrder.name || newOrder.customerInfo?.name || "Client",
+      customerName: newOrder.discordname || newOrder.discord || newOrder.name || newOrder.customerInfo?.name || "Client",
       orderNumber: newOrder.orderNumber || newOrder.id,
       totalAmount: newOrder.total || newOrder.totalAmount || totalAmount,
       items,
       shippingMethod: newOrder.shippingMethod?.name || "Livraison Standard",
       shippingCost,
       paymentMethod: newOrder.paymentMethod || "Non spécifié",
-      discountCode: newOrder.promoCode || null,
-      discountAmount: newOrder.discount || 0
+      appliedDiscount,      // ✅ Passe l'objet complet du code promo
+      discountAmount        // ✅ Passe le montant de la réduction
     });
 
     if (emailResult.success) {
-      newOrder.emailSent = true;
-
+      // Mise à jour du statut d'envoi
       const updatedOrders = orders.map((order) =>
         order.id === newOrder.id ? { ...order, emailSent: true } : order
       );
@@ -200,6 +221,7 @@ if (customerEmail && customerEmail !== "Non renseigné") {
 
   } catch (emailError) {
     console.error("❌ Erreur envoi email:", emailError);
+    console.error("Stack trace:", emailError.stack);
   }
 
 } else {
@@ -211,12 +233,13 @@ res.status(201).json({
   message: "Commande ajoutée avec succès",
   order: newOrder,
   success: true,
-  emailStatus: customerEmail ? "envoyé/à envoyer" : "pas d'email",
-  discordStatus: "en cours d'envoi",
+  emailStatus: customerEmail ? (newOrder.emailSent ? "envoyé" : "en cours") : "pas d'email",
+  discordStatus: newOrder.discordNotified ? "envoyé" : "en cours",
 });
 
   } catch (error) {
     console.error("❌ Erreur traitement commande:", error);
+    console.error("Stack trace:", error.stack);
     res.status(500).json({ error: "Erreur lors du traitement de la commande", success: false });
   }
 });
@@ -386,7 +409,7 @@ waitForBot().catch((err) => console.error("❌ Erreur démarrage bot:", err));
 // =============================================
 const shutdownBot = async () => {
   try {
-    console.log("🔻 Fermeture du bot Discord...");
+    console.log("📻 Fermeture du bot Discord...");
     if (discordBotService.bot) {
       await discordBotService.bot.destroy();
       console.log("✅ Bot Discord déconnecté");
@@ -424,7 +447,7 @@ process.on("uncaughtException", async (err) => {
 app.listen(PORT, () => {
   console.log("\n" + "=".repeat(50));
   console.log(`🚀 Serveur API lancé sur le port ${PORT}`);
-  console.log(`📁 Racine : ${path.join(__dirname, "../")}`);
+  console.log(`📂 Racine : ${path.join(__dirname, "../")}`);
   console.log(`🤖 Discord Bot : ${discordBotService.botEnabled ? "✅ Actif" : "❌ Inactif"}`);
   console.log(`📧 Email Service : ${configValidation.isValid ? "✅ Actif" : "❌ Inactif"}`);
   console.log("=".repeat(50) + "\n");

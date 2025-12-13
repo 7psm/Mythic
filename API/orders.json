@@ -334,5 +334,37 @@
     "createdAt": "2025-12-10T21:35:45.333Z",
     "emailSent": true,
     "discordNotified": false
+  },
+  {
+    "id": 1765614270447,
+    "orderNumber": "PM-289633-9617",
+    "orderDate": "2025-12-13T08:24:22.268Z",
+    "discordname": ".7psm",
+    "email": "boumbaover@gmail.com",
+    "discord": ".7psm",
+    "orderItems": [
+      {
+        "id": "1765614236514",
+        "name": "Nitro Basic 1 mois",
+        "price": 1.5,
+        "quantity": 1,
+        "image": "/public/products/banners/Nitro.png",
+        "category": "nitro"
+      }
+    ],
+    "shippingMethod": {
+      "name": "Livraison Express",
+      "price": 2.5,
+      "delivery": "2-4H"
+    },
+    "paymentMethod": "Buy me a coffee",
+    "status": "CONFIRMED",
+    "appliedDiscount": null,
+    "discountAmount": 0,
+    "selectedVendor": ".uwg9",
+    "submittedAt": "2025-12-13T08:24:30.379Z",
+    "createdAt": "2025-12-13T08:24:30.447Z",
+    "emailSent": true,
+    "discordNotified": false
   }
 ]
