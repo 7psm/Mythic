@@ -9,7 +9,7 @@ import cors from "cors";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
-import discordBotService from "../Discord/index.js";
+// import discordBotService from "../Discord/index.js";
 import { promises as fsPromises } from 'fs';
 import { exec } from 'child_process';
 import { promisify } from 'util';
