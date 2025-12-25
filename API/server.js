@@ -2,19 +2,43 @@
 //        SERVEUR API + BOT DISCORD
 // =============================================
 
-console.log("🚀 Démarrage du serveur et du bot...");
+console.log("🚀 Démarrage du serveur...");
 
 import express from "express";
 import cors from "cors";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
-// import discordBotService from "../Discord/index.js";
 import { promises as fsPromises } from 'fs';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
-console.log("✅ Chargement des dépendances OK");
+// =============================================
+// 🔍 DÉTECTION DE L'ENVIRONNEMENT
+// =============================================
+const IS_RENDER = process.env.RENDER === 'true' || process.env.RENDER_SERVICE_NAME;
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+const IS_LOCAL = !IS_RENDER && !IS_PRODUCTION;
+
+console.log("📍 Environnement détecté:");
+console.log(`   Local: ${IS_LOCAL ? '✅' : '❌'}`);
+console.log(`   Render: ${IS_RENDER ? '✅' : '❌'}`);
+console.log(`   Production: ${IS_PRODUCTION ? '✅' : '❌'}`);
+
+// Import conditionnel du bot Discord (uniquement en local)
+let discordBotService = null;
+if (IS_LOCAL) {
+  console.log("🤖 Chargement du service Discord...");
+  try {
+    const discordModule = await import("../Discord/index.js");
+    discordBotService = discordModule.default;
+    console.log("✅ Service Discord chargé");
+  } catch (error) {
+    console.warn("⚠️ Discord non disponible:", error.message);
+  }
+} else {
+  console.log("⏭️  Discord désactivé (environnement Render/Production)");
+}
 
 const execPromise = promisify(exec);
 const app = express();
@@ -22,15 +46,14 @@ const PORT = process.env.PORT || 3001;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+console.log("✅ Dépendances chargées");
 
 // =============================================
-// 🔥 MIDDLEWARES - CORS AMÉLIORÉ
+// 🔥 MIDDLEWARES - CORS
 // =============================================
 
-// 1. Configuration CORS AVANT express.json()
 app.use(cors({
   origin: function(origin, callback) {
-    // Autoriser les requêtes sans origin (comme curl ou Postman)
     if (!origin) return callback(null, true);
     
     const allowedOrigins = [
@@ -44,45 +67,37 @@ app.use(cors({
       "https://mythic-api.onrender.com"
     ];
     
-    // Autoriser tous les localhost en développement
     if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
       return callback(null, true);
     }
     
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+    if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      // Log désactivé - seules les erreurs sont loggées
-      callback(null, true); // En dev, on autorise quand même
+      callback(null, true);
     }
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
   exposedHeaders: ["Content-Length", "Content-Type"],
-  maxAge: 86400 // 24 heures
+  maxAge: 86400
 }));
 
-// 2. Middleware de logging - DÉSACTIVÉ (seules les erreurs sont loggées)
-// Les logs de requêtes normales sont désactivés pour réduire le bruit dans la console
 app.use((req, res, next) => {
   next();
 });
 
-// 3. Body parsers
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// 4. Headers manuels pour compatibilité maximale
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept");
   res.header("Access-Control-Allow-Credentials", "true");
   
-  // Gérer les requêtes OPTIONS (preflight)
   if (req.method === 'OPTIONS') {
-    // Log désactivé - seules les erreurs sont loggées
     return res.sendStatus(200);
   }
   
@@ -673,7 +688,6 @@ app.use(express.static(path.join(__dirname, "../")));
 app.use(express.static("public"));
 
 app.get("*", (req, res) => {
-  // Ne pas envoyer index.html pour les routes API
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({ error: "Route API non trouvée" });
   }
@@ -691,9 +705,14 @@ app.get("*", (req, res) => {
 });
 
 // =============================================
-//    🤖 BOT DISCORD - ATTENTE CONNEXION
+//    🤖 BOT DISCORD - ATTENTE CONNEXION (Local uniquement)
 // =============================================
 const waitForBot = async () => {
+  if (!discordBotService || IS_RENDER) {
+    console.log("⏭️  Initialisation Discord ignorée (Render/Production)");
+    return;
+  }
+
   let attempts = 0;
   const maxAttempts = 10;
 
@@ -705,6 +724,7 @@ const waitForBot = async () => {
       console.log("Webhook activé :", status.webhook ? "✅" : "❌");
       console.log("Bot connecté :", status.connected ? "✅" : "❌");
       console.log("Serveurs :", status.guilds);
+      console.log("Commandes :", status.commands || 0);
       console.log("========================================\n");
       
       try {
@@ -733,6 +753,8 @@ waitForBot().catch((err) => console.error("❌ Erreur démarrage bot:", err));
 //     🛑 GESTION SIGNAUX / ERREURS
 // =============================================
 const shutdownBot = async () => {
+  if (!discordBotService || IS_RENDER) return;
+  
   try {
     console.log("🔻 Fermeture du bot Discord...");
     if (discordBotService.bot) {
@@ -770,11 +792,11 @@ process.on("uncaughtException", async (err) => {
 //          🚀 LANCEMENT SERVEUR
 // =============================================
 app.listen(PORT, () => {
-  
   console.log("\n" + "=".repeat(50));
   console.log(`🚀 Serveur API lancé sur le port ${PORT}`);
   console.log(`🌐 URL: http://localhost:${PORT}`);
+  console.log(`📍 Environnement: ${IS_RENDER ? 'Render' : IS_LOCAL ? 'Local' : 'Production'}`);
   console.log(`📂 Racine : ${path.join(__dirname, "../")}`);
-  console.log(`🤖 Discord Bot :  ${discordBotService.botEnabled ? "✅ Actif" : "❌ Inactif"}`);
+  console.log(`🤖 Discord Bot : ${discordBotService ? "✅ Actif" : "⏭️  Désactivé"}`);
   console.log("=".repeat(50) + "\n");
 });
