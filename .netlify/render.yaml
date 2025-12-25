@@ -41,44 +41,11 @@ services:
       - key: LOG_LEVEL
         value: info
       
-      - key: EMAIL_LOGS
-        value: true
-      
       - key: LOG_TO_FILE
         value: false
       
-      - key: EMAIL_TEMPLATE_CACHE
-        value: true
-      
-      - key: EMAIL_CACHE_SIZE
-        value: 100
-      
       - key: DEFAULT_LANGUAGE
         value: fr
-      
-      - key: EMAIL_PORT
-        value: 587
-      
-      - key: EMAIL_SECURE
-        value: false
-      
-      - key: EMAIL_POOL
-        value: true
-      
-      - key: EMAIL_MAX_CONNECTIONS
-        value: 5
-      
-      - key: EMAIL_MAX_MESSAGES
-        value: 100
-      
-      - key: EMAIL_RATE_LIMIT
-        value: 14
-      
-      - key: EMAIL_RATE_DELTA
-        value: 1000
-      
-      - key: EMAIL_TLS_REJECT_UNAUTHORIZED
-        value: false
     
     # ========================================
     # VARIABLES SENSIBLES (SECRETS)
@@ -86,8 +53,10 @@ services:
     # Ces variables doivent être configurées manuellement sur Render.com
     # car elles contiennent des informations sensibles
     # 
-    # GMAIL_USER=votre-email@gmail.com
-    # GMAIL_APP_PASSWORD=votre-mot-de-passe-app
+    # DISCORD_BOT_TOKEN=votre-token-bot
+    # DISCORD_GUILD_ID=votre-guild-id
+    # DISCORD_ORDERS_CHANNEL_ID=votre-channel-id
+    # DISCORD_WEBHOOK_URL=votre-webhook-url
     # 
     # Pour les configurer :
     # 1. Allez sur Render.com Dashboard

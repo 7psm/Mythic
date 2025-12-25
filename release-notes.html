@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Release Notes - MythicMarket</title>
+    <link rel="icon" href="/public/logo.png"/>
+    
+<!-- /////////////////////////////////////////////////////////////////////////
+     ////////////////////       Importation & Files       ////////////////////
+     /////////////////////////////////////////////////////////////////////////-->
+        <link rel="stylesheet" href="/src/styles/NavBar.css">
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="/Crypted/Site/Context/OrderContext.min.js"></script>
+        <script src="/src/js/navbar-script.js"></script>
+
+<!-- ///////////////////////////////////////////////////////////////////
+     ////////////////////       Fonts & Icons       ////////////////////
+     ///////////////////////////////////////////////////////////////////-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+<!-- Open Graph / Facebook / Discord -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://getmythic.netlify.app/">
+        <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
+        <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
+        <meta property="og:image" content="https://getmythic.netlify.app/public/banner.png">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta property="og:image:alt" content="MythicMarket Banner">
+        <meta property="og:image:type" content="public/banner.png">
+
+<!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://getmythic.netlify.app/">
+        <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
+        <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
+        <meta property="twitter:image" content="https://getmythic.netlify.app/public/banner.png">
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gold': '#d4af37',
+                        'gold-light': '#fceabb',
+                        'gold-dark': '#c29d28',
+                    }
+                }
+            }
+        }
+    </script>
+
+<style>
+@layer base {
+  html { @apply scroll-smooth; }
+}
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation pour le modal */
+#versionModal.opacity-100 #modalContent {
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: scale(0.95) translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Scrollbar personnalisée pour le modal */
+#versionList::-webkit-scrollbar {
+    width: 8px;
+}
+
+#versionList::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+#versionList::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.3);
+    border-radius: 4px;
+}
+
+#versionList::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 175, 55, 0.5);
+}
+
+/* Animation pour les éléments au scroll */
+.animate-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+/* Pour les éléments avec classe 'reveal' */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal-visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* Délais échelonnés pour un effet de cascade */
+.delay-1 { transition-delay: 0.1s !important; }
+.delay-2 { transition-delay: 0.2s !important; }
+.delay-3 { transition-delay: 0.3s !important; }
+</style>
+</head>
+
+<body class="bg-[#1f1f1f] text-[#e4e4e7] overflow-x-hidden">
+    
+    <nav class="navbar-container">
+       <div class="nav-links">
+         <a href="/index.html" class="nav-link">Mythic-Market</a>
+            <a href="/src/pages/Products.html" class="nav-link">Produits</a>
+            <a href="/release-notes.html" class="nav-link">Release Notes</a>
+            <a href="/src/pages/Contact.html" class="nav-link">Contact</a>
+       </div>
+       <div class="action-buttons">
+            <a href="/src/pages/Cart.html" class="cart-icon" style="position: relative">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" ><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+              <span class="cart-count">0</span>
+            </a>
+            <a href="/src/pages/Contact.html" class="contact-button">Contact</a>
+       </div>
+       <div class="navbar-separator"></div>
+     </nav>
+
+    <!-- Layout -->
+    <div class="flex pt-[60px]">
+<main class="main-content">
+    <!-- Page Header -->
+    <div class="mb-16 ml-12 lg:ml-[10rem] animate-in">
+        <p class="mt-[12rem] text-6xl font-bold pb-8 text-[#d1cfc0]">Mises à jour</p>
+        <p class="text-s opacity-55">
+            Restez informé des dernières modifications apportées au Site !
+        </p>
+    </div>
+
+    <div class="mt-8 flex w-fit flex-col gap-4 sm:mr-0 sm:flex-row sm:items-center pb-[12rem] mb-16 ml-8 lg:ml-[10rem] animate-in">
+        <a href="https://buymeacoffee.com/evannn/membership" target="_blank" class="transition-bg flex items-center justify-center gap-2 rounded-xl px-6 py-4 transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98] flex border-dark bg-[#d1cfc0] text-[#1f1f1f] shadow-lg text-sm">
+            Soutenez-nous!
+        </a>
+        <a id="navigate-to-version" href="#" class="transition-bg flex items-center justify-center gap-2 rounded-xl px-6 py-4 transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98] flex bg-[rgba(255,255,255,0.1)] text-sm">
+            Naviguer vers les versions...
+        </a>
+    </div>
+
+    <!-- Modal Choose Version -->
+<div id="versionModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999] opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center">
+    <div class="bg-[#2a2a2a] rounded-2xl w-full max-w-md mx-4 transform scale-95 transition-transform duration-300 border border-gold/20 shadow-2xl" id="modalContent">
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 py-5 border-b border-gold/10">
+            <h2 class="text-xl font-bold text-white">Choose version</h2>
+            <button id="closeModal" class="text-zinc-400 hover:text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Liste des versions -->
+        <div class="max-h-[60vh] overflow-y-auto px-6 py-4" id="versionList">
+            <p class="text-center text-gray-400 py-4">Chargement...</p>
+        </div>
+    </div>
+</div>
+    <!-- CONTENU DYNAMIQUE ICI -->
+    <div id="versions-content" class="space-y-16"></div>
+
+    <!-- Version 1.0.0 - Lancement -->
+            <article id="v1.0.0" class="section-shell animate-in scroll-mt-20 mb-16 ml-8 lg:ml-[10rem] animate-in">
+                <div class="mb-8 pb-6 border-b border-gold/10">
+                <div class="flex items-center justify-between mb-4">
+                  <!-- Badge version -->
+                  <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-gold/[0.12] border border-gold/20 rounded-md text-[0.8125rem] font-bold text-gold tracking-wide">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    1.5.0
+                  </div>
+              
+                  <!-- Date à droite -->
+                  <div class="text-sm font-medium text-zinc-500">
+                    23 Décembre 2024
+                  </div>
+                </div>
+                    <h2 class="text-3xl font-extrabold tracking-tight text-white mb-3 lg:text-2xl">
+                        Lancement de MythicMarket 🎉
+                    </h2>
+                    <p class="text-[1.0625rem] text-zinc-400 leading-relaxed md:text-base">
+                        Première version officielle de MythicMarket !
+                    </p>
+                </div>
+
+                <div class="mb-10">
+                    <div class="flex items-center gap-2.5 mb-5 pb-3 border-b border-gold/[0.08]">
+                        <svg class="w-[18px] h-[18px] text-gold flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                            <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+                        </svg>
+                        <h3 class="text-[1.0625rem] font-bold text-white tracking-tight">Fonctionnalités de lancement</h3>
+                    </div>
+                    <ul class="flex flex-col gap-3">
+                        <li class="flex items-start gap-4 p-4 bg-white/[0.02] border border-gold/[0.08] rounded-lg hover:bg-white/[0.04] hover:border-gold/[0.15] hover:translate-x-1 transition-all duration-250">
+                            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-gold/10 rounded-lg text-gold text-base mt-2">✨</div>
+                            <div class="flex-1 pt-0.5">
+                                <div class="font-semibold text-white mb-1 text-[0.9375rem]">Présentation du site</div>
+                                <div class="text-zinc-400 text-sm leading-relaxed">
+                                    Description du site et de ses services
+                                </div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 p-4 bg-white/[0.02] border border-gold/[0.08] rounded-lg hover:bg-white/[0.04] hover:border-gold/[0.15] hover:translate-x-1 transition-all duration-250">
+                            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-gold/10 rounded-lg text-gold text-base mt-2">🛒</div>
+                            <div class="flex-1 pt-0.5">
+                                <div class="font-semibold text-white mb-1 text-[0.9375rem]">Catalogue de produits</div>
+                                <div class="text-zinc-400 text-sm leading-relaxed">
+                                    Première gamme de produits premium disponibles
+                                </div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 p-4 bg-white/[0.02] border border-gold/[0.08] rounded-lg hover:bg-white/[0.04] hover:border-gold/[0.15] hover:translate-x-1 transition-all duration-250">
+                            <div class="flex flex-col gap-2">
+                                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-gold/10 rounded-lg text-gold text-base">💳</div>
+                                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-gold/10 rounded-lg text-gold text-base">📄</div>
+                        </div>
+                            <div class="flex-1 pt-0.5">
+                                <div class="font-semibold text-white mb-1 mt-2 text-[0.9375rem]">Paiements & Données sécurisés</div>
+                                <div class="text-zinc-400 text-sm leading-relaxed">
+                                    Divers moyens de paiement sécurisés et protection des données clients
+                                </div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 p-4 bg-white/[0.02] border border-gold/[0.08] rounded-lg hover:bg-white/[0.04] hover:border-gold/[0.15] hover:translate-x-1 transition-all duration-250">
+                            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-gold/10 rounded-lg text-gold text-base mt-2">🚚</div>
+                            <div class="flex-1 pt-0.5">
+                                <div class="font-semibold text-white mb-1 text-[0.9375rem]">Livraison rapide</div>
+                                <div class="text-zinc-400 text-sm leading-relaxed">
+                                    Système de livraison classique et express via Discord
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+</main>
+    </div>
+
+    <!-- Bouton Back to Top -->
+    <button id="backToTop" class="fixed bottom-8 right-8 w-14 h-14 bg-[#d1cfc0] text-[#1f1f1f] rounded-xl shadow-lg opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 z-50 flex items-center justify-center">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+        </svg>
+    </button>
+
+    <script src="/Crypted/Site/Release.min.js"></script>
+</body>
+</html>

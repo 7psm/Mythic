@@ -11,12 +11,12 @@
      //////////////////////////////////////////////////////////////////////--> 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../styles/NavBar.css">
+    <link rel="stylesheet" href="../styles/responsive.css">
 
+    <script type="module" src="/src/js/utils.js"></script>
+    <script type="module" src="/src/js/Site/Products.js"></script>
+    <script type="module" src="/src/js/Site/Confirmation.js"></script>
     <script src="/Crypted/Site/Context/OrderContext.min.js"></script>
-    <script src="/Crypted/Site/Products.min.js"></script>
-    <script src="/Crypted/Site/Confirmation.min.js"></script>
-
-
     <script src="../js/navbar-script.js"></script>
 
     <!-- Fonts & Icons -->
@@ -40,8 +40,8 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://getmythic.netlify.app/">
     <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
-    <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
-    <meta property="twitter:image" content="https://getmythic.netlify.app/public/banner.png">
+  <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
+  <meta property="twitter:image" content="https://getmythic.netlify.app/public/banner.png">
 
 <!-- //////////////////////////////////////////////////////////////////////
      ////////////////////       Scripts TL + CSS       ////////////////////
@@ -391,10 +391,7 @@ button, a, div, span {
             <div class="nav-links">
                 <a href="/index.html" class="nav-link">Mythic-Market</a>
                 <a href="./Products.html" class="nav-link">Produits</a>
-                <a href="./TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
-                <a href="Subscriptions.html" class="nav-link">Abonnements</a>
                 <a href="./Contact.html" class="nav-link">Contact</a>
-                <a href="Status.html" class="nav-link">Status</a>
             </div>
             <div class="action-buttons">
                 <a href="./Cart.html" class="cart-icon">
@@ -452,11 +449,7 @@ button, a, div, span {
         <!-- Informations Client -->
         <div class="w-full">
             <h3 class="text-lg mb-4 text-gold-primary relative pb-2 border-b-2 border-[rgba(212,175,55,0.3)] font-semibold drop-shadow-[0_1px_3px_rgba(212,175,55,0.2)]">Vous contactez</h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <h4 class="text-xs text-text-gray mb-1 uppercase font-semibold tracking-wider">Email</h4>
-                    <p id="contact-email" class="text-text-white text-sm font-medium truncate">Non renseigné</p>
-                </div>
+            <div class="grid grid-cols-1 gap-4">
                 <div>
                     <h4 class="text-xs text-text-gray mb-1 uppercase font-semibold tracking-wider">Discord</h4>
                     <p id="contact-discord" class="text-text-white text-sm font-medium truncate">Non renseigné</p>
@@ -550,7 +543,7 @@ button, a, div, span {
                 et servira de preuve d'achat.
             </p>
             <p class="text-text-white text-sm md:text-base leading-relaxed opacity-90">
-                Cette dernière vous sera également envoyée par mail et en message privé sur Discord.
+                Cette dernière vous sera également envoyée en message privé sur Discord.
             </p>
         </div>
 
@@ -645,7 +638,7 @@ button, a, div, span {
                 </h2>
                 <p class="text-[#888] mb-3 text-center text-sm">🛒 Votre panier a été vidé !</p>
                 <p class="text-[#888] mb-3 text-center text-sm">💬 Vous allez être redirigé vers Discord pour une mise en contact avec le vendeur.</p>
-                <p class="text-[#888] mb-3 text-center text-sm">📧 Un mail de confirmation vous a été envoyé !</p>
+                <p class="text-[#888] mb-3 text-center text-sm">📬 Un message de confirmation vous a été envoyé en message privé sur Discord!</p>
                 <p class="text-[#888] mb-3 text-center text-sm">Merci pour votre commande !</p>
                 <div class="flex justify-center gap-4 mt-6">
                     <a href="/index.html" class="flex-1 px-6 py-3 bg-gradient-to-br from-gold-primary to-gold-light text-background-dark border-none rounded-lg font-bold text-base text-center cursor-pointer transition-all duration-300 shadow-[0_4px_12px_rgba(212,175,55,0.3)] hover:from-gold-light hover:to-gold-primary hover:-translate-y-0.5 hover:shadow-[0_6px_18px_rgba(212,175,55,0.5)] no-underline" id="confirmation-ok-btn">

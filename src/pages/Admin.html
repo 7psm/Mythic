@@ -140,47 +140,94 @@
         </div>
       </div>
 
-      <!-- TAB VERSIONS -->
-      <div id="tab-versions" class="tab-content hidden">
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="glass rounded-2xl p-6">
-            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
-              <span class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center text-sm">🔧</span>
-              Nouvelle Version
-            </h2>
-            <div class="space-y-4">
-              <div>
-                <label class="block text-sm text-gray-400 mb-2">Numéro de Version</label>
-                <input type="text" id="version-number" placeholder="1.2.0" pattern="[0-9a-zA-Z\.]+" maxlength="10" class="glass-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none">
-                <p class="text-xs text-gray-500 mt-1">Max 10 caractères (lettres, chiffres, points)</p>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm text-gray-400 mb-2">Date de sortie</label>
-                  <input type="date" id="version-date" class="glass-input w-full px-4 py-3 rounded-lg text-white focus:outline-none">
-                </div>
-                <div>
-                  <label class="block text-sm text-gray-400 mb-2">Heure de sortie</label>
-                  <input type="time" id="version-time" class="glass-input w-full px-4 py-3 rounded-lg text-white focus:outline-none">
-                </div>
-              </div>
-              <div>
-                <label class="block text-sm text-gray-400 mb-2">Notes de Version</label>
-                <textarea id="version-notes" placeholder="- Nouvelle fonctionnalité X&#10;- Correction du bug Y&#10;- Amélioration des performances" rows="5" class="glass-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none resize-none"></textarea>
-              </div>
-              <button onclick="prepareVersion()" class="w-full gradient-bg py-3 rounded-lg font-semibold hover:opacity-90 transition">Appliquer la Version</button>
-            </div>
-            <div id="version-message" class="mt-4 p-3 rounded-lg hidden"></div>
-          </div>
-          <div class="glass rounded-2xl p-6">
-            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
-              <span class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center text-sm">📜</span>
-              Historique des Versions
-            </h2>
-            <div id="version-history" class="space-y-3 max-h-96 overflow-y-auto"></div>
-          </div>
+     <!-- TAB VERSIONS -->
+<div id="tab-versions" class="tab-content hidden">
+  <div class="glass rounded-2xl p-6 mb-6">
+    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+      <span class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center text-sm">🔧</span>
+      Nouvelle Version
+    </h2>
+    
+    <div class="space-y-4">
+      <!-- Informations de base -->
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm text-gray-400 mb-2">Version *</label>
+          <input type="text" id="version-number" placeholder="1.5.0" class="glass-input w-full px-4 py-3 rounded-lg text-white">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-400 mb-2">Date *</label>
+          <input type="date" id="version-date" class="glass-input w-full px-4 py-3 rounded-lg text-white">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-400 mb-2">Heure</label>
+          <input type="time" id="version-time" class="glass-input w-full px-4 py-3 rounded-lg text-white">
         </div>
       </div>
+
+      <div>
+        <label class="block text-sm text-gray-400 mb-2">Titre</label>
+        <input type="text" id="version-title" placeholder="Interface modernisée (optionnel)" class="glass-input w-full px-4 py-3 rounded-lg text-white">
+      </div>
+      
+      <div>
+        <label class="block text-sm text-gray-400 mb-2">Description</label>
+        <textarea id="version-description" placeholder="Courte description de la version... (optionnel)" rows="2" class="glass-input w-full px-4 py-3 rounded-lg text-white resize-none"></textarea>
+      </div>
+
+      <!-- Nouvelles fonctionnalités -->
+      <div class="glass-input p-4 rounded-lg">
+        <h3 class="font-bold text-green-400 mb-3">✨ Nouvelles Fonctionnalités</h3>
+        <div id="features-container" class="space-y-2 mb-3"></div>
+        <button onclick="addFeature()" class="text-sm text-green-400 hover:text-green-300">+ Ajouter une fonctionnalité</button>
+      </div>
+
+      <!-- Améliorations -->
+      <div class="glass-input p-4 rounded-lg">
+        <h3 class="font-bold text-blue-400 mb-3">⚡ Améliorations</h3>
+        <div id="improvements-container" class="space-y-2 mb-3"></div>
+        <button onclick="addImprovement()" class="text-sm text-blue-400 hover:text-blue-300">+ Ajouter une amélioration</button>
+      </div>
+
+      <!-- Corrections -->
+      <div class="glass-input p-4 rounded-lg">
+        <h3 class="font-bold text-orange-400 mb-3">🐛 Corrections de bugs</h3>
+        <div id="fixes-container" class="space-y-2 mb-3"></div>
+        <button onclick="addFix()" class="text-sm text-orange-400 hover:text-orange-300">+ Ajouter une correction</button>
+      </div>
+
+      <div class="flex gap-3">
+        <button onclick="createVersionFromForm()" class="flex-1 gradient-bg py-3 rounded-lg font-semibold hover:opacity-90 transition">
+          Créer la Version
+        </button>
+        <label class="flex items-center gap-2 glass-input px-4 py-3 rounded-lg cursor-pointer hover:bg-white/10 transition">
+          <input type="checkbox" id="create-snapshot" class="w-4 h-4" checked>
+          <span class="text-sm">📸 Snapshot</span>
+        </label>
+      </div>
+    </div>
+
+    <div id="version-message" class="mt-4 p-3 rounded-lg hidden"></div>
+  </div>
+
+  <!-- Historique (inchangé) -->
+  <div class="glass rounded-2xl p-6">
+    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+      <span class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center text-sm">📜</span>
+      Historique des Versions
+    </h2>
+    <div id="version-history" class="space-y-3 max-h-96 overflow-y-auto"></div>
+  </div>
+
+   <!-- Snapshots disponibles -->
+  <div class="glass rounded-2xl p-6 mt-6">
+    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+      <span class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center text-sm">📸</span>
+      Snapshots Disponibles
+    </h2>
+    <div id="snapshots-list" class="space-y-3"></div>
+  </div>
+</div>
 
       <!-- TAB STATISTIQUES -->
       <div id="tab-stats" class="tab-content hidden">
@@ -259,6 +306,276 @@
     </div>
   </div>
 
+  <script>
+    // =============================================
+// GESTION FORMULAIRE DYNAMIQUE VERSIONS
+// =============================================
+
+let featureCount = 0;
+let improvementCount = 0;
+let fixCount = 0;
+
+function addFeature() {
+  const container = document.getElementById('features-container');
+  const id = `feature-${featureCount++}`;
+  
+  const div = document.createElement('div');
+  div.id = id;
+  div.className = 'grid grid-cols-12 gap-2';
+  div.innerHTML = `
+    <input type="text" placeholder="🎨" value="✨" class="glass-input px-2 py-2 rounded text-center col-span-1" maxlength="2">
+    <input type="text" placeholder="Titre" class="glass-input px-3 py-2 rounded col-span-5">
+    <input type="text" placeholder="Description" class="glass-input px-3 py-2 rounded col-span-5">
+    <button onclick="document.getElementById('${id}').remove()" class="text-red-400 hover:text-red-300 col-span-1 text-2xl">×</button>
+  `;
+  container.appendChild(div);
+}
+
+function addImprovement() {
+  const container = document.getElementById('improvements-container');
+  const id = `improvement-${improvementCount++}`;
+  
+  const div = document.createElement('div');
+  div.id = id;
+  div.className = 'grid grid-cols-12 gap-2';
+  div.innerHTML = `
+    <input type="text" placeholder="⚡" value="⚡" class="glass-input px-2 py-2 rounded text-center col-span-1" maxlength="2">
+    <input type="text" placeholder="Titre" class="glass-input px-3 py-2 rounded col-span-5">
+    <input type="text" placeholder="Description" class="glass-input px-3 py-2 rounded col-span-5">
+    <button onclick="document.getElementById('${id}').remove()" class="text-red-400 hover:text-red-300 col-span-1 text-2xl">×</button>
+  `;
+  container.appendChild(div);
+}
+
+function addFix() {
+  const container = document.getElementById('fixes-container');
+  const id = `fix-${fixCount++}`;
+  
+  const div = document.createElement('div');
+  div.id = id;
+  div.className = 'grid grid-cols-12 gap-2';
+  div.innerHTML = `
+    <input type="text" placeholder="🐛" value="🐛" class="glass-input px-2 py-2 rounded text-center col-span-1" maxlength="2">
+    <input type="text" placeholder="Titre" class="glass-input px-3 py-2 rounded col-span-5">
+    <input type="text" placeholder="Description" class="glass-input px-3 py-2 rounded col-span-5">
+    <button onclick="document.getElementById('${id}').remove()" class="text-red-400 hover:text-red-300 col-span-1 text-2xl">×</button>
+  `;
+  container.appendChild(div);
+}
+
+function collectItems(containerId) {
+  const container = document.getElementById(containerId);
+  const items = [];
+  
+  container.querySelectorAll('div[id^="feature-"], div[id^="improvement-"], div[id^="fix-"]').forEach(div => {
+    const inputs = div.querySelectorAll('input');
+    if (inputs.length >= 3 && inputs[1].value.trim()) {
+      items.push({
+        icon: inputs[0].value.trim() || '•',
+        title: inputs[1].value.trim(),
+        description: inputs[2].value.trim(),
+        tag: containerId.includes('features') ? 'new' : 
+             containerId.includes('improvements') ? 'improved' : 'fixed'
+      });
+    }
+  });
+  
+  return items;
+}
+
+async function createVersionFromForm() {
+  const versionNumber = document.getElementById('version-number').value.trim();
+  const title = document.getElementById('version-title').value.trim();
+  const description = document.getElementById('version-description').value.trim();
+  const dateInput = document.getElementById('version-date').value;
+  const timeInput = document.getElementById('version-time').value;
+  const createSnapshot = document.getElementById('create-snapshot').checked;
+
+  if (!versionNumber) {
+    showVersionMessage('Veuillez entrer un numéro de version', 'error');
+    return;
+  }
+
+  if (!validateVersion(versionNumber)) {
+    showVersionMessage('Format de version invalide', 'error');
+    return;
+  }
+
+  const features = collectItems('features-container');
+  const improvements = collectItems('improvements-container');
+  const fixes = collectItems('fixes-container');
+
+  let versionDate;
+  if (dateInput && timeInput) {
+    versionDate = new Date(`${dateInput}T${timeInput}`).toISOString();
+  } else if (dateInput) {
+    versionDate = new Date(dateInput).toISOString();
+  } else {
+    versionDate = new Date().toISOString();
+  }
+
+  const currentVersion = getCurrentVersion();
+
+  const newVersion = {
+    version: versionNumber,
+    previous: currentVersion,
+    date: versionDate,
+    title: title || `Version ${versionNumber}`,
+    description: description || '',
+    features: features,
+    improvements: improvements,
+    fixes: fixes,
+    createdAt: new Date().toISOString()
+  };
+
+  try {
+    // 1. Créer la version
+    const versionResponse = await fetch('http://localhost:3001/api/versions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newVersion)
+    });
+
+    const versionResult = await versionResponse.json();
+
+    if (!versionResult.success) {
+      showVersionMessage('Erreur lors de la création', 'error');
+      return;
+    }
+
+    // 2. Créer le snapshot si demandé
+    if (createSnapshot) {
+      showVersionMessage('📸 Création du snapshot en cours...', 'success');
+      
+      const snapshotResponse = await fetch('http://localhost:3001/api/versions/snapshot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ version: versionNumber })
+      });
+
+      const snapshotResult = await snapshotResponse.json();
+
+      if (snapshotResult.success) {
+        console.log(`✅ Snapshot créé: ${snapshotResult.filesCount} fichiers`);
+      } else {
+        console.warn('⚠️ Snapshot échoué:', snapshotResult.error);
+      }
+    }
+
+    localStorage.setItem('currentAppVersion', versionNumber);
+    
+    // Réinitialiser
+    document.getElementById('version-number').value = '';
+    document.getElementById('version-title').value = '';
+    document.getElementById('version-description').value = '';
+    document.getElementById('version-date').value = '';
+    document.getElementById('version-time').value = '';
+    document.getElementById('features-container').innerHTML = '';
+    document.getElementById('improvements-container').innerHTML = '';
+    document.getElementById('fixes-container').innerHTML = '';
+    
+    featureCount = 0;
+    improvementCount = 0;
+    fixCount = 0;
+    
+    loadVersionHistory();
+    updateCurrentVersionDisplay();
+    loadSnapshotsList(); // Nouvelle fonction
+    
+    showVersionMessage(
+      `✅ Version ${versionNumber} créée${createSnapshot ? ' avec snapshot' : ''} !`, 
+      'success'
+    );
+    
+  } catch (error) {
+    console.error('❌ Erreur:', error);
+    showVersionMessage('Erreur de connexion à l\'API', 'error');
+  }
+}
+
+// Charger la liste des snapshots
+async function loadSnapshotsList() {
+  const list = document.getElementById('snapshots-list');
+  if (!list) return;
+  
+  list.innerHTML = '<p class="text-gray-500 text-center py-4">Chargement...</p>';
+  
+  try {
+    const response = await fetch('http://localhost:3001/api/versions/snapshots');
+    const data = await response.json();
+    
+    if (data.snapshots.length === 0) {
+      list.innerHTML = '<p class="text-gray-500 text-center py-4">Aucun snapshot disponible</p>';
+      return;
+    }
+    
+    list.innerHTML = data.snapshots.map(snapshot => `
+      <div class="glass-input p-4 rounded-lg">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <p class="font-bold text-lg text-purple-400">v${snapshot.version}</p>
+            <p class="text-xs text-gray-500">${new Date(snapshot.createdAt).toLocaleString('fr-FR')}</p>
+          </div>
+          <button onclick="restoreVersion('${snapshot.version}')" class="glass px-4 py-2 rounded-lg text-yellow-400 hover:bg-yellow-400/20 transition text-sm font-semibold">
+            🔄 Restaurer
+          </button>
+        </div>
+        <div class="flex gap-4 text-xs text-gray-400">
+          <span>📁 ${snapshot.filesCount} fichiers</span>
+          <span>💾 ${snapshot.size}</span>
+        </div>
+      </div>
+    `).join('');
+    
+  } catch (error) {
+    console.error('❌ Erreur chargement snapshots:', error);
+    list.innerHTML = '<p class="text-red-400 text-center py-4">Erreur de chargement</p>';
+  }
+}
+
+// Restaurer une version
+async function restoreVersion(version) {
+  if (!confirm(`⚠️ ATTENTION !\n\nVous allez restaurer la version ${version}.\n\nTous les fichiers actuels seront remplacés par ceux du snapshot.\nUne sauvegarde de sécurité sera créée.\n\nContinuer ?`)) {
+    return;
+  }
+  
+  showVersionMessage('🔄 Restauration en cours...', 'success');
+  
+  try {
+    const response = await fetch('http://localhost:3001/api/versions/restore', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ version })
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      showVersionMessage(`✅ Version ${version} restaurée ! Rechargez la page.`, 'success');
+      
+      setTimeout(() => {
+        if (confirm('Recharger la page maintenant ?')) {
+          window.location.reload();
+        }
+      }, 2000);
+      
+    } else {
+      showVersionMessage(`Erreur: ${result.error}`, 'error');
+    }
+    
+  } catch (error) {
+    console.error('❌ Erreur restauration:', error);
+    showVersionMessage('Erreur lors de la restauration', 'error');
+  }
+}
+
+// Charger au démarrage
+window.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('snapshots-list')) {
+    loadSnapshotsList();
+  }
+});
+  </script>
   <script src="/Crypted/Site/Admin.min.js"></script>
 </body>
 </html>

@@ -1,4 +1,5 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +8,15 @@
 
     <!-- Redirection vers le splash screen -->
     <script>
-        // VÃ©rifier si on vient du splash screen ou si c'est un accÃ¨s direct
+        // Vérifier si on vient du splash screen ou si c'est un accès direct
         const urlParams = new URLSearchParams(window.location.search);
         const fromSplash = urlParams.get('fromSplash');
         const isDirectAccess = !fromSplash && !sessionStorage.getItem('splashCompleted');
         if (isDirectAccess) {
-            // Rediriger vers le service de mise Ã  jour de version (respecte la casse)
+            // Rediriger vers le service de mise à jour de version (respecte la casse)
             window.location.href = './src/Updater/UpdaterChristmas.html';
         } else {
-            // Marquer que le splash a Ã©tÃ© complÃ©tÃ©
+            // Marquer que le splash a été complété
             sessionStorage.setItem('splashCompleted', 'true');
         }
     </script>
@@ -26,7 +27,6 @@
         <link rel="stylesheet" href="/src/styles/NavBar.css">
 
         <script src="https://cdn.tailwindcss.com"></script>
-        <script src="/Crypted/Site/Product.min.js"></script>
         <script src="/Crypted/Site/Context/OrderContext.min.js"></script>
         <script src="/src/js/navbar-script.js"></script>
  
@@ -45,89 +45,66 @@
                 backgroundImage: {
                     'gold-gradient': 'linear-gradient(90deg, #fceabb 0%, #d4af37 60%, #c29d28 100%)',
                     'gold-gradient-animated': 'linear-gradient(45deg, #c29d28, #d4af37, #fceabb)',
-                }
+                },
+                keyframes: {
+                 shimmer: {
+                   '0%': { transform: 'translateX(-100%)' },
+                   '100%': { transform: 'translateX(200%)' }
+                   }
+                 },
+                animation: {
+                   shimmer: 'shimmer 1.4s linear infinite'
+                 }
             }
         }
     }
 </script>
 
-<style>
-body {
-    font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
+<style type="text/tailwindcss">
+@layer base {
+  html { @apply scroll-smooth; }
+  body { @apply font-[Inter] overflow-x-hidden; }
 }
-@keyframes float {
+@layer utilities {
+  @keyframes float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-20px); }
-}
-@keyframes glow {
+  }
+  @keyframes glow {
     0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
     50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); }
-}
-@keyframes gradientShift {
+  }
+  @keyframes gradientShift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
-}
-.animate-float {
-    animation: float 6s ease-in-out infinite;
-}
+  }
+  @keyframes particle-float {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+  }
 
-.animate-glow {
-    animation: glow 3s ease-in-out infinite;
-}
-.gradient-text {
-    background: linear-gradient(120deg, #fceabb 0%, #d4af37 50%, #c29d28 100%);
+  .animate-float { animation: float 6s ease-in-out infinite; }
+  .animate-glow { animation: glow 3s ease-in-out infinite; }
+  .gradient-text {
+    @apply bg-gradient-to-r from-gold-light via-gold-primary to-gold-dark bg-clip-text text-transparent;
     background-size: 200% 200%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
     animation: gradientShift 3s ease infinite;
-}
-.glass-effect {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(212, 175, 55, 0.2);
-}
+  }
+  .glass-effect { @apply bg-white/5 backdrop-blur-md border border-gold-primary/20; }
+  .section-shell { @apply scroll-mt-24; }
+  .surface { @apply bg-[rgba(22,22,32,0.7)] border border-gold-primary/10 backdrop-blur-lg shadow-[0_10px_30px_rgba(0,0,0,0.22)]; }
+  .reveal { @apply opacity-0 translate-y-6 transition duration-700 ease-out; }
+  .reveal-visible { @apply opacity-100 translate-y-0; }
+  .payment-card:hover { @apply -translate-y-1 border-gold-primary/60; }
 
-.payment-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(212, 175, 55, 0.6);
-}
-/* Particles background */
-.particles {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-}
-.particle {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: #d4af37;
-    border-radius: 50%;
-    opacity: 0.5;
+  .particles { @apply fixed inset-0 w-full h-full pointer-events-none z-[1]; }
+  .particle {
+    @apply absolute rounded-full opacity-50 bg-gold-primary w-[2px] h-[2px];
     animation: particle-float 15s infinite linear;
-}
-@keyframes particle-float {
-    0% {
-        transform: translateY(100vh) translateX(0);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.5;
-    }
-    90% {
-        opacity: 0.5;
-    }
-    100% {
-        transform: translateY(-100vh) translateX(100px);
-        opacity: 0;
-    }
+  }
 }
 </style>
 
@@ -143,7 +120,7 @@ body {
         <meta property="og:type" content="website">
         <meta property="og:url" content="https://getmythic.netlify.app/">
         <meta property="og:title" content="MythicMarket - No.1 Shop All Over Discord">
-        <meta property="og:description" content="Nos produits sont lÃ©gaux et fiables pour rÃ©pondre aux plus hauts standards d'authenticitÃ©.">
+        <meta property="og:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
         <meta property="og:image" content="https://getmythic.netlify.app/public/banner.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
@@ -154,7 +131,7 @@ body {
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:url" content="https://getmythic.netlify.app/">
         <meta property="twitter:title" content="MythicMarket - No.1 Shop All Over Discord">
-        <meta property="twitter:description" content="Nos produits sont lÃ©gaux et fiables pour rÃ©pondre aux plus hauts standards d'authenticitÃ©.">
+        <meta property="twitter:description" content="Nos produits sont légaux et fiables pour répondre aux plus hauts standards d'authenticité.">
         <meta property="twitter:image" content="https://getmythic.netlify.app/public/banner.png">
 
 </head>
@@ -164,15 +141,13 @@ body {
     <div class="particles" id="particles"></div>
 
     <!-- Navigation -->
-    <link rel="stylesheet" href="/src/styles/NavBar.css">
     <nav class="navbar-container">
        <div class="nav-links">
          <a href="/index.html" class="nav-link">Mythic-Market</a>
             <a href="/src/pages/Products.html" class="nav-link">Produits</a>
-            <a href="/src/pages/TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
-            <a href="/src/pages/Subscriptions.html" class="nav-link">Abonnements</a>
+            <a href="./#confiance" class="nav-link">Confiance & Sécurité</a>
+            <a href="./#subscriptions" class="nav-link">Abonnements</a>
             <a href="/src/pages/Contact.html" class="nav-link">Contact</a>
-            <a href="/src/pages/Status.html" class="nav-link">Status</a>
        </div>
        <div class="action-buttons">
             <a href="/src/pages/Cart.html" class="cart-icon" style="position: relative">
@@ -225,7 +200,7 @@ body {
                         </div>
                     </a>
                     
-                    <a href="/src/pages/TrustSafetyPage.html" class="px-8 py-4 glass-effect text-text-white font-semibold rounded-lg hover:bg-gold-primary/10 hover:border-gold-primary transition-all duration-300 no-underline">
+                    <a href="./#confiance" class="px-8 py-4 glass-effect text-text-white font-semibold rounded-lg hover:bg-gold-primary/10 hover:border-gold-primary transition-all duration-300 no-underline">
                         <div class="flex items-center space-x-2">
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="none">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -353,6 +328,376 @@ body {
         </div>
     </section>
 
+
+<div id="confiance" class="section-shell min-h-screen w-full flex flex-col relative overflow-hidden bg-background-dark bg-cover bg-center bg-no-repeat bg-fixed pt-10">
+<div class="absolute top-0 left-0 right-0 bottom-0 bg-[rgba(10,10,14,0.85)] z-0"></div>
+
+      <!-- //////////////////////////////////////////////////////////////////////////
+           ////////////////////       Confiance & Sécurité       ////////////////////
+           //////////////////////////////////////////////////////////////////////////-->
+  <main class="py-12 px-5 pb-20 max-w-7xl mx-auto w-full relative z-10 md:py-8 md:px-4 md:pb-16" style="font-family: 'Inter', sans-serif;">
+
+    <header class="mb-12 text-center md:mb-8 reveal">
+      <div class="inline-flex items-center px-4 py-2 rounded-full glass-effect text-gold-primary text-xs font-semibold uppercase tracking-widest mb-4">Engagement</div>
+      <h1 class="text-[2.5rem] font-extrabold mb-3 bg-gradient-to-r from-gold-light via-gold-primary to-gold-dark bg-clip-text text-transparent md:text-3xl">
+        Confiance &amp; Sécurité
+      </h1>
+      <p class="text-[1.05rem] text-[#ccc] max-w-2xl mx-auto md:text-base">
+        Votre sécurité et votre satisfaction sont nos priorités absolues. Chaque commande est vérifiée, tracée et accompagnée jusqu’à sa livraison.
+      </p>
+    </header>
+
+    <!-- Stat & Engagement -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+      <div class="glass-effect rounded-2xl p-6 text-center reveal">
+        <div class="text-5xl font-extrabold text-gold-primary mb-2"><span id="deliveredCounter">5</span>+</div>
+        <p class="text-sm text-text-gray">Produits livrés en toute sécurité sur Discord</p>
+      </div>
+      <div class="glass-effect rounded-2xl p-6 reveal">
+        <h3 class="text-lg font-semibold text-gold-primary mb-2.5">Traçabilité totale</h3>
+        <ul class="space-y-2 text-sm text-text-gray">
+          <li class="flex items-start gap-2"><span class="text-gold-primary mt-0.5">•</span> Reçu et numéro de commande systématiques</li>
+          <li class="flex items-start gap-2"><span class="text-gold-primary mt-0.5">•</span> Assurance incluse jusqu’à la réception</li>
+          <li class="flex items-start gap-2"><span class="text-gold-primary mt-0.5">•</span> Suivi proactif par notre équipe</li>
+        </ul>
+      </div>
+      <div class="glass-effect rounded-2xl p-6 reveal">
+        <h3 class="text-lg font-semibold text-gold-primary mb-2.5">Support réactif</h3>
+        <ul class="space-y-2 text-sm text-text-gray">
+          <li class="flex items-start gap-2"><span class="text-gold-primary mt-0.5">•</span> Assistance directe sur Discord</li>
+          <li class="flex items-start gap-2"><span class="text-gold-primary mt-0.5">•</span> Réponse rapide en cas de question</li>
+          <li class="flex items-start gap-2"><span class="text-gold-primary mt-0.5">•</span> Processus clair et documenté</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Piliers -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+      <article class="glass-effect rounded-2xl p-7 md:p-6 reveal">
+        <h2 class="text-2xl mb-5 text-gold-primary relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-12 after:bg-gradient-to-r after:from-gold-primary after:to-gold-light after:rounded md:text-xl md:mb-4">Livraison Sécurisée</h2>
+        <ul class="space-y-3 text-text-gray text-sm">
+          <li class="flex items-start gap-3"><span class="text-gold-primary">✓</span> Reçu de commande et preuves de livraison</li>
+          <li class="flex items-start gap-3"><span class="text-gold-primary">✓</span> Assurance incluse jusqu’à réception</li>
+          <li class="flex items-start gap-3"><span class="text-gold-primary">✓</span> Numéro de commande et suivi dédié</li>
+        </ul>
+      </article>
+
+      <article class="glass-effect rounded-2xl p-7 md:p-6 reveal">
+        <h2 class="text-2xl mb-5 text-gold-primary relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-12 after:bg-gradient-to-r after:from-gold-primary after:to-gold-light after:rounded md:text-xl md:mb-4">Garanties</h2>
+        <ul class="space-y-3 text-text-gray text-sm">
+          <li class="flex items-start gap-3"><span class="text-gold-primary">✓</span> Remboursement intégral si non satisfaction</li>
+          <li class="flex items-start gap-3"><span class="text-gold-primary">✓</span> Produits authentiques, non générés</li>
+          <li class="flex items-start gap-3"><span class="text-gold-primary">✓</span> Tests et vérifications avant expédition</li>
+          <li class="flex items-start gap-3"><span class="text-gold-primary">✓</span> Modes de paiement cryptés et sécurisés</li>
+        </ul>
+      </article>
+
+      <article class="glass-effect rounded-2xl p-7 md:p-6 reveal">
+        <h2 class="text-2xl mb-5 text-gold-primary relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-12 after:bg-gradient-to-r after:from-gold-primary after:to-gold-light after:rounded md:text-xl md:mb-4">Conformité & Confidentialité</h2>
+        <ul class="space-y-3 text-text-gray text-sm">
+          <li class="flex items-start gap-3"><span class="text-gold-primary">✓</span> Politique de confidentialité claire</li>
+          <li class="flex items-start gap-3"><span class="text-gold-primary">✓</span> Aucun cookie ni revente de données</li>
+          <li class="flex items-start gap-3"><span class="text-gold-primary">✓</span> Paiements traités via passerelles sécurisées</li>
+        </ul>
+        <p class="text-xs text-text-gray mt-4">Nous nous réservons le droit de mettre à jour ces politiques pour renforcer votre sécurité.</p>
+      </article>
+    </section>
+
+    <!-- Livraison + Avis & FAQ -->
+    <section class="grid grid-cols-1 lg:grid-cols-[1fr_1.25fr] gap-6 pt-2">
+      <div class="flex flex-col gap-6">
+        <div class="glass-effect rounded-2xl p-7 md:p-6 border border-gold-primary/25 w-full reveal">
+          <div class="max-w-2xl mb-5">
+            <h2 class="text-2xl mb-2 text-gold-primary md:text-xl text-center">Options de Livraison</h2>
+            <p class="text-sm text-text-gray text-center">Choisissez la vitesse qui vous convient le mieux.</p>
+          </div>
+          <div class="flex gap-3 flex-wrap">
+            <div class="glass-effect rounded-xl p-4 border border-gold-primary/30 min-w-[220px]">
+              <div class="text-gold-primary text-sm font-semibold mb-1 text-center">Livraison Express</div>
+              <p class="text-text-gray text-xs text-center">2.50€ · 2-4h</p>
+            </div>
+            <div class="glass-effect rounded-xl p-4 border border-gold-primary/30 min-w-[220px]">
+              <div class="text-gold-primary text-sm font-semibold mb-1 text-center">Livraison Classique</div>
+              <p class="text-text-gray text-xs text-center">0€ · 6-12h</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-effect rounded-2xl p-8 md:p-6 h-fit reveal">
+          <h2 class="text-2xl mb-4 text-gold-primary text-center md:text-xl">Avis & Communauté</h2>
+          <p class="text-text-light text-center mb-8">
+            Consultez les retours clients et discutez directement avec la communauté Discord pour vérifier la qualité de nos livraisons.
+          </p>
+          <a class="flex justify-center items-center bg-gradient-to-br from-gold-dark to-gold-primary text-black font-bold text-base py-3 px-6 rounded-lg no-underline w-max mx-auto transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(212,175,55,0.3)] md:text-sm md:py-2.5 md:px-5" href="https://discord.gg/beC8cFZaXH" target="_blank" rel="noopener noreferrer">
+            Rejoindre Notre Communauté
+          </a>
+        </div>
+      </div>
+
+      <div class="glass-effect rounded-2xl p-8 md:p-6 reveal">
+        <h2 class="text-2xl mb-5 text-gold-primary text-center md:text-xl">Questions Fréquentes</h2>
+        <div class="space-y-3">
+          <details class="group bg-white/5 rounded-lg border border-gold-primary/20 overflow-hidden hover:bg-white/10 transition-colors">
+            <summary class="flex justify-between items-center cursor-pointer p-4 text-text-white font-medium text-sm">
+              Authenticité
+              <svg class="w-4 h-4 text-gold-primary transition-transform group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </summary>
+            <div class="px-4 pb-4 text-text-light text-xs leading-relaxed">
+              Nos produits sont authentiques, testés et vérifiés avant chaque livraison. Aucun contenu généré ou douteux.
+            </div>
+          </details>
+
+          <details class="group bg-white/5 rounded-lg border border-gold-primary/20 overflow-hidden hover:bg-white/10 transition-colors">
+            <summary class="flex justify-between items-center cursor-pointer p-4 text-text-white font-medium text-sm">
+              Puis-je annuler mon abonnement ?
+              <svg class="w-4 h-4 text-gold-primary transition-transform group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </summary>
+            <div class="px-4 pb-4 text-text-light text-xs leading-relaxed">
+              Oui, vous pouvez résilier à tout moment et profiter des avantages jusqu’à la fin du cycle de facturation en cours.
+            </div>
+          </details>
+
+          <details class="group bg-white/5 rounded-lg border border-gold-primary/20 overflow-hidden hover:bg-white/10 transition-colors">
+            <summary class="flex justify-between items-center cursor-pointer p-4 text-text-white font-medium text-sm">
+              Remboursement & conditions
+              <svg class="w-4 h-4 text-gold-primary transition-transform group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </summary>
+            <div class="px-4 pb-4 text-text-light text-xs leading-relaxed">
+              Nous remboursons intégralement en cas de non satisfaction avérée. Les conditions d’utilisation encadrent chaque commande pour plus de clarté.
+            </div>
+          </details>
+
+          <details class="group bg-white/5 rounded-lg border border-gold-primary/20 overflow-hidden hover:bg-white/10 transition-colors">
+            <summary class="flex justify-between items-center cursor-pointer p-4 text-text-white font-medium text-sm">
+              Données & paiements
+              <svg class="w-4 h-4 text-gold-primary transition-transform group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </summary>
+            <div class="px-4 pb-4 text-text-light text-xs leading-relaxed">
+              Pas de cookies, pas de revente de données. Paiements traités via des passerelles sécurisées chiffrées.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<!-- ////////////////////////////////////////////////////////////////
+     ////////////////////       Subscriptions      //////////////////
+     ////////////////////////////////////////////////////////////////-->
+
+<section id="subscriptions" class="section-shell py-16 flex justify-center bg-background-dark">
+  <div class="w-[1200px] max-w-[96%] text-center">
+
+  <header class="reveal">
+    <h1 class="text-4xl font-extrabold mb-4 bg-gradient-to-r from-gold-light via-gold-primary to-gold-dark bg-clip-text text-transparent">
+      Abonnements ClientCare
+    </h1>
+    <p class="text-[#cccccc] max-w-[600px] mx-auto text-[1.1rem] mt-4 mb-10">
+      Choisissez l’abonnement qui correspond le mieux à vos besoins. Pas de frais cachés, pas de surprises.
+    </p>
+  </header>
+
+<div class="flex gap-6 justify-center items-start flex-wrap">
+
+  <!-- BASIC -->
+<article class="w-[320px] bg-[#0f0f11]/40 border border-gold-primary/20 rounded-lg p-6 shadow-xl text-left relative flex flex-col min-h-[640px]">
+  <h3 class="text-xl font-semibold bg-gradient-to-r from-gold-light to-gold-dark bg-clip-text text-transparent mb-1">Basic</h3>
+  <h2 class="text-3xl font-bold mb-2">0€ <small class="text-xs text-white/60">/mois</small></h2>
+  <p class="text-white/60 text-sm mb-3">Idéal pour commencer à découvrir notre boutique.</p>
+
+  <a href="https://discord.gg/beC8cFZaXH" target="_blank" class="w-full text-center border rounded-md font-semibold text-gold-primary bg-gradient-to-b relative overflow-hidden to-gold-dark border-gold-primary/20 py-2 px-4 transition-transform duration-300 hover:-translate-y-[2px] mt-1">
+    <span class="relative z-10">Default</span>
+    <!-- SHIMMER -->
+    <span class="absolute inset-0 translate-x-[-100%] bg-gradient-to-r 
+      from-transparent via-gold-primary/20 to-transparent 
+      skew-x-[-20deg]
+      animate-[shimmer_1.4s_infinite]"></span>
+  </a>
+  <!-- FEATURES -->
+  <h4 class="flex items-center justify-center text-gold-primary text-sm tracking-wide uppercase my-6 mt-7">
+    <span class="flex-1 h-px bg-[#2a2a2a] mx-3"></span>
+    Features
+    <span class="flex-1 h-px bg-[#2a2a2a] mx-3"></span>
+  </h4>
+  <ul class="space-y-2 text-white/70 text-sm">
+    <li>Accès à tous les produits</li>
+    <li>Participation aux giveaways publics</li>
+    <li>1 commande à la fois (3 articles max)</li>
+    <li>1€ dépensé = 1pt</li>
+  </ul>
+
+  <!-- LIMITATIONS label -->
+  <h4 class="flex items-center justify-center text-gold-primary text-sm tracking-wide uppercase my-6">
+    <span class="flex-1 h-px bg-[#2a2a2a] mx-3"></span>
+    Limitations
+    <span class="flex-1 h-px bg-[#2a2a2a] mx-3"></span>
+  </h4>
+  <ul class="space-y-2 text-white/70 text-sm">
+    <li>Réductions sur tous les produits</li>
+    <li>Commandes prioritaires</li>
+    <li>Rôle exclusif</li>
+    <li>Accès anticipé aux nouvelles offres</li>
+    <li>Crédit mensuel</li>
+    <li>Support direct</li>
+  </ul>
+</article>
+
+<!-- YEARLY (POPULAR) →→→ -->
+<article class="w-[320px] bg-[#0f0f11]/40 border-2 border-gold-primary rounded-lg p-6 shadow-2xl text-left relative flex flex-col min-h-[640px] -translate-y-1">
+  <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gold-primary text-[#0a0a0e] text-xs font-bold px-3 py-1 rounded-md shadow-lg">
+    Populaire
+  </div>
+  <h3 class="text-xl font-semibold bg-gradient-to-r from-gold-light to-gold-dark bg-clip-text text-transparent mb-1">ClientCare+</h3>
+  <h2 class="text-3xl font-bold mb-2">39.99€ <small class="text-xs text-white/60">/an</small></h2>
+  <p class="text-white/60 text-sm mb-5">Le plus haut statut, réservé aux membres d'élite.</p>
+  <!-- BUTTON -->
+  <a href="https://buymeacoffee.com/evannn/membership" target="_blank" class="w-full text-center border rounded-md font-semibold text-gold-primary bg-gradient-to-b relative overflow-hidden to-gold-dark border-gold-primary/20 py-2 px-4 transition-transform duration-300 hover:-translate-y-[2px]">
+    <span class="relative z-10">Achat mensuel</span>
+    <!-- SHIMMER -->
+    <span class="absolute inset-0 translate-x-[-100%] bg-gradient-to-r 
+      from-transparent via-gold-primary/20 to-transparent 
+      skew-x-[-20deg]
+      animate-[shimmer_1.4s_infinite]"></span>
+  </a>
+  <h4 class="flex items-center justify-center text-gold-primary text-sm tracking-wide uppercase my-6 mt-7">
+    <span class="flex-1 h-px bg-[#2a2a2a] mx-3"></span>
+    Features
+    <span class="flex-1 h-px bg-[#2a2a2a] mx-3"></span>
+  </h4>
+  <ul class="space-y-2 text-white/70 text-sm">
+    <li>-25% sur toute la boutique</li>
+    <li>+5€ de crédit boutique / mois</li>
+    <li>Rôle exclusif "ClientCare+ yearly"</li>
+    <li>Accès 48h avant tout le monde</li>
+    <li>Support direct avec le staff</li>
+    <li>1€ dépensé = 3 pts</li>
+    <li>Giveaways exclusifs</li>
+  </ul>
+  <h4 class="flex items-center justify-center text-gold-primary text-sm tracking-wide uppercase my-6 mt-5">
+    <span class="flex-1 h-px bg-[#2a2a2a] mx-3"></span>
+    Limitations
+    <span class="flex-1 h-px bg-[#2a2a2a] mx-3"></span>
+  </h4>
+  <ul class="space-y-2 text-white/70 text-sm">
+    <li>Pas de Limitations</li>
+  </ul>
+</article>
+
+<!-- MONTHLY →→→ -->
+<article class="w-[320px] bg-[#0f0f11]/40 border border-gold-primary/20 rounded-lg p-6 shadow-xl text-left relative flex flex-col min-h-[640px]">
+  <h3 class="text-xl font-semibold bg-gradient-to-r from-gold-light to-gold-dark bg-clip-text text-transparent mb-1">ClientCare</h3>
+  <h2 class="text-3xl font-bold mb-2">9.99€ <small class="text-xs text-white/60">/mois</small></h2>
+  <p class="text-white/60 text-sm mb-4">Un niveau supérieur, des privilèges exclusifs.</p>
+  <!-- BUTTON -->
+  <a href="https://buymeacoffee.com/evannn/membership" target="_blank" class="w-full text-center border rounded-md font-semibold text-gold-primary bg-gradient-to-b relative overflow-hidden to-gold-dark border-gold-primary/20 py-2 px-4 transition-transform duration-300 hover:-translate-y-[2px]">
+    <span class="relative z-10">Achat mensuel</span>
+    <!-- SHIMMER -->
+    <span class="absolute inset-0 translate-x-[-100%] bg-gradient-to-r 
+      from-transparent via-gold-primary/20 to-transparent 
+      skew-x-[-20deg]
+      animate-[shimmer_1.4s_infinite]"></span>
+  </a>
+  <h4 class="flex items-center justify-center text-gold-primary text-sm tracking-wide uppercase my-6">
+    <span class="flex-1 h-px bg-[#2a2a2a] mx-3"></span>
+    Features
+    <span class="flex-1 h-px bg-[#2a2a2a] mx-3"></span>
+  </h4>
+  <ul class="space-y-2 text-white/70 text-sm">
+    <li>-15% de réduction sur toute la boutique</li>
+    <li>+2€ crédit boutique / mois</li>
+    <li>Commandes prioritaires</li>
+    <li>Rôle exclusif "ClientCare monthly"</li>
+    <li>Accès anticipé 24h</li>
+    <li>1€ dépensé = 2pts</li>
+  </ul>
+  <h4 class="flex items-center justify-center text-gold-primary text-sm tracking-wide uppercase my-6">
+    <span class="flex-1 h-px bg-[#2a2a2a] mx-3"></span>
+    Limitations
+    <span class="flex-1 h-px bg-[#2a2a2a] mx-3"></span>
+  </h4>
+  <ul class="space-y-2 text-white/70 text-sm">
+    <li>Giveaways exclusifs</li>
+    <li>Support direct avec le staff</li>
+  </ul>
+</article>
+</div>
+
+<p class="text-[#cccccc] max-w-[600px] mx-auto text-[1rem] mt-8 mb-3 reveal">
+  Nous acceptons PayPal, Cryptomonnaies et Revolut. Pour payer avec ces options, rejoignez notre Discord.
+</p>
+
+<a href="https://discord.gg/beC8cFZaXH" target="_blank" class="relative inline-block mt-4 border border-gold-primary/20 text-gold-primary font-bold py-2 px-5 rounded-md overflow-hidden group reveal">
+  <span class="relative z-10">Rejoindre le Discord</span>
+  <span class="absolute inset-0 translate-x-[-100%] bg-gradient-to-r 
+      from-transparent via-gold-primary/20 to-transparent 
+      skew-x-[-20deg]
+      animate-[shimmer_1.4s_infinite]">
+  </span>
+</a>
+
+     </div>
+    </section>
+</main>
+
+    <script>
+      // Révèle les éléments au scroll
+      const revealElements = document.querySelectorAll('.reveal');
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.18 });
+
+      revealElements.forEach((el, index) => {
+        el.style.transitionDelay = `${Math.min(index * 0.07, 0.7)}s`;
+        revealObserver.observe(el);
+      });
+
+      // Scroll fluide avec compensation de la navbar
+      const navLinks = document.querySelectorAll('.nav-link[href*="#"]');
+      const navbar = document.querySelector('.navbar-container');
+      navLinks.forEach((link) => {
+        link.addEventListener('click', (event) => {
+          const targetId = link.getAttribute('href').replace('./', '').split('#')[1];
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            event.preventDefault();
+            const offset = (navbar?.offsetHeight || 0) + 12;
+            const top = targetEl.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+          }
+        });
+      });
+
+      // Compteur dynamique des produits livrés
+      const baseDelivered = 5;
+      const deliveredEl = document.getElementById('deliveredCounter');
+      const storedDelivered = parseInt(localStorage.getItem('deliveredCount') || `${baseDelivered}`, 10);
+      const currentDelivered = Number.isFinite(storedDelivered) ? storedDelivered : baseDelivered;
+
+      const renderDelivered = (value) => {
+        if (deliveredEl) deliveredEl.textContent = value;
+      };
+      renderDelivered(currentDelivered);
+
+      // Expose un helper pour incrémenter après une commande
+      window.incrementDeliveredCount = (step = 1) => {
+        const next = (parseInt(localStorage.getItem('deliveredCount') || `${baseDelivered}`, 10) || baseDelivered) + step;
+        localStorage.setItem('deliveredCount', `${next}`);
+        renderDelivered(next);
+      };
+    </script>
     <script>
         // Create particles
         const particlesContainer = document.getElementById('particles');
@@ -364,6 +709,39 @@ body {
             particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
             particlesContainer.appendChild(particle);
         }
+    </script>
+    <script>
+        // effet de vague pour tous les boutons d'ancrage avec la classe .btn
+document.querySelectorAll(".btn").forEach(btn => {
+  btn.addEventListener("click", function (e) {
+    // calculer les coordonnées par rapport au bouton
+    const rect = this.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // définir les variables CSS pour le pseudo-élément
+    this.style.setProperty('--ripple-x', x + 'px');
+    this.style.setProperty('--ripple-y', y + 'px');
+
+    // déclencher la classe d'animation
+    this.classList.remove('ripple');
+    // forcer le rajustement pour redémarrer l'animation
+    // eslint-disable-next-line no-unused-expressions
+    void this.offsetWidth;
+    this.classList.add('ripple');
+
+    // facultatif : supprimer la classe après la fin de l'animation
+    setTimeout(() => this.classList.remove('ripple'), 650);
+  });
+});
+
+// s'assurer que les animations des fonctionnalités ne démarrent qu'après le chargement (empêche les sauts)
+window.addEventListener('load', () => {
+  document.querySelectorAll('.features li').forEach((li, idx) => {
+    // conserver l'échelonnement défini dans CSS à l'aide de animation-delay ; mais s'assurer qu'elles s'exécutent
+    li.style.animationPlayState = 'running';
+  });
+});
     </script>
 </body>
 </html>

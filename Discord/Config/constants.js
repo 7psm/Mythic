@@ -3,6 +3,8 @@
 // =============================================
 // Configuration et constantes
 
+export const prefix = '&'; 
+
 /**
  * Configuration des statuts de commande
  * Chaque statut a un label, une couleur et un emoji associé
@@ -169,8 +171,7 @@ export const REQUIRED_INTENTS = [
  */
 export const LINKS = {
   LOGO: 'https://getmythic.netlify.app/public/logo.png',
-  WEBSITE: 'https://getmythic.netlify.app',
-  SUPPORT_EMAIL: 'support@mythicmarket.com'
+  WEBSITE: 'https://getmythic.netlify.app'
 };
 
 /**

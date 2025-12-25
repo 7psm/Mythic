@@ -1,5 +1,5 @@
 // =============================================
-// PERMISSIONS SYSTEM
+// PERMISSIONS SYSTEM - ÉTENDU
 // =============================================
 // Gestion des permissions et vérifications d'accès
 
@@ -26,6 +26,53 @@ export function hasVendorRole(interaction, shopRoleId) {
 
   // Vérifier si l'utilisateur a le rôle spécifique
   return member.roles.cache.has(shopRoleId);
+}
+
+/**
+ * Vérifie si un utilisateur a un rôle staff (modération)
+ * @param {Interaction} interaction - Interaction Discord
+ * @param {string} staffRoleId - ID du rôle staff
+ * @returns {boolean} True si l'utilisateur est staff
+ */
+export function hasStaffRole(interaction, staffRoleId) {
+  const member = interaction.member;
+  
+  if (!member) {
+    return false;
+  }
+
+  // Administrateur = staff automatiquement
+  if (member.permissions.has(PermissionFlagsBits.Administrator)) {
+    return true;
+  }
+
+  // Permissions de modération = staff
+  if (member.permissions.has(PermissionFlagsBits.ModerateMembers)) {
+    return true;
+  }
+
+  // Rôle staff spécifique
+  if (staffRoleId && member.roles.cache.has(staffRoleId)) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Vérifie les permissions Discord natives
+ * @param {Interaction} interaction - Interaction Discord
+ * @param {bigint} permission - Permission à vérifier
+ * @returns {boolean} True si l'utilisateur a la permission
+ */
+export function hasDiscordPermission(interaction, permission) {
+  const member = interaction.member;
+  
+  if (!member) {
+    return false;
+  }
+
+  return member.permissions.has(permission);
 }
 
 /**
@@ -72,6 +119,47 @@ export async function handleAccessDenied(interaction, shopRoleId, ordersChannelI
       console.error('❌ Erreur log sécurité:', error);
     }
   }
+}
+
+/**
+ * Gère le refus d'accès pour les commandes de modération
+ * @param {Interaction} interaction - Interaction Discord
+ * @param {string} staffRoleId - ID du rôle staff requis
+ * @returns {Promise<void>}
+ */
+export async function handleStaffAccessDenied(interaction, staffRoleId = null) {
+  const { EmbedBuilder } = await import('discord.js');
+  
+  const embed = new EmbedBuilder()
+    .setTitle('🔒 Accès Refusé')
+    .setDescription(
+      '**Vous n\'avez pas les permissions nécessaires pour cette commande.**\n\n' +
+      '⚠️ Cette commande est réservée aux membres du staff.\n' +
+      '🛡️ Permissions requises : **Modérer les membres** ou rôle staff'
+    )
+    .setColor(0xe74c3c)
+    .addFields({
+      name: '💡 Besoin d\'aide ?',
+      value: 'Contactez un administrateur si vous pensez avoir besoin de cet accès.',
+      inline: false
+    })
+    .setFooter({ 
+      text: `Tentative de ${interaction.user.tag}`,
+      iconURL: interaction.user.displayAvatarURL()
+    })
+    .setTimestamp();
+
+  if (staffRoleId) {
+    embed.addFields({
+      name: '🎯 Rôle requis',
+      value: `<@&${staffRoleId}>`,
+      inline: true
+    });
+  }
+
+  await interaction.reply({ embeds: [embed], ephemeral: true });
+  
+  console.log(`🔒 Accès staff refusé: ${interaction.user.tag} - /${interaction.commandName}`);
 }
 
 /**

@@ -1,0 +1,247 @@
+[
+  {
+    "version": "Betav1",
+    "date": "2025-08-31T13:55:00.000Z",
+    "title": "Version Betav1",
+    "description": "",
+    "notes": "",
+    "features": [
+      {
+        "icon": "🔒",
+        "title": "Sécurité",
+        "description": "Variables d'environnement et validation des données",
+        "tag": "new"
+      },
+      {
+        "icon": "⚡",
+        "title": "Performance",
+        "description": "Envoie asynchrone et rate limiting",
+        "tag": "new"
+      },
+      {
+        "icon": "🎀",
+        "title": "Estéthie",
+        "description": "Design sombre élégent et responsive",
+        "tag": "new"
+      },
+      {
+        "icon": "🏗",
+        "title": "Entretien",
+        "description": "Code organisé et maintenable",
+        "tag": "new"
+      },
+      {
+        "icon": "🧱",
+        "title": "Production",
+        "description": "Compatible Reder/netlify",
+        "tag": "new"
+      },
+      {
+        "icon": "📧",
+        "title": "Automatisme",
+        "description": "Confirmation immédiate des commandes",
+        "tag": "new"
+      }
+    ],
+    "improvements": [
+      {
+        "icon": "🎨",
+        "title": "Page Confirmation",
+        "description": "Style entièrement refait",
+        "tag": "improved"
+      }
+    ],
+    "fixes": [
+      {
+        "icon": "🎨",
+        "title": "NavBar",
+        "description": "Patch de la Navbar (à moitié)",
+        "tag": "fixed"
+      }
+    ],
+    "previous": "1.0.0",
+    "createdAt": "2025-12-24T20:48:37.362Z"
+  },
+  {
+    "version": "1.0.1",
+    "date": "2025-09-07T08:56:00.000Z",
+    "title": "Version 1.0.1",
+    "description": "Remarques\nJe travaille constamment à l'amélioration de votre expérience et votre sécurité.",
+    "notes": "",
+    "features": [
+      {
+        "icon": "✨",
+        "title": "Status",
+        "description": "Système de status",
+        "tag": "new"
+      },
+      {
+        "icon": "✨",
+        "title": "ScrollBar",
+        "description": "Ajout d'un scrollBar invisible compatible pc & mobile",
+        "tag": "new"
+      }
+    ],
+    "improvements": [
+      {
+        "icon": "⚡",
+        "title": "NavBar",
+        "description": "Nouvelle navbar plus moderne compatible pc seulement",
+        "tag": "improved"
+      },
+      {
+        "icon": "⚡",
+        "title": "Icones",
+        "description": "Modification des icones (bug)",
+        "tag": "improved"
+      }
+    ],
+    "fixes": [
+      {
+        "icon": "🐛",
+        "title": "Mail",
+        "description": "Patch responsive du mail sur mobile",
+        "tag": "fixed"
+      }
+    ],
+    "previous": "Betav1",
+    "createdAt": "2025-12-24T20:52:26.305Z"
+  },
+  {
+    "version": "1.1.0",
+    "date": "2025-09-18T15:17:00.000Z",
+    "title": "Version 1.1.0",
+    "description": "Remarques\nJe travaille constamment à l'amélioration de votre expérience et à votre sécurité.",
+    "notes": "",
+    "features": [
+      {
+        "icon": "✨",
+        "title": "Produits",
+        "description": "2 nouveaux produits disponibles sur le site",
+        "tag": "new"
+      },
+      {
+        "icon": "✨",
+        "title": "Versions Updater",
+        "description": "Création d'un système de vérification de version",
+        "tag": "new"
+      }
+    ],
+    "improvements": [
+      {
+        "icon": "⚡",
+        "title": "Responsive",
+        "description": "Amélioration de la responsive sur pc",
+        "tag": "improved"
+      },
+      {
+        "icon": "⚡",
+        "title": "Nom du Projet",
+        "description": "Le nom \"IncognitoMarket\" a été modifié par \"MythicMarket\"",
+        "tag": "improved"
+      }
+    ],
+    "fixes": [],
+    "previous": "1.2.0",
+    "createdAt": "2025-12-24T20:57:38.344Z"
+  },
+  {
+    "version": "1.2.0",
+    "date": "2025-12-18T09:30:00.000Z",
+    "title": "Version 1.2.0",
+    "description": "",
+    "notes": "",
+    "features": [
+      {
+        "icon": "✨",
+        "title": "Système de Version",
+        "description": "Le système a été améliorer",
+        "tag": "new"
+      },
+      {
+        "icon": "✨",
+        "title": "Page Abonnement",
+        "description": "Ajout d'une page présentant les abonnements",
+        "tag": "new"
+      },
+      {
+        "icon": "✨",
+        "title": "FAQ",
+        "description": "Ajout d'une FAQ sur la page Confiance & Sécurité",
+        "tag": "new"
+      },
+      {
+        "icon": "✨",
+        "title": "Moyens de Paiements",
+        "description": "Nouveaux moyens de paiements ajoutés",
+        "tag": "new"
+      },
+      {
+        "icon": "✨",
+        "title": "Code de réduction",
+        "description": "Création d'un système de réduction & code promo dans la page Cart.",
+        "tag": "new"
+      },
+      {
+        "icon": "✨",
+        "title": "Produits",
+        "description": "Plusieurs nouveaux produits ajoutés",
+        "tag": "new"
+      },
+      {
+        "icon": "✨",
+        "title": "Bot Discord",
+        "description": "Création d'un bot discord afin de gérer les commandes et le serveur",
+        "tag": "new"
+      },
+      {
+        "icon": "✨",
+        "title": "Email Switch",
+        "description": "Passage de SMT à API HTTP pour l'envoie d'email",
+        "tag": "new"
+      }
+    ],
+    "improvements": [
+      {
+        "icon": "⚡",
+        "title": "Design",
+        "description": "Nouveau design sur la page Contact",
+        "tag": "improved"
+      },
+      {
+        "icon": "⚡",
+        "title": "Ajustement",
+        "description": "La page Checkout a eu quelques petits changements et fix",
+        "tag": "improved"
+      },
+      {
+        "icon": "⚡",
+        "title": "FrameWork",
+        "description": "Passage de CSS à Tailwind CSS (chargement plus léger → site plus rapide)",
+        "tag": "improved"
+      },
+      {
+        "icon": "⚡",
+        "title": "Bug Images Panier",
+        "description": "Remplacement des billets par des icones",
+        "tag": "improved"
+      }
+    ],
+    "fixes": [
+      {
+        "icon": "🐛",
+        "title": "Image Panier",
+        "description": "Correction d’un bug d’affichage",
+        "tag": "fixed"
+      },
+      {
+        "icon": "🐛",
+        "title": "Envoie d'email",
+        "description": "Correction de l’envoi du mail après la confirmation d’une commande",
+        "tag": "fixed"
+      }
+    ],
+    "previous": "1.1.0",
+    "createdAt": "2025-12-24T21:04:02.284Z"
+  }
+]

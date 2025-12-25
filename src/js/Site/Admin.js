@@ -401,87 +401,65 @@ function showCodeMessage(msg, type){
 // GESTION DES VERSIONS
 // =============================================
 
-function getCurrentVersion(){
-  try {
-    const history = JSON.parse(localStorage.getItem('versionHistory') || '[]');
-    return history.length > 0 ? history[history.length - 1].version : '1.0.0';
-  } catch {
-    return '1.0.0';
-  }
-}
-
-function getVersionHistory(){
-  try {
-    return JSON.parse(localStorage.getItem('versionHistory') || '[]');
-  } catch {
-    return [];
-  }
-}
-
-function saveVersionHistory(history){
-  localStorage.setItem('versionHistory', JSON.stringify(history));
-}
-
-function loadVersionHistory(){
-  const history = getVersionHistory();
+// Charger les versions depuis l'API
+async function loadVersionHistory(){
   const list = document.getElementById('version-history');
-  list.innerHTML = '';
+  list.innerHTML = '<p class="text-gray-500 text-center py-8">Chargement...</p>';
   
-  if(history.length === 0){
-    list.innerHTML = '<p class="text-gray-500 text-center py-8">Aucune version enregistrée</p>';
-    return;
-  }
-
-  history.slice().reverse().forEach((v, idx) => {
-    const div = document.createElement('div');
-    div.className = 'glass-input p-4 rounded-lg relative';
-    const date = new Date(v.date).toLocaleDateString('fr-FR', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'});
-    const isLatest = idx === 0;
+  try {
+    const response = await fetch('http://localhost:3001/api/versions/content');
+    const versions = await response.json();
     
-    div.innerHTML = `
-      <div class="flex justify-between items-start mb-2">
-        <div class="flex-1">
-          <div class="flex items-center gap-2 mb-1">
-            <p class="font-bold text-lg text-purple-400">v${v.version}</p>
-            ${isLatest ? '<span class="glass px-2 py-1 rounded text-xs text-green-400">● Actuelle</span>' : ''}
+    list.innerHTML = '';
+    
+    if(versions.length === 0){
+      list.innerHTML = '<p class="text-gray-500 text-center py-8">Aucune version enregistrée</p>';
+      return;
+    }
+
+    versions.slice().reverse().forEach((v, idx) => {
+      const div = document.createElement('div');
+      div.className = 'glass-input p-4 rounded-lg relative';
+      const date = new Date(v.date).toLocaleDateString('fr-FR', {
+        day:'2-digit', 
+        month:'short', 
+        year:'numeric', 
+        hour:'2-digit', 
+        minute:'2-digit'
+      });
+      const isLatest = idx === 0;
+      
+      div.innerHTML = `
+        <div class="flex justify-between items-start mb-2">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <p class="font-bold text-lg text-purple-400">v${v.version}</p>
+              ${isLatest ? '<span class="glass px-2 py-1 rounded text-xs text-green-400">● Actuelle</span>' : ''}
+            </div>
+            <p class="text-xs text-gray-500">${date}</p>
           </div>
-          <p class="text-xs text-gray-500">${date}</p>
+          <button onclick="deleteVersionAPI('${v.version}')" class="delete-btn glass px-3 py-1 rounded-lg text-xs text-red-400 hover:bg-red-400/20 transition border border-red-400/30">
+            Supprimer
+          </button>
         </div>
-        <div class="flex gap-2">
-          ${!isLatest ? `<button onclick="rollbackVersion('${v.version}')" class="glass px-3 py-1 rounded-lg text-xs text-yellow-400 hover:bg-yellow-400/20 transition">Restaurer</button>` : ''}
-          <button onclick="deleteVersion('${v.version}')" class="delete-btn glass px-3 py-1 rounded-lg text-xs text-red-400 hover:bg-red-400/20 transition border border-red-400/30">Supprimer</button>
-        </div>
-      </div>
-      ${v.previous ? `<p class="text-sm text-gray-400 mb-2">← Depuis v${v.previous}</p>` : ''}
-      ${v.notes ? `<p class="text-sm text-gray-300 whitespace-pre-line mt-2 pt-2 border-t border-white/10">${v.notes}</p>` : ''}
-    `;
-    list.appendChild(div);
-  });
-}
-
-function validateVersion(version){
-  if(!version || version.length > 10) return false;
-  if(!/^[0-9a-zA-Z\.]+$/.test(version)) return false;
-  return true;
-}
-
-function compareVersions(v1, v2){
-  const p1 = v1.split('.').map(n => parseInt(n) || 0);
-  const p2 = v2.split('.').map(n => parseInt(n) || 0);
-  const len = Math.max(p1.length, p2.length);
-  
-  for(let i = 0; i < len; i++){
-    const n1 = p1[i] || 0;
-    const n2 = p2[i] || 0;
-    if(n1 < n2) return -1;
-    if(n1 > n2) return 1;
+        ${v.previous ? `<p class="text-sm text-gray-400 mb-2">← Depuis v${v.previous}</p>` : ''}
+        ${v.notes ? `<p class="text-sm text-gray-300 whitespace-pre-line mt-2 pt-2 border-t border-white/10">${v.notes}</p>` : ''}
+      `;
+      list.appendChild(div);
+    });
+    
+  } catch (error) {
+    console.error('❌ Erreur chargement versions:', error);
+    list.innerHTML = '<p class="text-red-400 text-center py-8">Erreur de connexion à l\'API</p>';
   }
-  return 0;
 }
 
-function prepareVersion(){
+// Créer une nouvelle version (envoyer à l'API)
+async function prepareVersion(){
   const versionNumber = document.getElementById('version-number').value.trim();
   const notes = document.getElementById('version-notes').value.trim();
+  const dateInput = document.getElementById('version-date').value;
+  const timeInput = document.getElementById('version-time').value;
 
   if(!versionNumber){
     showVersionMessage('Veuillez entrer un numéro de version', 'error');
@@ -493,89 +471,70 @@ function prepareVersion(){
     return;
   }
 
-  const history = getVersionHistory();
+  // Préparer la date
+  let versionDate;
+  if(dateInput && timeInput){
+    versionDate = new Date(`${dateInput}T${timeInput}`).toISOString();
+  } else if(dateInput){
+    versionDate = new Date(dateInput).toISOString();
+  } else {
+    versionDate = new Date().toISOString();
+  }
+
   const currentVersion = getCurrentVersion();
-
-  if(history.some(v => v.version === versionNumber)){
-    showVersionMessage('Cette version existe déjà dans l\'historique', 'error');
-    return;
-  }
-
-  const comparison = compareVersions(versionNumber, currentVersion);
-  if(comparison < 0){
-    if(!confirm(`⚠️ Downgrade détecté (${versionNumber} < ${currentVersion}).\n\nVoulez-vous forcer le downgrade ?`)){
-      return;
-    }
-  }
-
-  const newEntry = {
+  
+  const newVersion = {
     version: versionNumber,
     previous: currentVersion,
-    date: (() => {
-      const dateInput = document.getElementById('version-date').value;
-      const timeInput = document.getElementById('version-time').value;
-      if(dateInput && timeInput){
-        return new Date(`${dateInput}T${timeInput}`).toISOString();
-      } else if(dateInput){
-        return new Date(dateInput).toISOString();
-      } else {
-        return new Date().toISOString();
-      }
-    })(),
+    date: versionDate,
     notes: notes,
-    appliedAt: new Date().toISOString()
+    title: `Version ${versionNumber}`, // Tu peux ajouter un champ pour ça
+    description: notes.split('\n')[0] || '' // Première ligne comme description
   };
 
-  history.push(newEntry);
-  saveVersionHistory(history);
-  localStorage.setItem('currentAppVersion', versionNumber);
-  
-  loadVersionHistory();
-  updateCurrentVersionDisplay();
+  try {
+    // Envoyer à l'API
+    const response = await fetch('http://localhost:3001/api/versions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newVersion)
+    });
 
-  document.getElementById('version-number').value = '';
-  document.getElementById('version-notes').value = '';
-  document.getElementById('version-date').value = '';
-  document.getElementById('version-time').value = '';
-  
-  showVersionMessage(`✅ Version ${versionNumber} activée avec succès !`, 'success');
-  console.log('✅ Nouvelle version appliquée:', newEntry);
+    const result = await response.json();
+
+    if(result.success){
+      // Mettre à jour localStorage pour la version actuelle
+      localStorage.setItem('currentAppVersion', versionNumber);
+      
+      // Rafraîchir l'affichage
+      loadVersionHistory();
+      updateCurrentVersionDisplay();
+
+      // Réinitialiser le formulaire
+      document.getElementById('version-number').value = '';
+      document.getElementById('version-notes').value = '';
+      document.getElementById('version-date').value = '';
+      document.getElementById('version-time').value = '';
+      
+      showVersionMessage(`✅ Version ${versionNumber} créée avec succès !`, 'success');
+      console.log('✅ Version envoyée à l\'API:', result);
+      
+    } else {
+      showVersionMessage('Erreur lors de la création', 'error');
+    }
+    
+  } catch (error) {
+    console.error('❌ Erreur envoi version:', error);
+    showVersionMessage('Erreur de connexion à l\'API', 'error');
+  }
 }
 
-function rollbackVersion(targetVersion){
-  if(!confirm(`Voulez-vous vraiment restaurer la version ${targetVersion} ?\n\nCela remplacera la version actuelle.`)){
-    return;
-  }
-
-  const history = getVersionHistory();
+// Supprimer une version via l'API
+async function deleteVersionAPI(targetVersion){
   const currentVersion = getCurrentVersion();
-  const targetEntry = history.find(v => v.version === targetVersion);
   
-  if(!targetEntry){
-    showVersionMessage('Version introuvable', 'error');
-    return;
-  }
-
-  const rollbackEntry = {
-    version: targetVersion,
-    previous: currentVersion,
-    date: new Date().toISOString(),
-    notes: `🔄 Rollback depuis v${currentVersion}\n\n${targetEntry.notes || ''}`,
-    appliedAt: new Date().toISOString(),
-    isRollback: true
-  };
-
-  history.push(rollbackEntry);
-  saveVersionHistory(history);
-  localStorage.setItem('currentAppVersion', targetVersion);
-  
-  loadVersionHistory();
-  updateCurrentVersionDisplay();
-  showVersionMessage(`✅ Rollback vers v${targetVersion} effectué !`, 'success');
-}
-
-function deleteVersion(targetVersion){
-  const currentVersion = getCurrentVersion();
   if(targetVersion === currentVersion){
     showVersionMessage('Impossible de supprimer la version actuelle', 'error');
     return;
@@ -585,17 +544,35 @@ function deleteVersion(targetVersion){
     return;
   }
 
-  const history = getVersionHistory();
-  const updatedHistory = history.filter(v => v.version !== targetVersion);
+  try {
+    const response = await fetch(`http://localhost:3001/api/versions/${targetVersion}`, {
+      method: 'DELETE'
+    });
 
-  if(updatedHistory.length === history.length){
-    showVersionMessage('Version introuvable', 'error');
-    return;
+    const result = await response.json();
+
+    if(result.success){
+      loadVersionHistory();
+      showVersionMessage(`✅ Version ${targetVersion} supprimée !`, 'success');
+    } else {
+      showVersionMessage(result.error || 'Erreur lors de la suppression', 'error');
+    }
+    
+  } catch (error) {
+    console.error('❌ Erreur suppression version:', error);
+    showVersionMessage('Erreur de connexion à l\'API', 'error');
   }
+}
 
-  saveVersionHistory(updatedHistory);
-  loadVersionHistory();
-  showVersionMessage(`✅ Version ${targetVersion} supprimée !`, 'success');
+// Garde les fonctions utilitaires
+function validateVersion(version){
+  if(!version || version.length > 10) return false;
+  if(!/^[0-9a-zA-Z\.]+$/.test(version)) return false;
+  return true;
+}
+
+function getCurrentVersion(){
+  return localStorage.getItem('currentAppVersion') || '1.0.0';
 }
 
 function updateCurrentVersionDisplay(){
@@ -614,7 +591,7 @@ function showVersionMessage(msg, type){
   setTimeout(() => el.classList.add('hidden'), 3000);
 }
 
-
+// =============================================
 // GESTION DES STATISTIQUES (LOCALSTORAGE)
 // =============================================
 

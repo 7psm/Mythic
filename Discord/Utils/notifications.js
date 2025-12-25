@@ -72,7 +72,7 @@ export async function notifyVendor(params) {
         const { embed } = createOrderEmbed(orderData, orderStatusConfig, true, false);
         
         await channel.send({
-          content: `<@&${shopRoleId}> **Nouvelle commande de ${orderData.discord || orderData.email} !**`,
+          content: `<@&${shopRoleId}> **Nouvelle commande de ${orderData.discord || 'Non renseigné'} !**`,
           embeds: [embed]
         });
 

@@ -1,0 +1,62 @@
+@layer base {
+  /* Large desktops down to 1440px */
+  @media (max-width: 1536px) {
+    .navbar-container {
+      gap: 18px;
+      padding-inline: 28px;
+    }
+    #subscriptions article {
+      min-height: 600px;
+    }
+  }
+
+  /* 1440px down to 1280px (laptops courants) */
+  @media (max-width: 1440px) {
+    #subscriptions article {
+      min-height: 560px;
+    }
+    #subscriptions h1 {
+      font-size: 2.4rem;
+    }
+    #subscriptions p {
+      font-size: 1rem;
+    }
+  }
+
+  /* 1280px down to 1152px (13-15" laptops) */
+  @media (max-width: 1280px) {
+    #subscriptions .flex {
+      flex-direction: column;
+      align-items: center;
+    }
+    #subscriptions article {
+      width: 100%;
+      max-width: 520px;
+    }
+    #confiance .grid {
+      grid-template-columns: 1fr !important;
+    }
+    #confiance section,
+    #confiance main {
+      padding-inline: 1.25rem;
+    }
+  }
+
+  /* 1180px and below: resserrer la nav et le texte */
+  @media (max-width: 1180px) {
+    .navbar-container .nav-links {
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    body {
+      font-size: 15px;
+    }
+    #subscriptions article h2 {
+      font-size: 1.8rem;
+    }
+  }
+}
+
+
+
+

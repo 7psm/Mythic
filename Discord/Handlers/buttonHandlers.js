@@ -75,7 +75,20 @@ async function handleDeleteConfirmation(interaction, orderStatusConfig, getPerio
   const statusFilter = parts[1];
 
   try {
-    const ordersPath = join(__dirname, '..', 'orders.json');
+    // 🔧 CORRECTION : Chemin corrigé pour correspondre à commandHandlers.js
+    const ordersPath = join(__dirname, '..', '..', 'api', 'orders.json');
+    
+    console.log('📂 Chemin orders.json:', ordersPath);
+    
+    if (!fs.existsSync(ordersPath)) {
+      await interaction.update({
+        content: '❌ **Fichier orders.json introuvable**\n\nChemin: `' + ordersPath + '`',
+        embeds: [],
+        components: []
+      });
+      return;
+    }
+    
     const ordersData = JSON.parse(fs.readFileSync(ordersPath, 'utf8'));
     const now = new Date();
     let ordersToKeep = [];
@@ -143,7 +156,7 @@ async function handleDeleteConfirmation(interaction, orderStatusConfig, getPerio
   } catch (error) {
     console.error('❌ Erreur suppression:', error);
     await interaction.update({
-      content: '❌ Erreur lors de la suppression.',
+      content: `❌ **Erreur lors de la suppression**\n\n\`\`\`${error.message}\`\`\``,
       embeds: [],
       components: []
     });
@@ -155,7 +168,8 @@ async function handleDeleteConfirmation(interaction, orderStatusConfig, getPerio
  */
 async function handleTrackOrder(interaction, orderId, createDetailedOrderEmbedFn) {
   try {
-    const ordersPath = join(__dirname, '..', 'orders.json');
+    // 🔧 CORRECTION : Chemin corrigé
+    const ordersPath = join(__dirname, '..', '..', 'api', 'orders.json');
     
     if (!fs.existsSync(ordersPath)) {
       await interaction.editReply({
@@ -214,7 +228,8 @@ async function handleTrackOrder(interaction, orderId, createDetailedOrderEmbedFn
  */
 async function handleCancelRequest(interaction, orderId, notifyVendorCancellationRequestFn) {
   try {
-    const ordersPath = join(__dirname, '..', 'orders.json');
+    // 🔧 CORRECTION : Chemin corrigé
+    const ordersPath = join(__dirname, '..', '..', 'api', 'orders.json');
     const ordersData = JSON.parse(fs.readFileSync(ordersPath, 'utf8'));
     
     const order = ordersData.find(o => 
@@ -244,7 +259,8 @@ async function handleCancelRequest(interaction, orderId, notifyVendorCancellatio
  */
 async function handleDeliveryConfirmation(interaction, orderId, notifyVendorDeliveryConfirmedFn) {
   try {
-    const ordersPath = join(__dirname, '..', 'orders.json');
+    // 🔧 CORRECTION : Chemin corrigé
+    const ordersPath = join(__dirname, '..', '..', 'api', 'orders.json');
     const ordersData = JSON.parse(fs.readFileSync(ordersPath, 'utf8'));
     
     const orderIndex = ordersData.findIndex(o => 

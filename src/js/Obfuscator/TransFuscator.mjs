@@ -4,6 +4,11 @@ import path from 'path';
 import { exec } from 'child_process';
 import readline from 'readline';
 
+function isJSX(file) {
+  return path.extname(file).toLowerCase() === '.jsx';
+}
+
+
 //////////////////////////////////////////
 // Couleurs ANSI et helpers d'affichage //
 //////////////////////////////////////////
@@ -80,10 +85,6 @@ async function transpileStep(){
     throw new Error(`Fichier source introuvable: ${inJsx}`);
   }
 
-///////////////////////////////////////////////////////////////////////
-// Créer chemin du fichier Transpilé par défaut si non séléectionner //
-///////////////////////////////////////////////////////////////////////
-
   let outJs = await ask('Chemin du fichier de sortie JS (ex: dist/app.js). Faites "Entrée" pour créer un emplacement par défaut :');
   if (!outJs) {
     const base = path.basename(inJsx).replace(/\.[^/.]+$/, '');
@@ -99,13 +100,24 @@ async function transpileStep(){
     ensureDir(path.dirname(path.resolve(process.cwd(), outJs)));
   }
 
-  const cmdBabel = `npx babel "${inJsx}" --out-file "${outJs}" --presets=@babel/preset-env,@babel/preset-react`;
-  title('Transpilation');
-  logInfo(`Transpilation: ${inJsx} → ${outJs}`);
-  await execPromise(cmdBabel);
-  logOk(`Transpilation terminée → ${outJs}`);
+  // --- Bloc Babel ---
+  let cmdBabel = '';
+  if (isJSX(inJsx)) {
+    cmdBabel = `npx babel "${inJsx}" --out-file "${outJs}" --presets=@babel/preset-react,@babel/preset-env --no-babelrc`;
+  }
+
+  if (cmdBabel) {
+    title('Transpilation');
+    logInfo(`Transpilation: ${inJsx} → ${outJs}`);
+    await execPromise(cmdBabel);
+    logOk(`Transpilation terminée → ${outJs}`);
+  } else {
+    logInfo(`Le fichier n'est pas un JSX, pas besoin de transpilation → ${outJs}`);
+  }
+
   return outJs;
 }
+
 
 ////////////////////////////////////////////
 // Fonction d'obfuscation des fichiers JS //
@@ -121,18 +133,14 @@ async function obfuscateStep(defaultInput){
       inFile = defaultInput;
       console.log(`Aucun chemin saisi. Utilisation de la sortie précédente: ${inFile}`);
     } else {
-      throw new Error('Aucun fichier d’entrée fourni.');
+      throw new Error("Aucun fichier d'entrée fourni.");
     }
   }
   if (!fs.existsSync(path.resolve(process.cwd(), inFile))) {
     throw new Error(`Fichier introuvable: ${inFile}`);
   }
 
-///////////////////////////////////////////////////////////////////////
-// Créer chemin du fichier Transpilé par défaut si non séléectionner //
-///////////////////////////////////////////////////////////////////////
-
-  let outMin = await ask('Chemin du fichier de sortie (ex: dist/app.min.js). Fautes "Entrée" pour créer un emplacement par défaut :');
+  let outMin = await ask('Chemin du fichier de sortie (ex: dist/app.min.js). Faites "Entrée" pour créer un emplacement par défaut :');
   if (!outMin) {
     const base = path.basename(inFile).replace(/\.[^/.]+$/, '');
     const outDir = path.resolve(process.cwd(), 'Obfusquer');
@@ -147,17 +155,83 @@ async function obfuscateStep(defaultInput){
     ensureDir(path.dirname(path.resolve(process.cwd(), outMin)));
   }
 
-  const cmdTerser = [
-    `npx terser "${inFile}"`,
-    '--compress',
-    '--mangle',
-    '--mangle-props=regex=/^_/',
-    `--output "${outMin}"`
-  ].join(' ');
+  // ✅ CONFIGURATION TERSER CORRIGÉE - Ne casse plus le code async/await + DOM préservé
+  const cmdTerser = `npx terser "${inFile}" --compress arrows=false,collapse_vars=false,hoist_funs=false,inline=false,reduce_funcs=false,reduce_vars=false,toplevel=false --mangle reserved=[document,window,addEventListener,removeEventListener,getElementById,querySelector,querySelectorAll,createElement,localStorage,sessionStorage,fetch,submitOrderToServer,loadOrderData,API_URL,encryptData,decryptData],keep_classnames=true,keep_fnames=true,safari10=true --format comments=false,safari10=true,webkit=true --output "${outMin}"`;
+
   title('Obfuscation');
   logInfo(`Obfuscation en cours: ${inFile} → ${outMin}`);
-  await execPromise(cmdTerser);
-  logOk(`Obfuscation terminée → ${outMin}`);
+  logWarn(`Configuration: Mode sécurisé (async/await préservé)`);
+  
+  try {
+    await execPromise(cmdTerser);
+    logOk(`Obfuscation terminée → ${outMin}`);
+    
+    // ✅ Vérification post-obfuscation
+    const originalSize = fs.statSync(path.resolve(process.cwd(), inFile)).size;
+    const minifiedSize = fs.statSync(path.resolve(process.cwd(), outMin)).size;
+    const reduction = ((1 - minifiedSize / originalSize) * 100).toFixed(1);
+    logInfo(`Taille: ${originalSize} → ${minifiedSize} octets (-${reduction}%)`);
+    
+  } catch (error) {
+    logErr(`Erreur lors de l'obfuscation: ${error.message}`);
+    logWarn(`Le fichier original est intact: ${inFile}`);
+    throw error;
+  }
+  
+  return true;
+}
+
+/////////////////////////////////////
+// Mode batch pour plusieurs fichiers //
+/////////////////////////////////////
+
+async function batchObfuscateStep(){
+  const doBatch = await askYesNo('Veux-tu obfusquer plusieurs fichiers en batch ?');
+  if (!doBatch) return false;
+
+  const dirPath = await ask('Chemin du dossier contenant les fichiers JS (ex: src/js/Site) :');
+  if (!dirPath) {
+    logWarn('Aucun chemin fourni, mode batch annulé.');
+    return false;
+  }
+
+  const resolvedDir = path.resolve(process.cwd(), dirPath);
+  
+  if (!fs.existsSync(resolvedDir)) {
+    logErr(`Dossier introuvable: ${resolvedDir}`);
+    return false;
+  }
+
+  // Lire tous les fichiers .js du dossier
+  const files = fs.readdirSync(resolvedDir)
+    .filter(file => file.endsWith('.js') && !file.endsWith('.min.js'))
+    .map(file => path.join(resolvedDir, file));
+  
+  if (files.length === 0) {
+    logWarn(`Aucun fichier JS trouvé dans: ${dirPath}`);
+    return false;
+  }
+
+  logInfo(`${files.length} fichier(s) trouvé(s)`);
+  const outDir = path.resolve(process.cwd(), 'Crypted/Site');
+  ensureDir(outDir);
+
+  for (const file of files) {
+    const base = path.basename(file).replace(/\.js$/, '');
+    const outMin = path.join(outDir, `${base}.min.js`);
+    
+    const cmdTerser = `npx terser "${inFile}" --module --compress arrows=false,collapse_vars=false,hoist_funs=false,inline=false,reduce_funcs=false,reduce_vars=false,toplevel=false --mangle reserved=[document,window,addEventListener,removeEventListener,getElementById,querySelector,querySelectorAll,createElement,localStorage,sessionStorage,fetch,submitOrderToServer,loadOrderData,API_URL,encryptData,decryptData],keep_classnames=true,keep_fnames=true,safari10=true --format comments=false --output "${outMin}"`;
+
+    title(`Traitement: ${path.basename(file)}`);
+    try {
+      await execPromise(cmdTerser);
+      logOk(`${path.basename(file)} → ${path.basename(outMin)}`);
+    } catch (error) {
+      logErr(`Erreur avec ${path.basename(file)}: ${error.message}`);
+    }
+  }
+
+  logOk(`Batch terminé: ${files.length} fichiers traités`);
   return true;
 }
 
@@ -167,24 +241,39 @@ async function obfuscateStep(defaultInput){
 
 async function main(){
   box([
-    `${c.b}${c.fg.magenta}TransFuscator – made by evannn${c.r}`,
-    ``,
-    `${c.fg.cyan}Transpile JSX → JS (Babel)${c.r}`,
-    `${c.fg.yellow}Obfuscation JS → MIN.JS (Terser)${c.r}`
+    c.b + c.fg.magenta + 'TransFuscator v2.0 – made by evannn' + c.r,
+    '',
+    c.fg.cyan + 'Transpile JSX → JS (Babel)' + c.r,
+    c.fg.yellow + 'Obfuscation JS → MIN.JS (Terser)' + c.r,
   ]);
+  
   try {
     await ensureBabelInstalled();
     await ensureTerserInstalled();
 
-    const jsOut = await transpileStep();
-    let keep = await obfuscateStep(jsOut);
-    while (keep) {
-      const again = await askYesNo('Veux-tu continuer d\'obfusquer des fichiers ?');
-      if (!again) break;
-      keep = await obfuscateStep('');
+    // Option: Mode batch ou fichier par fichier
+    const useBatch = await askYesNo('Veux-tu utiliser le mode batch (plusieurs fichiers) ?');
+    
+    if (useBatch) {
+      await batchObfuscateStep();
+    } else {
+      const jsOut = await transpileStep();
+      let keep = await obfuscateStep(jsOut);
+      
+      while (keep) {
+        const again = await askYesNo('Veux-tu continuer d\'obfusquer des fichiers ?');
+        if (!again) break;
+        keep = await obfuscateStep('');
+      }
     }
 
-    box(['Terminé !','Merci d\'avoir utiliser TransFuscator']);
+    box([
+      'Terminé !',
+      'Merci d\'avoir utilisé TransFuscator',
+      '',
+      c.fg.cyan + '💡 Astuce: Teste tes fichiers après obfuscation' + c.r
+    ]);
+    
   } catch (e) {
     logErr(e.message || String(e));
     process.exitCode = 1;
@@ -194,4 +283,3 @@ async function main(){
 }
 
 main();
-

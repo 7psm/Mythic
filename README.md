@@ -1,29 +1,28 @@
 # 📋 Changelog - MythicMarket
 
-## V1 : Version complète pour PC 
+## V1 : Développment de la Version complète pour PC 
 
-## [1.2.0] - 2025-12-18
+## [1.2.1] - 2025-12-18
 
 ## 🧶 Nouveautés
-💠 Système de version amélioré (vérifie la version actuelle du site et actualise si nécessaire)
-💠 Nouvelle page Abonnements (paiements via BuyMeACoffee & plus)
-💠 Ajout d’une FAQ sur la page Confiance & Sécurité
-💠 Nouveaux moyens de paiement
-💠 Ajout d’un système de codes de réduction sur la page Panier
-💠 Nouveaux produits ajoutés (+ sélecteur pour variantes)
-💠 Ajout du bot pour les commandes (réception du reçu en MP)
+💠 **Responsive d'écrans** pour les pc portables & fixes.
+💠 Création de la page **Release** afin d'afficher les versions et leurs contenus.
+💠 Optimisation des requêtes DOM.
+💠 Optimisation des calculs.
+💠 Utilisation du ES6.
+💠 Les fichiers concernant le site sont optimiser puis nettoyé et certains mis à jour pour l'utilisation des modules.
+💠 
 
 ## 🎀 Modifications
-💠 Nouveau design sur la page Contact
-💠 Nouvelle présentation des avis sur la page Confiance & Sécurité
-💠 Ajustements mineurs sur la page Checkout
-💠 Passage du CSS à Tailwind CSS (chargement plus léger → site plus rapide)
-💠 Images produits mises à jour (remplacement des billets par des photos réelles)
-💠 Suppression de la section "Informations de livraison" sur les pages Checkout & Confirmation
+💠 Migration de la page **Confiance & Sécurité** et **Abonnements** dans la page d'accueil.
+💠 Suppression du Système de mail et remplacement définitif par l'envoie du récapitulatif sur discord.
+💠 Suppression temporaire de la partie Status.
+💠 Suppression du code mort.
 
 ## 🐛 Fixes
-💠 Correction d’un bug d’affichage d’images sur la page Panier
-💠 Correction de l’envoi du mail après la confirmation d’une commande
+💠 Bouttons du l'embed en mp Discord qui marchaient pas.
+💠 SlashCommands qui ne marchaient pas.
+
 
 ### 🔍 En cours
 N/A
@@ -32,8 +31,6 @@ N/A
 ## 🔮 Versions Futures
 
 ### Version ?? (Planifiée)
-- **Améliorations de performance**
-- **Responsive d'écrans** pour les pc portables & fixes
 - **Sécuriser** le site afin de permettre une protection maximale pour les clients
 
 ### Version ?? (Planifiée)

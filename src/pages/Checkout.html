@@ -9,13 +9,14 @@
      ////////////////////       Importation & Files       ////////////////////
      /////////////////////////////////////////////////////////////////////////-->
         <link rel="stylesheet" href="../styles/NavBar.css">
+        <link rel="stylesheet" href="../styles/responsive.css">
 
+        <script type="module" src="/src/js/utils.js"></script>
+        <script type="module" src="/src/js/Site/Products.js"></script>
+        <script type="module" src="/src/js/Site/Checkout.js"></script>
         <script src="/Crypted/Site/Context/OrderContext.min.js"></script>
-        <script src="/Crypted/Site/Products.min.js"></script>
-        <script type="module" src="/Crypted/Site/Checkout.min.js"></script>
-
         <script src="https://cdn.tailwindcss.com"></script>
-        <script src="../js/navbar-script.js"></script>>
+        <script src="../js/navbar-script.js"></script>
 
 <!-- ///////////////////////////////////////////////////////////////////
      ////////////////////       Fonts & Icons       ////////////////////
@@ -69,11 +70,8 @@
         <nav class="navbar-container">
           <div class="nav-links">
             <a href="/index.html" class="nav-link">Mythic-Market</a>
-            <a href="./Products.html" class="nav-link">Produits</a>
-            <a href="./TrustSafetyPage.html" class="nav-link">Confiance & Sécurité</a>
             <a href="Subcscriptions.html">Abonnements</a>
             <a href="./Contact.html" class="nav-link">Contact</a>
-            <a href="Status.html" class="nav-link">Status</a>
           </div>
           <div class="action-buttons">
             <a href="./Cart.html" class="cart-icon">
@@ -125,18 +123,15 @@
            ////////////////////////////////////////////////////////////////-->   
       <form action="Confirmation.html" method="POST" novalidate autocomplete="off" class="bg-[rgba(22,22,32,0.7)] rounded-xl p-6 border border-[rgba(212,175,55,0.1)]">
         <h2 class="text-[1.1rem] my-6 mb-4 text-[#d4af37] pb-2 border-b border-[rgba(212,175,55,0.2)]">Informations Client</h2>
-        <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 mb-4">
-        <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 mb-4">
-  
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4 mb-4">
           <div class="flex flex-col mb-3">
-              <label class="text-[0.85rem] mb-1.5 text-[#e0e0e0]" for="discord">Pseudo Discord</label>
-              <input id="discord" name="discord" type="text" class="px-3 py-2 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded text-white text-[0.95rem]"  />
+              <label class="text-[0.85rem] mb-1.5 text-[#e0e0e0]" for="discord">Pseudo Discord <span class="text-red-400">*</span></label>
+              <input id="discord" name="discord" type="text" required class="px-3 py-2 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded text-white text-[0.95rem]" placeholder="ex: username#1234" />
             </div>
-          </div>
           <div class="flex flex-col mb-3">
-            <label class="text-[0.85rem] mb-1.5 text-[#e0e0e0]" for="email">Email</label>
-            <input id="email" name="email" type="email" class="px-3 py-2 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded text-white text-[0.95rem]"  required />
-          </div>
+              <label class="text-[0.85rem] mb-1.5 text-[#e0e0e0]" for="client-name">Nom (optionnel)</label>
+              <input id="client-name" name="client-name" type="text" class="px-3 py-2 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded text-white text-[0.95rem]" placeholder="Pour personnaliser vos messages" />
+            </div>
         </div>
     
       <!-- ///////////////////////////////////////////////////////////////

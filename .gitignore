@@ -1,9 +1,14 @@
-
 # ========================================
-# GITIGNORE SÉLECTIF - REPOSITORY PUBLIC
+# DOSSIERS SENSIBLES À CACHER
 # ========================================
-# Cache uniquement les informations sensibles
-# Le projet reste entièrement fonctionnel et visible
+/Discord
+/Discord/Commands
+/Discord/Config
+/Discord/data
+/Discord/Handlers
+/Discord/Utils
+/Discord/index.js
+/snapshots/*
 
 # ========================================
 # FICHIERS SENSIBLES À CACHER
@@ -20,7 +25,6 @@ secrets.json
 *.pem
 *.p12
 *.crt
-# *.txt  # COMMENTÉ pour permettre les fichiers de configuration
 
 # Configuration API (contient des URLs sensibles)
 src/js/api-config.js
@@ -29,11 +33,6 @@ src/js/api-config.js
 API/orders.json
 API/data/
 API/database/
-
-# Fichiers de configuration avec mots de passe
-# MailSystem/.env  # COMMENTÉ pour permettre la configuration email
-MailSystem/config.json
-MailSystem/secrets.json
 
 # Logs et fichiers temporaires
 *.log

@@ -126,12 +126,8 @@ echo.
 echo 2. 🔧 RENDER.COM (Backend) :
 echo    - Connectez votre repo GitHub
 echo    - Créez un "Web Service"
-echo    - Configurez les variables d'environnement
+echo    - Configurez les variables d'environnement Discord
 echo    - Déployez le backend
-echo.
-echo 3. 📧 CONFIGURATION EMAIL :
-echo    - Ajoutez GMAIL_USER et GMAIL_APP_PASSWORD
-echo    - Sur Render.com dans "Environment"
 echo.
 echo ========================================
 echo 🎉 DÉPLOIEMENT TERMINÉ !

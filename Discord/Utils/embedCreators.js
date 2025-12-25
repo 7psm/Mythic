@@ -51,7 +51,7 @@ export function createDetailedOrderEmbed(orderData, orderStatusConfig) {
     .addFields(
       {
         name: '👤 ───── Client ─────',
-        value: `> 📧 ${orderData.email}\n> 💤 ${orderData.discord || '`Non renseigné`'}`,
+        value: `> 💬 **Discord:** ${orderData.discord || '`Non renseigné`'}`,
         inline: false
       },
       {
@@ -152,7 +152,6 @@ export function createOrderEmbed(orderData, orderStatusConfig, isVendor = false,
       {
         name: '👤 ───── Informations Client ─────',
         value: 
-          `> 📧 **Email:** ${orderData.email}\n` +
           `> 💬 **Discord:** ${orderData.discord || '`Non renseigné`'}`,
         inline: false
       },
@@ -226,7 +225,7 @@ export function createOrderEmbed(orderData, orderStatusConfig, isVendor = false,
     if (!includeButtons) {
       embed.addFields({
         name: '📞 ───── Besoin d\'Aide ? ─────',
-        value: '> Contactez-nous sur **Discord** ou par **email** !\n> Nous sommes là pour vous aider 24/7 💬',
+        value: '> Contactez-nous sur **Discord** !\n> Nous sommes là pour vous aider 24/7 💬',
         inline: false
       });
     }
@@ -328,7 +327,7 @@ export function createStatusChangeEmbed(orderData, oldStatus, newStatus, orderSt
       break;
     case 'REFUNDED':
       content = '💰 **Votre commande a été remboursée**';
-      additionalInfo = '> Le remboursement sera effectué sous **3-5 jours ouvrés**.\n> Vous recevrez une confirmation par email.';
+      additionalInfo = '> Le remboursement sera effectué sous **3-5 jours ouvrés**.\n> Vous recevrez une confirmation sur Discord.';
       break;
     case 'CONFIRMED':
       content = '✅ **Votre commande est confirmée !**';
