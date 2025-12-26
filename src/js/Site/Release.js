@@ -113,7 +113,7 @@ async function loadVersionsForModal() {
     versionList.innerHTML = '<p class="text-center text-gray-400 py-4">Chargement...</p>';
     
     try {
-        const response = await fetch('http://localhost:3001/api/versions/content');
+        const response = await fetch('https://mythic-api.onrender.com');
         const versions = await response.json();
         
         if (versions.length === 0) {
