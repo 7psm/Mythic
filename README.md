@@ -2,7 +2,7 @@
 
 ## V1 : Développment de la Version complète pour PC 
 
-## [1.2.1] - 2025-12-18
+## [1.2.1] - 2025-25-12
 
 ## 🧶 Nouveautés
 💠 **Responsive d'écrans** pour les pc portables & fixes.
