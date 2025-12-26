@@ -1,4 +1,13 @@
 // ============================================
+//          CONFIGURATION API
+// ============================================
+const API_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3001' 
+    : 'https://mythic-api.onrender.com';
+
+console.log('🌐 API URL:', API_URL);
+
+// ============================================
 //          BOUTON BACK TO TOP
 // ============================================
 const backToTopBtn = document.getElementById('backToTop');
@@ -25,7 +34,6 @@ const animateElements = document.querySelectorAll('.animate-in, .reveal');
 const animateObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
-            // Ajouter les classes pour l'animation
             entry.target.classList.add('reveal-visible');
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'translateY(0)';
@@ -36,9 +44,7 @@ const animateObserver = new IntersectionObserver((entries) => {
     rootMargin: '0px 0px -80px 0px' 
 });
 
-// Appliquer l'observer à tous les éléments
 animateElements.forEach((el, index) => {
-    // Ajouter un délai échelonné automatique
     el.style.transitionDelay = `${Math.min(index * 0.08, 1)}s`;
     animateObserver.observe(el);
 });
@@ -62,6 +68,7 @@ document.querySelectorAll('a[href^="#v"]').forEach(anchor => {
         }
     });
 });
+
 // ============================================
 //              MODAL VERSIONS
 // ============================================
@@ -71,7 +78,6 @@ const closeModalBtn = document.getElementById('closeModal');
 const navigateBtn = document.getElementById('navigate-to-version');
 const versionList = document.getElementById('versionList');
 
-// Ouvrir le modal
 navigateBtn?.addEventListener('click', (e) => {
     e.preventDefault();
     loadVersionsForModal();
@@ -83,13 +89,11 @@ navigateBtn?.addEventListener('click', (e) => {
     }, 10);
 });
 
-// Fermer le modal
 closeModalBtn?.addEventListener('click', closeModal);
 versionModal?.addEventListener('click', (e) => {
     if (e.target === versionModal) closeModal();
 });
 
-// Fermer avec Escape
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && versionModal?.classList.contains('opacity-100')) {
         closeModal();
@@ -105,7 +109,6 @@ function closeModal() {
     }, 200);
 }
 
-
 // ============================================
 //      CHARGER LES VERSIONS DEPUIS L'API
 // ============================================
@@ -113,7 +116,12 @@ async function loadVersionsForModal() {
     versionList.innerHTML = '<p class="text-center text-gray-400 py-4">Chargement...</p>';
     
     try {
-        const response = await fetch('https://mythic-api.onrender.com');
+        const response = await fetch(`${API_URL}/api/versions/content`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
         const versions = await response.json();
         
         if (versions.length === 0) {
@@ -121,7 +129,6 @@ async function loadVersionsForModal() {
             return;
         }
         
-        // Inverser pour afficher les plus récentes en premier
         const sortedVersions = versions.slice().reverse();
         
         versionList.innerHTML = sortedVersions.map(version => `
@@ -141,7 +148,7 @@ async function loadVersionsForModal() {
         versionList.innerHTML = `
             <p class="text-center text-red-400 py-4">
                 ❌ Impossible de charger les versions<br>
-                <span class="text-xs text-gray-500">Vérifiez que le serveur est démarré</span>
+                <span class="text-xs text-gray-500">Erreur: ${error.message}</span>
             </p>
         `;
     }
@@ -155,7 +162,12 @@ async function loadVersionsContent() {
     container.innerHTML = '<p class="text-center text-gray-400 py-8">Chargement des versions...</p>';
     
     try {
-        const response = await fetch('http://localhost:3001/api/versions/content');
+        const response = await fetch(`${API_URL}/api/versions/content`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
         const versions = await response.json();
         
         if (versions.length === 0) {
@@ -163,7 +175,6 @@ async function loadVersionsContent() {
             return;
         }
         
-        // Inverser pour afficher les plus récentes en premier
         const sortedVersions = versions.slice().reverse();
         
         container.innerHTML = sortedVersions.map((version, index) => `
@@ -276,7 +287,6 @@ async function loadVersionsContent() {
             </article>
         `).join('');
         
-        // Réappliquer l'Intersection Observer
         const animateElements = document.querySelectorAll('.animate-in');
         animateElements.forEach((el) => {
             animateObserver.observe(el);
@@ -284,9 +294,13 @@ async function loadVersionsContent() {
         
     } catch (error) {
         console.error('❌ Erreur chargement contenu:', error);
-        container.innerHTML = '<p class="text-center text-red-400 py-8">Erreur de connexion à l\'API</p>';
+        container.innerHTML = `
+            <p class="text-center text-red-400 py-8">
+                ❌ Erreur de connexion à l'API<br>
+                <span class="text-xs text-gray-500">Erreur: ${error.message}</span>
+            </p>
+        `;
     }
 }
 
-// Charger au démarrage de la page
 loadVersionsContent();
